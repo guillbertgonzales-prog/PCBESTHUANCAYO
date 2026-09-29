@@ -46,9 +46,13 @@
             </div>
 
             <div class="flex items-center gap-2.5">
+                <button onclick="downloadPDFCatalog()" class="bg-slate-800 hover:bg-slate-700 text-cyan-400 border border-slate-700 hover:border-cyan-500 p-2.5 rounded-xl transition-all flex items-center gap-1.5 text-xs font-bold" title="Descargar Catálogo Completo en PDF con imágenes">
+                    <i class="fa-solid fa-file-pdf text-sm"></i>
+                    <span class="hidden sm:inline">Catálogo PDF</span>
+                </button>
                 <button onclick="requestPin()" class="bg-slate-800 hover:bg-slate-700 text-amber-400 border border-slate-700 hover:border-amber-500 p-2.5 rounded-xl transition-all flex items-center gap-1.5 text-xs font-bold" title="Panel de Administración con PIN">
                     <i class="fa-solid fa-shield-halved text-sm"></i>
-                    <span class="hidden sm:inline">Administrar (PIN)</span>
+                    <span class="hidden sm:inline">Admin (PIN)</span>
                 </button>
                 <button onclick="toggleCartModal()" class="relative bg-slate-900 border border-slate-700 hover:border-blue-500 p-2.5 rounded-xl transition-all flex items-center gap-2 group">
                     <i class="fa-solid fa-cart-shopping text-blue-400 text-lg"></i>
@@ -91,28 +95,8 @@
             <span id="productCounter" class="text-xs text-slate-400 font-bold bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800">Mostrando todos los productos</span>
         </div>
         
-        <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-slate-800">
-            <button onclick="setCategory('todos')" id="cat-todos" class="category-btn active px-5 py-2.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap bg-blue-600 text-white shadow-md shadow-blue-600/30">
-                <i class="fa-solid fa-border-all mr-1.5"></i> Todos
-            </button>
-            <button onclick="setCategory('Procesadores')" id="cat-Procesadores" class="category-btn px-5 py-2.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700">
-                <i class="fa-solid fa-microchip mr-1.5 text-blue-400"></i> Procesadores
-            </button>
-            <button onclick="setCategory('Tarjetas de Video')" id="cat-Tarjetas de Video" class="category-btn px-5 py-2.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700">
-                <i class="fa-solid fa-display mr-1.5 text-cyan-400"></i> Tarjetas de Video
-            </button>
-            <button onclick="setCategory('Placas Madre')" id="cat-Placas Madre" class="category-btn px-5 py-2.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700">
-                <i class="fa-solid fa-chess-board mr-1.5 text-indigo-400"></i> Placas Madre
-            </button>
-            <button onclick="setCategory('Memorias RAM')" id="cat-Memorias RAM" class="category-btn px-5 py-2.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700">
-                <i class="fa-solid fa-memory mr-1.5 text-emerald-400"></i> Memorias RAM
-            </button>
-            <button onclick="setCategory('Almacenamiento')" id="cat-Almacenamiento" class="category-btn px-5 py-2.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700">
-                <i class="fa-solid fa-hard-drive mr-1.5 text-amber-400"></i> Almacenamiento SSD
-            </button>
-            <button onclick="setCategory('Cases y Fuentes')" id="cat-Cases y Fuentes" class="category-btn px-5 py-2.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700">
-                <i class="fa-solid fa-server mr-1.5 text-rose-400"></i> Cases y Fuentes
-            </button>
+        <div id="categoryButtonsContainer" class="flex gap-2 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-slate-800">
+            <!-- Renderizado dinámico de categorías -->
         </div>
     </section>
 
@@ -189,7 +173,7 @@
             </div>
             <div>
                 <h3 class="font-extrabold text-lg text-white">Código de Administrador</h3>
-                <p class="text-xs text-slate-400 mt-1">Ingresa el PIN para gestionar productos (PIN predeterminado: <span class="text-amber-400 font-bold">1234</span>)</p>
+                <p class="text-xs text-slate-400 mt-1">Ingresa el PIN para gestionar productos (PIN predeterminado: <span class="text-amber-400 font-bold">2230</span>)</p>
             </div>
             <input type="password" id="pinInput" placeholder="••••" maxlength="4" class="w-full bg-slate-950 border border-slate-800 rounded-xl text-center text-2xl tracking-widest py-3 text-white focus:outline-none focus:border-amber-500">
             <p id="pinError" class="text-xs text-red-400 hidden font-semibold">Código PIN incorrecto</p>
@@ -209,8 +193,8 @@
                         <i class="fa-solid fa-sliders"></i>
                     </div>
                     <div>
-                        <h3 class="font-extrabold text-lg text-white">Panel de Administración de Productos</h3>
-                        <p class="text-xs text-slate-400">Agrega, edita o elimina componentes del catálogo</p>
+                        <h3 class="font-extrabold text-lg text-white">Panel de Administración de Productos y Categorías</h3>
+                        <p class="text-xs text-slate-400">Agrega, edita o elimina componentes y categorías del catálogo</p>
                     </div>
                 </div>
                 <button onclick="toggleAdminPanel()" class="text-slate-400 hover:text-white p-2 rounded-xl hover:bg-slate-800 transition-colors">
@@ -219,6 +203,22 @@
             </div>
 
             <div class="p-6 overflow-y-auto flex-1 space-y-6">
+                <!-- Gestión de Categorías -->
+                <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-3">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-2">
+                        <i class="fa-solid fa-folder-plus"></i> Gestionar Categorías
+                    </h4>
+                    <div class="flex gap-2">
+                        <input type="text" id="newCategoryName" placeholder="Nombre de la nueva categoría..." class="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-amber-500">
+                        <button onclick="addNewCategory()" class="bg-amber-600 hover:bg-amber-500 text-white font-bold px-4 py-2.5 rounded-xl text-xs transition-all shadow-md shadow-amber-600/30 flex items-center gap-1.5">
+                            <i class="fa-solid fa-plus"></i> Añadir Categoría
+                        </button>
+                    </div>
+                    <div id="adminCategoryList" class="flex flex-wrap gap-2 pt-2">
+                        <!-- Listado de categorías administrables -->
+                    </div>
+                </div>
+
                 <div class="flex justify-between items-center bg-slate-950 p-4 rounded-2xl border border-slate-800">
                     <div>
                         <h4 class="text-sm font-bold text-white">Registrar Nuevo Producto</h4>
@@ -271,12 +271,7 @@
                     <div>
                         <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Categoría</label>
                         <select id="prodCategory" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-blue-500">
-                            <option value="Procesadores">Procesadores</option>
-                            <option value="Tarjetas de Video">Tarjetas de Video</option>
-                            <option value="Placas Madre">Placas Madre</option>
-                            <option value="Memorias RAM">Memorias RAM</option>
-                            <option value="Almacenamiento">Almacenamiento</option>
-                            <option value="Cases y Fuentes">Cases y Fuentes</option>
+                            <!-- Opciones dinámicas de categorías -->
                         </select>
                     </div>
                     <div>
@@ -382,6 +377,17 @@
 
     <!-- Script de lógica -->
     <script>
+        let categories = [
+            "Procesadores",
+            "Tarjetas de Video",
+            "Placas Madre",
+            "Memorias RAM",
+            "Almacenamiento",
+            "Cases y Fuentes",
+            "Monitores",
+            "Periféricos"
+        ];
+
         let products = [
             {
                 id: 1,
@@ -488,8 +494,77 @@
                 modal.classList.add('hidden');
                 return;
             }
-            updateAdminProductList();
+            updateAdminData();
             modal.classList.remove('hidden');
+        }
+
+        function updateAdminData() {
+            updateAdminCategoryList();
+            updateAdminProductList();
+        }
+
+        function updateAdminCategoryList() {
+            const list = document.getElementById('adminCategoryList');
+            list.innerHTML = categories.map(cat => `
+                <div class="flex items-center gap-2 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-xl text-xs text-slate-300">
+                    <span>${cat}</span>
+                    <button onclick="deleteCategory('${cat}')" class="text-slate-500 hover:text-red-400 transition-colors" title="Eliminar categoría">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function addNewCategory() {
+            const input = document.getElementById('newCategoryName');
+            const catName = input.value.trim();
+            if(!catName) return;
+
+            if(categories.includes(catName)) {
+                alert("Esta categoría ya existe.");
+                return;
+            }
+
+            categories.push(catName);
+            input.value = '';
+            renderCategories();
+            updateAdminData();
+        }
+
+        function deleteCategory(catName) {
+            if(categories.length <= 1) {
+                alert("Debes tener al menos una categoría.");
+                return;
+            }
+            if(confirm(`¿Estás seguro de eliminar la categoría "${catName}"?`)) {
+                categories = categories.filter(c => c !== catName);
+                if(currentCategory === catName) {
+                    currentCategory = 'todos';
+                }
+                renderCategories();
+                updateAdminData();
+                filterProducts();
+            }
+        }
+
+        function renderCategories() {
+            const container = document.getElementById('categoryButtonsContainer');
+            let html = `
+                <button onclick="setCategory('todos')" id="cat-todos" class="category-btn ${currentCategory === 'todos' ? 'active bg-blue-600 text-white shadow-md shadow-blue-600/30' : 'bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700'} px-5 py-2.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap">
+                    <i class="fa-solid fa-border-all mr-1.5"></i> Todos
+                </button>
+            `;
+
+            categories.forEach(cat => {
+                const isActive = currentCategory === cat;
+                html += `
+                    <button onclick="setCategory('${cat}')" id="cat-${cat}" class="category-btn ${isActive ? 'active bg-blue-600 text-white shadow-md shadow-blue-600/30' : 'bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700'} px-5 py-2.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap">
+                        <i class="fa-solid fa-tag mr-1.5 text-blue-400"></i> ${cat}
+                    </button>
+                `;
+            });
+
+            container.innerHTML = html;
         }
 
         function updateAdminProductList() {
@@ -527,6 +602,10 @@
             
             document.getElementById('productForm').reset();
             document.getElementById('editProductId').value = '';
+
+            // Llenar select de categorías en el formulario
+            const selectCat = document.getElementById('prodCategory');
+            selectCat.innerHTML = categories.map(c => `<option value="${c}">${c}</option>`).join('');
 
             if(id) {
                 const p = products.find(prod => prod.id === id);
@@ -623,13 +702,7 @@
 
         function setCategory(cat) {
             currentCategory = cat;
-            document.querySelectorAll('.category-btn').forEach(btn => {
-                btn.className = "category-btn px-5 py-2.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700";
-            });
-            const activeBtn = document.getElementById('cat-' + cat);
-            if(activeBtn) {
-                activeBtn.className = "category-btn px-5 py-2.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap bg-blue-600 text-white shadow-md shadow-blue-600/30";
-            }
+            renderCategories();
             filterProducts();
         }
 
@@ -782,7 +855,87 @@
             window.open(`https://wa.me/51910057512?text=${encoded}`, '_blank');
         }
 
+        function downloadPDFCatalog() {
+            let printWindow = window.open('', '_blank');
+            let htmlContent = `
+                <!DOCTYPE html>
+                <html lang="es">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Catálogo Oficial con Imágenes - PcBest Huancayo</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; color: #111; margin: 20px; }
+                        header { border-bottom: 2px solid #2563eb; padding-bottom: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+                        h1 { color: #1e3a8a; margin: 0; font-size: 22px; }
+                        p { margin: 2px 0; font-size: 11px; color: #555; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+                        th, td { border: 1px solid #cbd5e1; padding: 6px 10px; font-size: 10px; text-align: left; vertical-align: middle; }
+                        th { background-color: #1e3a8a; color: #fff; text-transform: uppercase; }
+                        tr:nth-child(even) { background-color: #f8fafc; }
+                        .prod-img { width: 50px; height: 50px; object-fit: cover; border-radius: 6px; border: 1px solid #cbd5e1; }
+                        .footer { margin-top: 30px; text-align: center; font-size: 10px; color: #666; border-top: 1px solid #cbd5e1; padding-top: 10px; }
+                    </style>
+                </head>
+                <body>
+                    <header>
+                        <div>
+                            <h1>PC BEST HUANCAYO</h1>
+                            <p>Catálogo Oficial de Hardware y Componentes con Imágenes</p>
+                        </div>
+                        <div style="text-align: right;">
+                            <p><strong>Fecha:</strong> ${new Date().toLocaleDateString()}</p>
+                            <p><strong>WhatsApp:</strong> 910057512</p>
+                            <p><strong>Redes:</strong> @pcbest_huancayo</p>
+                        </div>
+                    </header>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 40px; text-align: center;">Foto</th>
+                                <th>Categoría</th>
+                                <th>Nombre del Producto</th>
+                                <th>Descripción</th>
+                                <th style="text-align: center;">Stock</th>
+                                <th style="text-align: right;">Precio (S/.)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+            products.forEach((p) => {
+                htmlContent += `
+                    <tr>
+                        <td style="text-align: center;">
+                            <img src="${p.image}" class="prod-img" crossorigin="anonymous" onerror="this.src='https://placehold.co/100x100/e2e8f0/1e293b?text=PC'">
+                        </td>
+                        <td><b>${p.category}</b></td>
+                        <td><b>${p.name}</b></td>
+                        <td>${p.desc}</td>
+                        <td style="text-align: center;">${p.stock}</td>
+                        <td style="text-align: right;"><b>S/. ${p.price.toFixed(2)}</b></td>
+                    </tr>
+                `;
+            });
+
+            htmlContent += `
+                        </tbody>
+                    </table>
+                    <div class="footer">
+                        <p>PcBest Huancayo - Garantía y Calidad en Computadoras y Componentes. Huancayo, Perú.</p>
+                    </div>
+                    <script>
+                        window.onload = function() { setTimeout(() => { window.print(); }, 500); }
+                    <\/script>
+                </body>
+                </html>
+            `;
+
+            printWindow.document.write(htmlContent);
+            printWindow.document.close();
+        }
+
         window.onload = function() {
+            renderCategories();
             filterProducts();
         }
     </script>
