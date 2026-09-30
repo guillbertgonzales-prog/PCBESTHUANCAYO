@@ -194,7 +194,7 @@
                     </div>
                     <div>
                         <h3 class="font-extrabold text-lg text-white">Panel de Administración Cloud (GitHub)</h3>
-                        <p class="text-xs text-slate-400">Sincroniza tus cambios en vivo para cualquier navegador en internet</p>
+                        <p class="text-xs text-slate-400">Sincronización en vivo automática configurada</p>
                     </div>
                 </div>
                 <button onclick="toggleAdminPanel()" class="text-slate-400 hover:text-white p-2 rounded-xl hover:bg-slate-800 transition-colors">
@@ -203,41 +203,26 @@
             </div>
 
             <div class="p-6 overflow-y-auto flex-1 space-y-8">
-                <!-- Sección de Configuración Cloud JSONBin -->
-                <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-3">
+                <!-- Sección de Configuración Cloud JSONBin (Sincronizada Automáticamente) -->
+                <div class="bg-slate-950 p-5 rounded-2xl border border-emerald-500/30 space-y-2">
                     <div class="flex items-center justify-between flex-wrap gap-2">
                         <h4 class="text-sm font-bold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-cloud text-blue-500"></i> Sincronización Global (JSONBin.io)
+                            <i class="fa-solid fa-cloud-arrow-up text-emerald-400"></i> Sincronización Global en la Nube Activa
                         </h4>
-                        <span class="text-[10px] bg-blue-500/20 text-blue-400 font-bold px-2.5 py-1 rounded-md border border-blue-500/30">Recomendado para GitHub Pages</span>
+                        <span class="text-[10px] bg-emerald-500/20 text-emerald-400 font-bold px-2.5 py-1 rounded-md border border-emerald-500/30">¡Conectado a JSONBin!</span>
                     </div>
-                    <p class="text-xs text-slate-400 leading-relaxed">
-                        Para que al subir tu página a GitHub puedas agregar o editar productos y verlos actualizados automáticamente en cualquier otro navegador o celular del mundo, ingresa tus credenciales gratuitas de <a href="https://jsonbin.io" target="_blank" class="text-blue-400 underline font-semibold">JSONBin.io</a>:
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Tus credenciales de la nube ya se encuentran integradas internamente. Cualquier cambio que guardes se actualizará automáticamente en cualquier navegador o dispositivo del mundo al instante.
                     </p>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                        <div>
-                            <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Master Key ($2s-...) </label>
-                            <input type="text" id="jsonBinKey" placeholder="Ingresa tu Master Key" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:border-blue-500 focus:outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Bin ID (ID del Bin)</label>
-                            <input type="text" id="jsonBinId" placeholder="Ingresa tu Bin ID" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:border-blue-500 focus:outline-none">
-                        </div>
-                    </div>
-                    <button onclick="saveCloudConfig()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold px-4 py-2 rounded-xl transition-all border border-slate-700 flex items-center gap-1.5 mt-2">
-                        <i class="fa-solid fa-link text-blue-400"></i> Guardar Credenciales Cloud
-                    </button>
                 </div>
 
                 <!-- Sección de Gestión de Categorías -->
                 <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-4">
-                    <div class="flex justify-between items-center flex-wrap gap-4">
-                        <div>
-                            <h4 class="text-sm font-bold text-white flex items-center gap-2">
-                                <i class="fa-solid fa-folder-plus text-blue-500"></i> Gestión de Categorías
-                            </h4>
-                            <p class="text-xs text-slate-400">Crea nuevas categorías para clasificar tu hardware</p>
-                        </div>
+                    <div>
+                        <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-folder-plus text-blue-500"></i> Gestión de Categorías
+                        </h4>
+                        <p class="text-xs text-slate-400">Crea nuevas categorías para clasificar tu hardware</p>
                     </div>
                     <form onsubmit="handleCategorySubmit(event)" class="flex gap-3">
                         <input type="text" id="newCategoryName" required placeholder="Nombre de nueva categoría (Ej. Refrigeración)" class="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-blue-500">
@@ -399,7 +384,7 @@
                 <a href="https://www.tiktok.com/@pcbest_huancayo" target="_blank" class="w-10 h-10 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-xl flex items-center justify-center transition-all" title="TikTok: @pcbest_huancayo">
                     <i class="fa-brands fa-tiktok text-lg"></i>
                 </a>
-                <a href="https://www.facebook.com" target="_blank" class="w-10 h-10 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-blue-400 rounded-xl flex items-center justify-center transition-all" title="Facebook: Pc best - huancayo">
+                <a href="https://www.facebook.com/profile.php?id=61594306926466" target="_blank" class="w-10 h-10 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-blue-400 rounded-xl flex items-center justify-center transition-all" title="Facebook: Pc best - huancayo">
                     <i class="fa-brands fa-facebook text-lg"></i>
                 </a>
                 <a href="https://www.instagram.com/pcbest_huancayo" target="_blank" class="w-10 h-10 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-pink-400 rounded-xl flex items-center justify-center transition-all" title="Instagram: pcbest_huancayo">
@@ -415,9 +400,13 @@
         </div>
     </footer>
 
-    <!-- Script de lógica -->
+    <!-- Script de lógica con Credenciales Cloud Hardcoded -->
     <script>
-        let categories = JSON.parse(localStorage.getItem('pcbest_categories')) || [
+        // CREDENCIALES JSONBIN HARDCODED INTERNAMENTE
+        const CLOUD_MASTER_KEY = "$2a$10$zDVRXQE2nViYTAkTFbEK3OPyzJEcMycLeDBOcN5IAp2nQj3z3pq0e";
+        const CLOUD_BIN_ID = "6abd35cbac6210605a06028a";
+
+        let categories = [
             "Procesadores",
             "Tarjetas de Video",
             "Placas Madre",
@@ -426,7 +415,7 @@
             "Cases y Fuentes"
         ];
 
-        let products = JSON.parse(localStorage.getItem('pcbest_products')) || [
+        let products = [
             {
                 id: 1,
                 name: "AMD Ryzen 5 5600G",
@@ -511,54 +500,43 @@
             syncToCloud();
         }
 
-        function saveCloudConfig() {
-            const apiKey = document.getElementById('jsonBinKey').value.trim();
-            const binId = document.getElementById('jsonBinId').value.trim();
-            if(apiKey && binId) {
-                localStorage.setItem('jsonbin_key', apiKey);
-                localStorage.setItem('jsonbin_id', binId);
-                alert("Credenciales Cloud guardadas exitosamente. Sincronizando datos...");
-                syncToCloud();
-            } else {
-                alert("Por favor ingresa ambos campos: Master Key y Bin ID.");
-            }
-        }
-
         async function syncToCloud() {
-            const apiKey = localStorage.getItem('jsonbin_key');
-            const binId = localStorage.getItem('jsonbin_id');
-            if(apiKey && binId) {
-                try {
-                    await fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-Master-Key': apiKey
-                        },
-                        body: JSON.stringify({ products, categories })
-                    });
-                } catch(err) {
-                    console.error("Error sincronizando cloud", err);
-                }
+            try {
+                await fetch(`https://api.jsonbin.io/v3/b/${CLOUD_BIN_ID}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': CLOUD_MASTER_KEY
+                    },
+                    body: JSON.stringify({ products, categories })
+                });
+            } catch(err) {
+                console.error("Error sincronizando cloud", err);
             }
         }
 
         async function loadFromCloud() {
-            const binId = localStorage.getItem('jsonbin_id');
-            const apiKey = localStorage.getItem('jsonbin_key');
-            if(binId && apiKey) {
-                try {
-                    const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
-                        headers: { 'X-Master-Key': apiKey }
-                    });
-                    const data = await res.json();
-                    if(data && data.record) {
-                        if(data.record.products) products = data.record.products;
-                        if(data.record.categories) categories = data.record.categories;
+            try {
+                const res = await fetch(`https://api.jsonbin.io/v3/b/${CLOUD_BIN_ID}/latest`, {
+                    headers: { 'X-Master-Key': CLOUD_MASTER_KEY }
+                });
+                const data = await res.json();
+                if(data && data.record) {
+                    if(data.record.products && data.record.products.length > 0) {
+                        products = data.record.products;
                     }
-                } catch(e) {
-                    console.error("Usando almacenamiento local de respaldo");
+                    if(data.record.categories && data.record.categories.length > 0) {
+                        categories = data.record.categories;
+                    }
+                    localStorage.setItem('pcbest_products', JSON.stringify(products));
+                    localStorage.setItem('pcbest_categories', JSON.stringify(categories));
                 }
+            } catch(e) {
+                console.error("Cargando desde almacenamiento local de respaldo");
+                let localP = localStorage.getItem('pcbest_products');
+                let localC = localStorage.getItem('pcbest_categories');
+                if(localP) products = JSON.parse(localP);
+                if(localC) categories = JSON.parse(localC);
             }
         }
 
@@ -613,8 +591,6 @@
                 return;
             }
             document.getElementById('adminStatusMsg').classList.add('hidden');
-            if(localStorage.getItem('jsonbin_key')) document.getElementById('jsonBinKey').value = localStorage.getItem('jsonbin_key');
-            if(localStorage.getItem('jsonbin_id')) document.getElementById('jsonBinId').value = localStorage.getItem('jsonbin_id');
             updateAdminProductList();
             renderAdminCategoryList();
             modal.classList.remove('hidden');
@@ -1046,6 +1022,13 @@
             await loadFromCloud();
             renderCategories();
             filterProducts();
+            
+            // Sincronización automática en tiempo real cada 10 segundos para otros navegadores
+            setInterval(async () => {
+                await loadFromCloud();
+                renderCategories();
+                filterProducts();
+            }, 10000);
         }
     </script>
 </body>
