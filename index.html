@@ -173,7 +173,7 @@
             </div>
             <div>
                 <h3 class="font-extrabold text-lg text-white">Código de Administrador</h3>
-                <p class="text-xs text-slate-400 mt-1">Ingresa el PIN para gestionar productos (PIN predeterminado: <span class="text-amber-400 font-bold">OÑO</span>)</p>
+                <p class="text-xs text-slate-400 mt-1">Ingresa el PIN para gestionar productos (PIN predeterminado: <span class="text-amber-400 font-bold">2230</span>)</p>
             </div>
             <input type="password" id="pinInput" placeholder="••••" maxlength="4" class="w-full bg-slate-950 border border-slate-800 rounded-xl text-center text-2xl tracking-widest py-3 text-white focus:outline-none focus:border-amber-500">
             <p id="pinError" class="text-xs text-red-400 hidden font-semibold">Código PIN incorrecto</p>
@@ -193,8 +193,8 @@
                         <i class="fa-solid fa-sliders"></i>
                     </div>
                     <div>
-                        <h3 class="font-extrabold text-lg text-white">Panel de Administración General</h3>
-                        <p class="text-xs text-slate-400">Gestiona categorías y componentes del catálogo</p>
+                        <h3 class="font-extrabold text-lg text-white">Panel de Administración Cloud</h3>
+                        <p class="text-xs text-slate-400">Tus cambios se sincronizarán en todos los navegadores</p>
                     </div>
                 </div>
                 <button onclick="toggleAdminPanel()" class="text-slate-400 hover:text-white p-2 rounded-xl hover:bg-slate-800 transition-colors">
@@ -203,6 +203,18 @@
             </div>
 
             <div class="p-6 overflow-y-auto flex-1 space-y-8">
+                <!-- Sección de Configuración Cloud JSONBin -->
+                <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-3">
+                    <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-cloud text-blue-500"></i> Sincronización Cloud (Opcional para GitHub)
+                    </h4>
+                    <p class="text-xs text-slate-400">Para que los cambios se guarden globalmente para cualquier visitante en GitHub Pages, puedes configurar tu Master Key de JSONBin.io o usar el almacenamiento local automático.</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                        <input type="text" id="jsonBinKey" placeholder="JSONBin Master Key (Opcional)" class="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100">
+                        <input type="text" id="jsonBinId" placeholder="JSONBin Bin ID (Opcional)" class="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100">
+                    </div>
+                </div>
+
                 <!-- Sección de Gestión de Categorías -->
                 <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-4">
                     <div class="flex justify-between items-center flex-wrap gap-4">
@@ -482,6 +494,41 @@
         function saveToStorage() {
             localStorage.setItem('pcbest_products', JSON.stringify(products));
             localStorage.setItem('pcbest_categories', JSON.stringify(categories));
+            
+            // Opcional: Si se configuró JSONBin
+            const apiKey = document.getElementById('jsonBinKey')?.value || localStorage.getItem('jsonbin_key');
+            const binId = document.getElementById('jsonBinId')?.value || localStorage.getItem('jsonbin_id');
+            if(apiKey && binId) {
+                localStorage.setItem('jsonbin_key', apiKey);
+                localStorage.setItem('jsonbin_id', binId);
+                fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': apiKey
+                    },
+                    body: JSON.stringify({ products, categories })
+                }).catch(err => console.error("Error sincronizando cloud", err));
+            }
+        }
+
+        async function loadFromCloud() {
+            const binId = localStorage.getItem('jsonbin_id');
+            const apiKey = localStorage.getItem('jsonbin_key');
+            if(binId && apiKey) {
+                try {
+                    const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
+                        headers: { 'X-Master-Key': apiKey }
+                    });
+                    const data = await res.json();
+                    if(data && data.record) {
+                        if(data.record.products) products = data.record.products;
+                        if(data.record.categories) categories = data.record.categories;
+                    }
+                } catch(e) {
+                    console.error("Usando almacenamiento local de respaldo");
+                }
+            }
         }
 
         function renderCategories() {
@@ -535,6 +582,8 @@
                 return;
             }
             document.getElementById('adminStatusMsg').classList.add('hidden');
+            if(localStorage.getItem('jsonbin_key')) document.getElementById('jsonBinKey').value = localStorage.getItem('jsonbin_key');
+            if(localStorage.getItem('jsonbin_id')) document.getElementById('jsonBinId').value = localStorage.getItem('jsonbin_id');
             updateAdminProductList();
             renderAdminCategoryList();
             modal.classList.remove('hidden');
@@ -962,7 +1011,8 @@
             printWindow.document.close();
         }
 
-        window.onload = function() {
+        window.onload = async function() {
+            await loadFromCloud();
             renderCategories();
             filterProducts();
         }
