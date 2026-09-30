@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -235,20 +235,27 @@
                     </div>
                 </div>
 
-                <!-- Sección de Productos -->
+                <!-- Sección de Productos con Filtro en Admin -->
                 <div class="space-y-4">
-                    <div class="flex justify-between items-center bg-slate-950 p-4 rounded-2xl border border-slate-800">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-slate-950 p-4 rounded-2xl border border-slate-800 gap-4">
                         <div>
-                            <h4 class="text-sm font-bold text-white">Registrar Nuevo Producto</h4>
-                            <p class="text-xs text-slate-400">Añade componentes uno tras otro sin cerrar el panel</p>
+                            <h4 class="text-sm font-bold text-white">Inventario y Productos</h4>
+                            <p class="text-xs text-slate-400">Filtra por categoría para gestionar, editar o eliminar</p>
                         </div>
-                        <button onclick="openProductForm()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-4 py-2.5 rounded-xl text-xs transition-all flex items-center gap-2 shadow-lg shadow-blue-600/30">
+                        <button onclick="openProductForm()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-4 py-2.5 rounded-xl text-xs transition-all flex items-center gap-2 shadow-lg shadow-blue-600/30 whitespace-nowrap">
                             <i class="fa-solid fa-plus"></i> Nuevo Producto
                         </button>
                     </div>
 
+                    <!-- Filtro de Categorías en Admin -->
+                    <div class="flex items-center gap-2 overflow-x-auto pb-1">
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider whitespace-nowrap"><i class="fa-solid fa-filter mr-1 text-blue-400"></i> Filtrar Admin:</span>
+                        <div id="adminCategoryFilterTabs" class="flex gap-2">
+                            <!-- Botones dinámicos de filtro de admin -->
+                        </div>
+                    </div>
+
                     <div>
-                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Listado Actual en el Catálogo</h4>
                         <div class="space-y-3" id="adminProductList"></div>
                     </div>
                 </div>
@@ -490,6 +497,7 @@
         ];
 
         let currentCategory = 'todos';
+        let currentAdminCategory = 'todos';
         let cart = [];
         const ADMIN_PIN = "2230";
 
@@ -557,6 +565,29 @@
             container.innerHTML = html;
         }
 
+        function renderAdminCategoryFilterTabs() {
+            const container = document.getElementById('adminCategoryFilterTabs');
+            let html = `
+                <button onclick="setAdminCategory('todos')" id="admin-cat-todos" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${currentAdminCategory === 'todos' ? 'bg-blue-600 text-white' : 'bg-slate-900 border border-slate-800 text-slate-300'}">
+                    Todos
+                </button>
+            `;
+            categories.forEach(cat => {
+                html += `
+                    <button onclick="setAdminCategory('${cat}')" id="admin-cat-${cat}" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${currentAdminCategory === cat ? 'bg-blue-600 text-white' : 'bg-slate-900 border border-slate-800 text-slate-300'}">
+                        ${cat}
+                    </button>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function setAdminCategory(cat) {
+            currentAdminCategory = cat;
+            renderAdminCategoryFilterTabs();
+            updateAdminProductList();
+        }
+
         function renderProductCategorySelect() {
             const select = document.getElementById('prodCategory');
             select.innerHTML = categories.map(cat => `<option value="${cat}">${cat}</option>`).join('');
@@ -590,6 +621,8 @@
                 return;
             }
             document.getElementById('adminStatusMsg').classList.add('hidden');
+            currentAdminCategory = 'todos';
+            renderAdminCategoryFilterTabs();
             updateAdminProductList();
             renderAdminCategoryList();
             modal.classList.remove('hidden');
@@ -631,6 +664,7 @@
             categories.push(catName);
             input.value = '';
             renderAdminCategoryList();
+            renderAdminCategoryFilterTabs();
             renderProductCategorySelect();
         }
 
@@ -642,21 +676,29 @@
             if(confirm(`¿Deseas eliminar la categoría "${catName}"?`)) {
                 categories = categories.filter(c => c !== catName);
                 renderAdminCategoryList();
+                renderAdminCategoryFilterTabs();
                 renderProductCategorySelect();
                 if(currentCategory === catName) {
                     setCategory('todos');
+                }
+                if(currentAdminCategory === catName) {
+                    setAdminCategory('todos');
                 }
             }
         }
 
         function updateAdminProductList() {
             const list = document.getElementById('adminProductList');
-            if(products.length === 0) {
-                list.innerHTML = `<p class="text-center text-slate-500 py-6 text-xs">No hay productos registrados</p>`;
+            const filteredProducts = currentAdminCategory === 'todos' 
+                ? products 
+                : products.filter(p => p.category === currentAdminCategory);
+
+            if(filteredProducts.length === 0) {
+                list.innerHTML = `<p class="text-center text-slate-500 py-6 text-xs">No hay productos registrados en esta categoría</p>`;
                 return;
             }
 
-            list.innerHTML = products.map(p => `
+            list.innerHTML = filteredProducts.map(p => `
                 <div class="flex items-center justify-between bg-slate-950 p-3.5 rounded-2xl border border-slate-800 gap-4">
                     <div class="flex items-center gap-3">
                         <img src="${p.image}" alt="${p.name}" onerror="this.src='https://placehold.co/100x100/0f172a/ffffff?text=PC'" class="w-10 h-10 object-cover rounded-xl border border-slate-800">
@@ -743,11 +785,9 @@
                 saveToStorage();
                 updateAdminProductList();
                 
-                // Reiniciar formulario para agregar otro producto inmediatamente sin cerrar la ventana de añadir
                 document.getElementById('productForm').reset();
                 document.getElementById('prodName').focus();
                 
-                // Mostrar notificación breve de éxito inline
                 const titleEl = document.getElementById('formModalTitle');
                 const originalText = titleEl.innerText;
                 titleEl.innerText = "¡Producto guardado! Agrega el siguiente:";
@@ -1038,7 +1078,6 @@
             renderCategories();
             filterProducts();
             
-            // Sincronización automática en tiempo real cada 10 segundos para otros navegadores
             setInterval(async () => {
                 await loadFromCloud();
                 renderCategories();
