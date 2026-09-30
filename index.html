@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -173,7 +173,7 @@
             </div>
             <div>
                 <h3 class="font-extrabold text-lg text-white">Código de Administrador</h3>
-                <p class="text-xs text-slate-400 mt-1">Ingresa el PIN para gestionar productos (PIN predeterminado: <span class="text-amber-400 font-bold">CODE</span>)</p>
+                <p class="text-xs text-slate-400 mt-1">Ingresa el PIN para gestionar productos (PIN predeterminado: <span class="text-amber-400 font-bold">2230</span>)</p>
             </div>
             <input type="password" id="pinInput" placeholder="••••" maxlength="4" class="w-full bg-slate-950 border border-slate-800 rounded-xl text-center text-2xl tracking-widest py-3 text-white focus:outline-none focus:border-amber-500">
             <p id="pinError" class="text-xs text-red-400 hidden font-semibold">Código PIN incorrecto</p>
@@ -240,7 +240,7 @@
                     <div class="flex justify-between items-center bg-slate-950 p-4 rounded-2xl border border-slate-800">
                         <div>
                             <h4 class="text-sm font-bold text-white">Registrar Nuevo Producto</h4>
-                            <p class="text-xs text-slate-400">Añade un nuevo componente al catálogo general</p>
+                            <p class="text-xs text-slate-400">Añade componentes uno tras otro sin cerrar el panel</p>
                         </div>
                         <button onclick="openProductForm()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-4 py-2.5 rounded-xl text-xs transition-all flex items-center gap-2 shadow-lg shadow-blue-600/30">
                             <i class="fa-solid fa-plus"></i> Nuevo Producto
@@ -278,7 +278,7 @@
                     </div>
                     <div>
                         <h3 class="font-extrabold text-lg text-white" id="formModalTitle">Nuevo Producto</h3>
-                        <p class="text-xs text-slate-400">Completa los campos del componente</p>
+                        <p class="text-xs text-slate-400">Completa los campos para registrar componente</p>
                     </div>
                 </div>
                 <button onclick="closeProductForm()" class="text-slate-400 hover:text-white p-2 rounded-xl hover:bg-slate-800 transition-colors">
@@ -321,10 +321,10 @@
 
                 <div class="pt-4 flex gap-3">
                     <button type="button" onclick="closeProductForm()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-3 px-4 rounded-xl text-xs transition-all flex-1">
-                        Cancelar
+                        Terminar / Volver
                     </button>
                     <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-4 rounded-xl text-xs transition-all flex-1 shadow-lg shadow-blue-600/30">
-                        Guardar Componente
+                        Guardar y Agregar Otro +
                     </button>
                 </div>
             </form>
@@ -400,7 +400,6 @@
         </div>
     </footer>
 
-    <!-- Script de lógica con Credenciales Cloud Hardcoded -->
     <script>
         // CREDENCIALES JSONBIN HARDCODED INTERNAMENTE
         const CLOUD_MASTER_KEY = "$2a$10$zDVRXQE2nViYTAkTFbEK3OPyzJEcMycLeDBOcN5IAp2nQj3z3pq0e";
@@ -701,7 +700,7 @@
                     document.getElementById('prodDesc').value = p.desc;
                 }
             } else {
-                title.innerText = "Nuevo Producto";
+                title.innerText = "Nuevo Producto (Modo Múltiple)";
                 icon.className = "fa-solid fa-square-plus";
             }
 
@@ -710,6 +709,7 @@
 
         function closeProductForm() {
             document.getElementById('productFormModal').classList.add('hidden');
+            updateAdminProductList();
         }
 
         function handleProductFormSubmit(e) {
@@ -728,6 +728,7 @@
             if(editId) {
                 const idNum = parseInt(editId);
                 products = products.map(p => p.id === idNum ? { ...p, name, category, price, stock, image, desc } : p);
+                closeProductForm();
             } else {
                 const newProduct = {
                     id: products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1,
@@ -739,10 +740,23 @@
                     desc
                 };
                 products.unshift(newProduct);
+                saveToStorage();
+                updateAdminProductList();
+                
+                // Reiniciar formulario para agregar otro producto inmediatamente sin cerrar la ventana de añadir
+                document.getElementById('productForm').reset();
+                document.getElementById('prodName').focus();
+                
+                // Mostrar notificación breve de éxito inline
+                const titleEl = document.getElementById('formModalTitle');
+                const originalText = titleEl.innerText;
+                titleEl.innerText = "¡Producto guardado! Agrega el siguiente:";
+                titleEl.classList.add("text-emerald-400");
+                setTimeout(() => {
+                    titleEl.innerText = originalText;
+                    titleEl.classList.remove("text-emerald-400");
+                }, 2000);
             }
-
-            closeProductForm();
-            updateAdminProductList();
         }
 
         function deleteProduct(id) {
@@ -751,6 +765,7 @@
                 cart = cart.filter(i => i.id !== id);
                 updateAdminProductList();
                 updateCartUI();
+                saveToStorage();
             }
         }
 
