@@ -193,8 +193,8 @@
                         <i class="fa-solid fa-sliders"></i>
                     </div>
                     <div>
-                        <h3 class="font-extrabold text-lg text-white">Panel de Administración Cloud</h3>
-                        <p class="text-xs text-slate-400">Tus cambios se sincronizarán en todos los navegadores</p>
+                        <h3 class="font-extrabold text-lg text-white">Panel de Administración Cloud (GitHub)</h3>
+                        <p class="text-xs text-slate-400">Sincroniza tus cambios en vivo para cualquier navegador en internet</p>
                     </div>
                 </div>
                 <button onclick="toggleAdminPanel()" class="text-slate-400 hover:text-white p-2 rounded-xl hover:bg-slate-800 transition-colors">
@@ -205,14 +205,28 @@
             <div class="p-6 overflow-y-auto flex-1 space-y-8">
                 <!-- Sección de Configuración Cloud JSONBin -->
                 <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-3">
-                    <h4 class="text-sm font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-cloud text-blue-500"></i> Sincronización Cloud (Opcional para GitHub)
-                    </h4>
-                    <p class="text-xs text-slate-400">Para que los cambios se guarden globalmente para cualquier visitante en GitHub Pages, puedes configurar tu Master Key de JSONBin.io o usar el almacenamiento local automático.</p>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                        <input type="text" id="jsonBinKey" placeholder="JSONBin Master Key (Opcional)" class="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100">
-                        <input type="text" id="jsonBinId" placeholder="JSONBin Bin ID (Opcional)" class="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100">
+                    <div class="flex items-center justify-between flex-wrap gap-2">
+                        <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-cloud text-blue-500"></i> Sincronización Global (JSONBin.io)
+                        </h4>
+                        <span class="text-[10px] bg-blue-500/20 text-blue-400 font-bold px-2.5 py-1 rounded-md border border-blue-500/30">Recomendado para GitHub Pages</span>
                     </div>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Para que al subir tu página a GitHub puedas agregar o editar productos y verlos actualizados automáticamente en cualquier otro navegador o celular del mundo, ingresa tus credenciales gratuitas de <a href="https://jsonbin.io" target="_blank" class="text-blue-400 underline font-semibold">JSONBin.io</a>:
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                        <div>
+                            <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Master Key ($2s-...) </label>
+                            <input type="text" id="jsonBinKey" placeholder="Ingresa tu Master Key" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:border-blue-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Bin ID (ID del Bin)</label>
+                            <input type="text" id="jsonBinId" placeholder="Ingresa tu Bin ID" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:border-blue-500 focus:outline-none">
+                        </div>
+                    </div>
+                    <button onclick="saveCloudConfig()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold px-4 py-2 rounded-xl transition-all border border-slate-700 flex items-center gap-1.5 mt-2">
+                        <i class="fa-solid fa-link text-blue-400"></i> Guardar Credenciales Cloud
+                    </button>
                 </div>
 
                 <!-- Sección de Gestión de Categorías -->
@@ -256,7 +270,7 @@
             </div>
 
             <div class="p-6 bg-slate-950 border-t border-slate-800 flex justify-between items-center">
-                <p id="adminStatusMsg" class="text-xs text-emerald-400 font-semibold hidden"><i class="fa-solid fa-check-circle mr-1"></i> Cambios guardados exitosamente</p>
+                <p id="adminStatusMsg" class="text-xs text-emerald-400 font-semibold hidden"><i class="fa-solid fa-check-circle mr-1"></i> Cambios guardados y sincronizados en la nube</p>
                 <div class="flex gap-3 ml-auto">
                     <button onclick="toggleAdminPanel()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-2.5 px-6 rounded-xl text-xs transition-all">
                         Cerrar
@@ -494,21 +508,38 @@
         function saveToStorage() {
             localStorage.setItem('pcbest_products', JSON.stringify(products));
             localStorage.setItem('pcbest_categories', JSON.stringify(categories));
-            
-            // Opcional: Si se configuró JSONBin
-            const apiKey = document.getElementById('jsonBinKey')?.value || localStorage.getItem('jsonbin_key');
-            const binId = document.getElementById('jsonBinId')?.value || localStorage.getItem('jsonbin_id');
+            syncToCloud();
+        }
+
+        function saveCloudConfig() {
+            const apiKey = document.getElementById('jsonBinKey').value.trim();
+            const binId = document.getElementById('jsonBinId').value.trim();
             if(apiKey && binId) {
                 localStorage.setItem('jsonbin_key', apiKey);
                 localStorage.setItem('jsonbin_id', binId);
-                fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': apiKey
-                    },
-                    body: JSON.stringify({ products, categories })
-                }).catch(err => console.error("Error sincronizando cloud", err));
+                alert("Credenciales Cloud guardadas exitosamente. Sincronizando datos...");
+                syncToCloud();
+            } else {
+                alert("Por favor ingresa ambos campos: Master Key y Bin ID.");
+            }
+        }
+
+        async function syncToCloud() {
+            const apiKey = localStorage.getItem('jsonbin_key');
+            const binId = localStorage.getItem('jsonbin_id');
+            if(apiKey && binId) {
+                try {
+                    await fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Master-Key': apiKey
+                        },
+                        body: JSON.stringify({ products, categories })
+                    });
+                } catch(err) {
+                    console.error("Error sincronizando cloud", err);
+                }
             }
         }
 
@@ -598,7 +629,7 @@
             setTimeout(() => {
                 msg.classList.add('hidden');
                 toggleAdminPanel();
-            }, 1000);
+            }, 1200);
         }
 
         function renderAdminCategoryList() {
