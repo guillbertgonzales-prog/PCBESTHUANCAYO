@@ -131,33 +131,39 @@
         </div>
     </div>
 
-    <!-- Modal Detalle de Producto -->
+    <!-- Modal Detalle de Producto - Horizontal Layout -->
     <div id="productDetailModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 w-full max-w-xl rounded-3xl overflow-hidden shadow-2xl flex flex-col">
-            <div class="relative h-64 bg-slate-950">
-                <img id="detailImage" src="" alt="Detalle" class="w-full h-full object-cover">
-                <button onclick="closeDetailModal()" class="absolute top-4 right-4 bg-slate-900/80 text-white hover:text-blue-400 w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-md transition-colors">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-4xl rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row relative">
+            <button onclick="closeDetailModal()" class="absolute top-4 right-4 z-10 bg-slate-800/80 text-white hover:text-blue-400 w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-md transition-colors">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            
+            <!-- Columna Izquierda: Imagen Completa -->
+            <div class="w-full md:w-1/2 bg-slate-950 p-6 flex items-center justify-center relative border-b md:border-b-0 md:border-r border-slate-800 min-h-[300px]">
+                <img id="detailImage" src="" alt="Detalle" class="max-h-80 w-auto object-contain drop-shadow-2xl">
                 <span id="detailCategory" class="absolute bottom-4 left-4 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-xl shadow-lg"></span>
             </div>
-            <div class="p-6 space-y-4">
-                <div>
+
+            <!-- Columna Derecha: Información y Detalles -->
+            <div class="w-full md:w-1/2 p-6 sm:p-8 flex flex-col justify-between space-y-6">
+                <div class="space-y-4">
                     <div class="flex justify-between items-start gap-4">
-                        <h3 id="detailName" class="text-xl font-extrabold text-white"></h3>
-                        <span id="detailStock" class="text-xs font-bold px-2.5 py-1 rounded-lg"></span>
+                        <h3 id="detailName" class="text-xl sm:text-2xl font-extrabold text-white"></h3>
+                        <span id="detailStock" class="text-xs font-bold px-2.5 py-1 rounded-lg whitespace-nowrap"></span>
                     </div>
-                    <p id="detailPrice" class="text-2xl font-black text-blue-400 mt-2"></p>
+                    <p id="detailPrice" class="text-2xl sm:text-3xl font-black text-blue-400"></p>
+                    
+                    <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-1.5">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400"><i class="fa-solid fa-circle-info mr-1 text-blue-500"></i> Especificaciones</h4>
+                        <p id="detailDesc" class="text-sm text-slate-300 leading-relaxed"></p>
+                    </div>
                 </div>
-                <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800">
-                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5"><i class="fa-solid fa-circle-info mr-1 text-blue-500"></i> Especificaciones y Detalles</h4>
-                    <p id="detailDesc" class="text-sm text-slate-300 leading-relaxed"></p>
-                </div>
-                <div class="pt-2 flex gap-3">
-                    <button onclick="closeDetailModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-3 px-4 rounded-xl text-xs transition-all flex-1">
+
+                <div class="pt-4 flex gap-3 border-t border-slate-800">
+                    <button onclick="closeDetailModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-3.5 px-6 rounded-xl text-xs transition-all">
                         Cerrar
                     </button>
-                    <button id="detailAddBtn" onclick="" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-4 rounded-xl text-xs transition-all flex-1 shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2">
+                    <button id="detailAddBtn" onclick="" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 px-6 rounded-xl text-xs transition-all flex-1 shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2">
                         <i class="fa-solid fa-cart-plus"></i> Agregar a Cotización
                     </button>
                 </div>
