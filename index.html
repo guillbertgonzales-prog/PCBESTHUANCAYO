@@ -86,17 +86,23 @@
         </div>
     </section>
 
-    <!-- Categories Tabs -->
-    <section id="categorias" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-6">
-        <div class="flex items-center justify-between mb-6 flex-wrap gap-4">
+    <!-- Categories Tabs & Subcategories -->
+    <section id="categorias" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-6 space-y-4">
+        <div class="flex items-center justify-between mb-2 flex-wrap gap-4">
             <h2 class="text-xl font-extrabold text-white flex items-center gap-2">
-                <i class="fa-solid fa-filter text-blue-500"></i> Filtrar por Categoría
+                <i class="fa-solid fa-filter text-blue-500"></i> Filtrar por Categoría y Subcategoría
             </h2>
             <span id="productCounter" class="text-xs text-slate-400 font-bold bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800">Mostrando todos los productos</span>
         </div>
         
+        <!-- Main Categories Container -->
         <div id="categoryContainer" class="flex gap-2 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-slate-800">
-            <!-- Renderizado dinámico de categorías -->
+            <!-- Renderizado dinámico de categorías principales -->
+        </div>
+
+        <!-- Subcategories Container (Dynamic) -->
+        <div id="subcategoryContainer" class="flex gap-2 overflow-x-auto pb-2 hidden items-center bg-slate-900/60 p-3 rounded-2xl border border-slate-800/80">
+            <!-- Renderizado dinámico de subcategorías -->
         </div>
     </section>
 
@@ -109,7 +115,7 @@
         <div id="noResults" class="hidden text-center py-20">
             <i class="fa-solid fa-box-open text-5xl text-slate-600 mb-4"></i>
             <h3 class="text-lg font-bold text-slate-300">No se encontraron productos</h3>
-            <p class="text-sm text-slate-500 mt-1">Intenta con otra palabra clave o categoría.</p>
+            <p class="text-sm text-slate-500 mt-1">Intenta con otra palabra clave, categoría o subcategoría.</p>
         </div>
     </main>
 
@@ -131,39 +137,36 @@
         </div>
     </div>
 
-    <!-- Modal Detalle de Producto - Horizontal Layout -->
+    <!-- Modal Detalle de Producto -->
     <div id="productDetailModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 w-full max-w-4xl rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row relative">
-            <button onclick="closeDetailModal()" class="absolute top-4 right-4 z-10 bg-slate-800/80 text-white hover:text-blue-400 w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-md transition-colors">
-                <i class="fa-solid fa-xmark text-lg"></i>
-            </button>
-            
-            <!-- Columna Izquierda: Imagen Completa -->
-            <div class="w-full md:w-1/2 bg-slate-950 p-6 flex items-center justify-center relative border-b md:border-b-0 md:border-r border-slate-800 min-h-[300px]">
-                <img id="detailImage" src="" alt="Detalle" class="max-h-80 w-auto object-contain drop-shadow-2xl">
-                <span id="detailCategory" class="absolute bottom-4 left-4 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-xl shadow-lg"></span>
-            </div>
-
-            <!-- Columna Derecha: Información y Detalles -->
-            <div class="w-full md:w-1/2 p-6 sm:p-8 flex flex-col justify-between space-y-6">
-                <div class="space-y-4">
-                    <div class="flex justify-between items-start gap-4">
-                        <h3 id="detailName" class="text-xl sm:text-2xl font-extrabold text-white"></h3>
-                        <span id="detailStock" class="text-xs font-bold px-2.5 py-1 rounded-lg whitespace-nowrap"></span>
-                    </div>
-                    <p id="detailPrice" class="text-2xl sm:text-3xl font-black text-blue-400"></p>
-                    
-                    <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-1.5">
-                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400"><i class="fa-solid fa-circle-info mr-1 text-blue-500"></i> Especificaciones</h4>
-                        <p id="detailDesc" class="text-sm text-slate-300 leading-relaxed"></p>
-                    </div>
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-xl rounded-3xl overflow-hidden shadow-2xl flex flex-col">
+            <div class="relative h-64 bg-slate-950">
+                <img id="detailImage" src="" alt="Detalle" class="w-full h-full object-cover">
+                <button onclick="closeDetailModal()" class="absolute top-4 right-4 bg-slate-900/80 text-white hover:text-blue-400 w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-md transition-colors">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+                <div class="absolute bottom-4 left-4 flex gap-2">
+                    <span id="detailCategory" class="bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-xl shadow-lg"></span>
+                    <span id="detailSubcategory" class="bg-cyan-600 text-white text-xs font-bold px-3 py-1 rounded-xl shadow-lg hidden"></span>
                 </div>
-
-                <div class="pt-4 flex gap-3 border-t border-slate-800">
-                    <button onclick="closeDetailModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-3.5 px-6 rounded-xl text-xs transition-all">
+            </div>
+            <div class="p-6 space-y-4">
+                <div>
+                    <div class="flex justify-between items-start gap-4">
+                        <h3 id="detailName" class="text-xl font-extrabold text-white"></h3>
+                        <span id="detailStock" class="text-xs font-bold px-2.5 py-1 rounded-lg"></span>
+                    </div>
+                    <p id="detailPrice" class="text-2xl font-black text-blue-400 mt-2"></p>
+                </div>
+                <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5"><i class="fa-solid fa-circle-info mr-1 text-blue-500"></i> Especificaciones y Detalles</h4>
+                    <p id="detailDesc" class="text-sm text-slate-300 leading-relaxed"></p>
+                </div>
+                <div class="pt-2 flex gap-3">
+                    <button onclick="closeDetailModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-3 px-4 rounded-xl text-xs transition-all flex-1">
                         Cerrar
                     </button>
-                    <button id="detailAddBtn" onclick="" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 px-6 rounded-xl text-xs transition-all flex-1 shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2">
+                    <button id="detailAddBtn" onclick="" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-4 rounded-xl text-xs transition-all flex-1 shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2">
                         <i class="fa-solid fa-cart-plus"></i> Agregar a Cotización
                     </button>
                 </div>
@@ -179,7 +182,7 @@
             </div>
             <div>
                 <h3 class="font-extrabold text-lg text-white">Código de Administrador</h3>
-                <p class="text-xs text-slate-400 mt-1">Ingresa el PIN para gestionar productos (PIN predeterminado: <span class="text-amber-400 font-bold">oño</span>)</p>
+                <p class="text-xs text-slate-400 mt-1">Ingresa el PIN para gestionar productos (<span class="text-amber-400 font-bold">PIN: 2230</span>)</p>
             </div>
             <input type="password" id="pinInput" placeholder="••••" maxlength="4" class="w-full bg-slate-950 border border-slate-800 rounded-xl text-center text-2xl tracking-widest py-3 text-white focus:outline-none focus:border-amber-500">
             <p id="pinError" class="text-xs text-red-400 hidden font-semibold">Código PIN incorrecto</p>
@@ -199,8 +202,8 @@
                         <i class="fa-solid fa-sliders"></i>
                     </div>
                     <div>
-                        <h3 class="font-extrabold text-lg text-white">Panel de Administración Cloud (GitHub)</h3>
-                        <p class="text-xs text-slate-400">Sincronización en vivo automática configurada</p>
+                        <h3 class="font-extrabold text-lg text-white">Panel de Administración de Categorías y Subcategorías</h3>
+                        <p class="text-xs text-slate-400">Sincronización en la nube activa</p>
                     </div>
                 </div>
                 <button onclick="toggleAdminPanel()" class="text-slate-400 hover:text-white p-2 rounded-xl hover:bg-slate-800 transition-colors">
@@ -209,65 +212,65 @@
             </div>
 
             <div class="p-6 overflow-y-auto flex-1 space-y-8">
-                <!-- Sección de Configuración Cloud JSONBin (Sincronizada Automáticamente) -->
-                <div class="bg-slate-950 p-5 rounded-2xl border border-emerald-500/30 space-y-2">
-                    <div class="flex items-center justify-between flex-wrap gap-2">
-                        <h4 class="text-sm font-bold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-cloud-arrow-up text-emerald-400"></i> Sincronización Global en la Nube Activa
-                        </h4>
-                        <span class="text-[10px] bg-emerald-500/20 text-emerald-400 font-bold px-2.5 py-1 rounded-md border border-emerald-500/30">¡Conectado a JSONBin!</span>
-                    </div>
-                    <p class="text-xs text-slate-300 leading-relaxed">
-                        Tus credenciales de la nube ya se encuentran integradas internamente. Cualquier cambio que guardes se actualizará automáticamente en cualquier navegador o dispositivo del mundo al instante.
-                    </p>
-                </div>
-
-                <!-- Sección de Gestión de Categorías con botón Guardar Categoría -->
+                <!-- Gestión de Categorías principales -->
                 <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-4">
-                    <div class="flex justify-between items-center flex-wrap gap-2">
-                        <div>
-                            <h4 class="text-sm font-bold text-white flex items-center gap-2">
-                                <i class="fa-solid fa-folder-plus text-blue-500"></i> Gestión de Categorías
-                            </h4>
-                            <p class="text-xs text-slate-400">Crea nuevas categorías para clasificar tu hardware</p>
-                        </div>
+                    <div>
+                        <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-folder-plus text-blue-500"></i> Gestión de Categorías Principales
+                        </h4>
+                        <p class="text-xs text-slate-400">Crea nuevas categorías o edítalas</p>
                     </div>
-                    
                     <form onsubmit="handleCategorySubmit(event)" class="flex gap-3 flex-col sm:flex-row">
-                        <input type="text" id="newCategoryName" required placeholder="Nombre de nueva categoría (Ej. Refrigeración líquida)" class="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-xs text-slate-100 focus:outline-none focus:border-blue-500">
+                        <input type="text" id="newCategoryName" required placeholder="Nombre de nueva categoría..." class="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-xs text-slate-100 focus:outline-none focus:border-blue-500">
                         <button type="submit" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-3 rounded-xl text-xs transition-all shadow-lg shadow-emerald-600/30 whitespace-nowrap flex items-center justify-center gap-2">
                             <i class="fa-solid fa-floppy-disk"></i> Guardar Categoría
                         </button>
                     </form>
+                    <div id="adminCategoryList" class="flex flex-wrap gap-2 pt-2"></div>
+                </div>
+
+                <!-- Gestión de Subcategorías -->
+                <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-4">
+                    <div>
+                        <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-folder-tree text-cyan-400"></i> Gestión de Subcategorías
+                        </h4>
+                        <p class="text-xs text-slate-400">Asocia subcategorías específicas a una categoría principal</p>
+                    </div>
                     
-                    <div id="adminCategoryList" class="flex flex-wrap gap-2 pt-2">
-                        <!-- Categorías actuales -->
+                    <form onsubmit="handleSubcategorySubmit(event)" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <select id="subCatParentSelect" required class="bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-xs text-slate-100 focus:outline-none focus:border-cyan-500">
+                            <option value="">Seleccionar Categoría...</option>
+                        </select>
+                        <input type="text" id="newSubcategoryName" required placeholder="Nombre de subcategoría (Ej. DDR5, AM5)..." class="bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-xs text-slate-100 focus:outline-none focus:border-cyan-500">
+                        <button type="submit" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-6 py-3 rounded-xl text-xs transition-all shadow-lg shadow-cyan-600/30 whitespace-nowrap flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-plus"></i> Agregar Subcategoría
+                        </button>
+                    </form>
+                    
+                    <div id="adminSubcategoryList" class="space-y-3 pt-2">
+                        <!-- Listado de subcategorías por categoría -->
                     </div>
                 </div>
 
-                <!-- Sección de Productos con Filtro en Admin -->
+                <!-- Sección de Productos -->
                 <div class="space-y-4">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-slate-950 p-4 rounded-2xl border border-slate-800 gap-4">
                         <div>
-                            <h4 class="text-sm font-bold text-white">Inventario y Productos</h4>
-                            <p class="text-xs text-slate-400">Filtra por categoría para gestionar, editar o eliminar</p>
+                            <h4 class="text-sm font-bold text-white">Inventario de Productos</h4>
+                            <p class="text-xs text-slate-400">Filtra y gestiona tus componentes</p>
                         </div>
                         <button onclick="openProductForm()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-4 py-2.5 rounded-xl text-xs transition-all flex items-center gap-2 shadow-lg shadow-blue-600/30 whitespace-nowrap">
                             <i class="fa-solid fa-plus"></i> Nuevo Producto
                         </button>
                     </div>
 
-                    <!-- Filtro de Categorías en Admin -->
                     <div class="flex items-center gap-2 overflow-x-auto pb-1">
                         <span class="text-xs font-bold text-slate-400 uppercase tracking-wider whitespace-nowrap"><i class="fa-solid fa-filter mr-1 text-blue-400"></i> Filtrar Admin:</span>
-                        <div id="adminCategoryFilterTabs" class="flex gap-2">
-                            <!-- Botones dinámicos de filtro de admin -->
-                        </div>
+                        <div id="adminCategoryFilterTabs" class="flex gap-2"></div>
                     </div>
 
-                    <div>
-                        <div class="space-y-3" id="adminProductList"></div>
-                    </div>
+                    <div class="space-y-3" id="adminProductList"></div>
                 </div>
             </div>
 
@@ -311,25 +314,31 @@
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Categoría</label>
-                        <select id="prodCategory" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-blue-500">
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Categoría Principal</label>
+                        <select id="prodCategory" onchange="updateSubcategoryDropdownOptions()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-blue-500">
                             <!-- Opciones dinámicas -->
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Precio (S/.)</label>
-                        <input type="number" step="0.01" id="prodPrice" required placeholder="0.00" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-blue-500">
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Subcategoría (Opcional)</label>
+                        <select id="prodSubcategory" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-blue-500">
+                            <option value="">-- Sin subcategoría --</option>
+                        </select>
                     </div>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Precio (S/.)</label>
+                        <input type="number" step="0.01" id="prodPrice" required placeholder="0.00" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
                         <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Stock</label>
                         <input type="number" id="prodStock" required value="10" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-blue-500">
                     </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">URL de Imagen (Opcional)</label>
-                        <input type="url" id="prodImage" placeholder="https://..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-blue-500">
-                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">URL de Imagen (Opcional)</label>
+                    <input type="url" id="prodImage" placeholder="https://..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-blue-500">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Descripción y Detalles Completos</label>
@@ -418,10 +427,10 @@
     </footer>
 
     <script>
-        // CREDENCIALES JSONBIN HARDCODED INTERNAMENTE
         const CLOUD_MASTER_KEY = "$2a$10$zDVRXQE2nViYTAkTFbEK3OPyzJEcMycLeDBOcN5IAp2nQj3z3pq0e";
         const CLOUD_BIN_ID = "6abd35cbac6210605a06028a";
 
+        // Categorías principales y subcategorías (Diccionario o Mapa)
         let categories = [
             "Procesadores",
             "Tarjetas de Video",
@@ -431,417 +440,249 @@
             "Cases y Fuentes"
         ];
 
+        let subcategories = {
+            "Procesadores": ["AMD Ryzen", "Intel Core"],
+            "Tarjetas de Video": ["NVIDIA GeForce", "AMD Radeon"],
+            "Placas Madre": ["Chipset AMD", "Chipset Intel"],
+            "Memorias RAM": ["DDR4", "DDR5"],
+            "Almacenamiento": ["SSD NVMe M.2", "Discos duros HDD", "SSD SATA"],
+            "Cases y Fuentes": ["Cases Gamer", "Fuentes de Poder 80+", "Combos"]
+        };
+
         let products = [
             {
                 id: 1,
                 name: "AMD Ryzen 5 5600G",
                 category: "Procesadores",
+                subcategory: "AMD Ryzen",
                 price: 540.00,
                 stock: 12,
                 image: "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=500&auto=format&fit=crop&q=60",
-                desc: "Procesador de escritorio con 6 núcleos y 12 hilos de procesamiento. Frecuencia base de 3.9GHz y turbo de hasta 4.4GHz. Incluye potentes gráficos integrados Radeon Vega 7 ideales para gaming sin tarjeta de video dedicada y disipador Wraith Stealth."
+                desc: "Procesador de escritorio con 6 núcleos y 12 hilos. Gráficos integrados Radeon Vega 7."
             },
             {
                 id: 2,
                 name: "Intel Core i5-13400F",
                 category: "Procesadores",
+                subcategory: "Intel Core",
                 price: 680.00,
                 stock: 8,
                 image: "https://images.unsplash.com/photo-1555680202-c86f0e12f086?w=500&auto=format&fit=crop&q=60",
-                desc: "Procesador Intel de 13ª generación con arquitectura híbrida de 10 núcleos (6 Performance-cores y 4 Efficient-cores) y 16 hilos. Frecuencia turbo de hasta 4.6 GHz. Socket LGA 1700 (requiere tarjeta gráfica dedicada)."
+                desc: "Procesador Intel de 13ª generación, 10 núcleos y 16 hilos. Socket LGA 1700."
             },
             {
                 id: 3,
                 name: "NVIDIA GeForce RTX 4060 8GB",
                 category: "Tarjetas de Video",
+                subcategory: "NVIDIA GeForce",
                 price: 1350.00,
                 stock: 5,
                 image: "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=500&auto=format&fit=crop&q=60",
-                desc: "Tarjeta gráfica de última generación con arquitectura Ada Lovelace. Cuenta con 8GB de memoria GDDR6, soporte para DLSS 3 con inteligencia artificial, Ray Tracing avanzado y salidas DisplayPort 1.4a y HDMI 2.1a."
+                desc: "Tarjeta gráfica con arquitectura Ada Lovelace y 8GB GDDR6."
             },
             {
                 id: 4,
                 name: "Gigabyte B550M AORUS ELITE",
                 category: "Placas Madre",
+                subcategory: "Chipset AMD",
                 price: 420.00,
                 stock: 10,
                 image: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=500&auto=format&fit=crop&q=60",
-                desc: "Placa base Micro-ATX con chipset AMD B550, socket AM4. Soporta PCIe 4.0 para SSDs ultra rápidos, diseño digital VRM de 5+3 fases, disipadores térmicos M.2 y audio de alta fidelidad con condensadores de gama alta."
+                desc: "Placa base Micro-ATX con chipset AMD B550, socket AM4."
             },
             {
                 id: 5,
-                name: "MSI PRO B760M-A WIFI",
-                category: "Placas Madre",
-                price: 590.00,
-                stock: 6,
-                image: "https://images.unsplash.com/photo-1563770660941-20978e870e26?w=500&auto=format&fit=crop&q=60",
-                desc: "Motherboard LGA 1700 para procesadores Intel Core de 12ª, 13ª y 14ª gen. Compatible con memoria DDR4, conectividad Wi-Fi 6E de alta velocidad, LAN 2.5G y múltiples ranuras M.2 Shield Frozr."
-            },
-            {
-                id: 6,
                 name: "Lexar Thor 16GB (2x8GB) 3200MHz",
                 category: "Memorias RAM",
+                subcategory: "DDR4",
                 price: 210.00,
                 stock: 20,
                 image: "https://images.unsplash.com/photo-1562976540-1e02c51414c5?w=500&auto=format&fit=crop&q=60",
-                desc: "Kit de memoria RAM DDR4 de alto rendimiento con diseño de perfil bajo y disipador de aluminio color gris oscuro. Frecuencia de 3200MHz CL16 con soporte para perfiles XMP 2.0."
+                desc: "Kit de memoria RAM DDR4 de alto rendimiento 3200MHz CL16."
             },
             {
-                id: 7,
+                id: 6,
                 name: "Kingston NV2 1TB NVMe PCIe 4.0",
                 category: "Almacenamiento",
+                subcategory: "SSD NVMe M.2",
                 price: 270.00,
                 stock: 25,
                 image: "https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=500&auto=format&fit=crop&q=60",
-                desc: "Unidad de estado sólido M.2 2280 NVMe con velocidades de lectura de hasta 3500 MB/s. Menor consumo de energía, menor temperatura y tiempos de carga reducidos para sistemas operativos y juegos pesados."
-            },
-            {
-                id: 8,
-                name: "Antryx Crystal Gaming + Fuente 500W",
-                category: "Cases y Fuentes",
-                price: 220.00,
-                stock: 7,
-                image: "https://images.unsplash.com/photo-1587202372634-32705e3bf49c?w=500&auto=format&fit=crop&q=60",
-                desc: "Chasis Mid-Tower gamer con panel lateral de vidrio templado panorámico, excelente flujo de aire con ventiladores RGB preinstalados e incluye fuente de alimentación de 500W certificada."
+                desc: "Unidad SSD M.2 NVMe con velocidades de hasta 3500 MB/s."
             }
         ];
 
         let currentCategory = 'todos';
+        let currentSubcategory = 'todos';
         let currentAdminCategory = 'todos';
         let cart = [];
         const ADMIN_PIN = "2230";
 
-        function saveToStorage() {
-            localStorage.setItem('pcbest_products', JSON.stringify(products));
-            localStorage.setItem('pcbest_categories', JSON.stringify(categories));
-            syncToCloud();
-        }
-
-        async function syncToCloud() {
-            try {
-                await fetch(`https://api.jsonbin.io/v3/b/${CLOUD_BIN_ID}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': CLOUD_MASTER_KEY
-                    },
-                    body: JSON.stringify({ products, categories })
-                });
-            } catch(err) {
-                console.error("Error sincronizando cloud", err);
-            }
-        }
-
         async function loadFromCloud() {
             try {
                 const res = await fetch(`https://api.jsonbin.io/v3/b/${CLOUD_BIN_ID}/latest`, {
-                    headers: { 'X-Master-Key': CLOUD_MASTER_KEY }
+                    headers: { "X-Master-Key": CLOUD_MASTER_KEY }
                 });
-                const data = await res.json();
-                if(data && data.record) {
-                    if(data.record.products && data.record.products.length > 0) {
-                        products = data.record.products;
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && data.record) {
+                        if (data.record.categories) categories = data.record.categories;
+                        if (data.record.subcategories) subcategories = data.record.subcategories;
+                        if (data.record.products) products = data.record.products;
                     }
-                    if(data.record.categories && data.record.categories.length > 0) {
-                        categories = data.record.categories;
-                    }
-                    localStorage.setItem('pcbest_products', JSON.stringify(products));
-                    localStorage.setItem('pcbest_categories', JSON.stringify(categories));
                 }
-            } catch(e) {
-                console.error("Cargando desde almacenamiento local de respaldo");
-                let localP = localStorage.getItem('pcbest_products');
-                let localC = localStorage.getItem('pcbest_categories');
-                if(localP) products = JSON.parse(localP);
-                if(localC) categories = JSON.parse(localC);
+            } catch (e) {
+                console.log("Modo local activo");
             }
+            renderAll();
+        }
+
+        async function saveToCloud() {
+            try {
+                await fetch(`https://api.jsonbin.io/v3/b/${CLOUD_BIN_ID}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-Master-Key": CLOUD_MASTER_KEY
+                    },
+                    body: JSON.stringify({ categories, subcategories, products })
+                });
+            } catch (e) {
+                console.error("Error al sincronizar", e);
+            }
+        }
+
+        function renderAll() {
+            renderCategories();
+            renderSubcategories();
+            renderProducts();
+            renderCartCount();
         }
 
         function renderCategories() {
             const container = document.getElementById('categoryContainer');
-            let html = `
-                <button onclick="setCategory('todos')" id="cat-todos" class="category-btn active px-5 py-2.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap bg-blue-600 text-white shadow-md shadow-blue-600/30">
-                    <i class="fa-solid fa-border-all mr-1.5"></i> Todos
-                </button>
-            `;
-
+            let html = `<button onclick="selectCategory('todos')" class="px-5 py-2.5 rounded-xl font-bold text-xs whitespace-nowrap transition-all ${currentCategory === 'todos' ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30' : 'bg-slate-900 border border-slate-800 text-slate-300 hover:bg-slate-800'}">🌟 Todos</button>`;
+            
             categories.forEach(cat => {
-                html += `
-                    <button onclick="setCategory('${cat}')" id="cat-${cat}" class="category-btn px-5 py-2.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700">
-                        <i class="fa-solid fa-tag mr-1.5 text-blue-400"></i> ${cat}
-                    </button>
-                `;
+                const isActive = currentCategory === cat;
+                html += `<button onclick="selectCategory('${cat}')" class="px-5 py-2.5 rounded-xl font-bold text-xs whitespace-nowrap transition-all ${isActive ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30' : 'bg-slate-900 border border-slate-800 text-slate-300 hover:bg-slate-800'}">${cat}</button>`;
             });
             container.innerHTML = html;
         }
 
-        function renderAdminCategoryFilterTabs() {
-            const container = document.getElementById('adminCategoryFilterTabs');
-            let html = `
-                <button onclick="setAdminCategory('todos')" id="admin-cat-todos" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${currentAdminCategory === 'todos' ? 'bg-blue-600 text-white' : 'bg-slate-900 border border-slate-800 text-slate-300'}">
-                    Todos
-                </button>
-            `;
-            categories.forEach(cat => {
-                html += `
-                    <button onclick="setAdminCategory('${cat}')" id="admin-cat-${cat}" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${currentAdminCategory === cat ? 'bg-blue-600 text-white' : 'bg-slate-900 border border-slate-800 text-slate-300'}">
-                        ${cat}
-                    </button>
-                `;
+        function renderSubcategories() {
+            const subContainer = document.getElementById('subcategoryContainer');
+            if (currentCategory === 'todos' || !subcategories[currentCategory] || subcategories[currentCategory].length === 0) {
+                subContainer.classList.add('hidden');
+                currentSubcategory = 'todos';
+                return;
+            }
+
+            subContainer.classList.remove('hidden');
+            const subs = subcategories[currentCategory];
+            let html = `<span class="text-xs font-bold text-slate-400 mr-2"><i class="fa-solid fa-code-branch text-cyan-400"></i> Subcategoría:</span>`;
+            html += `<button onclick="selectSubcategory('todos')" class="px-3 py-1.5 rounded-lg font-bold text-xs transition-all ${currentSubcategory === 'todos' ? 'bg-cyan-600 text-white' : 'bg-slate-900 text-slate-300 hover:bg-slate-800'}">Todas en ${currentCategory}</button>`;
+
+            subs.forEach(sub => {
+                const isActive = currentSubcategory === sub;
+                html += `<button onclick="selectSubcategory('${sub}')" class="px-3 py-1.5 rounded-lg font-bold text-xs transition-all ${isActive ? 'bg-cyan-600 text-white' : 'bg-slate-900 text-slate-300 hover:bg-slate-800'}">${sub}</button>`;
             });
-            container.innerHTML = html;
+
+            subContainer.innerHTML = html;
         }
 
-        function setAdminCategory(cat) {
-            currentAdminCategory = cat;
-            renderAdminCategoryFilterTabs();
-            updateAdminProductList();
-        }
-
-        function renderProductCategorySelect() {
-            const select = document.getElementById('prodCategory');
-            select.innerHTML = categories.map(cat => `<option value="${cat}">${cat}</option>`).join('');
-        }
-
-        function requestPin() {
-            document.getElementById('pinInput').value = '';
-            document.getElementById('pinError').classList.add('hidden');
-            document.getElementById('pinModal').classList.remove('hidden');
-            setTimeout(() => document.getElementById('pinInput').focus(), 100);
-        }
-
-        function closePinModal() {
-            document.getElementById('pinModal').classList.add('hidden');
-        }
-
-        function verifyPin() {
-            const entered = document.getElementById('pinInput').value;
-            if(entered === ADMIN_PIN) {
-                closePinModal();
-                toggleAdminPanel();
-            } else {
-                document.getElementById('pinError').classList.remove('hidden');
-            }
-        }
-
-        function toggleAdminPanel() {
-            const modal = document.getElementById('adminPanelModal');
-            if(!modal.classList.contains('hidden')) {
-                modal.classList.add('hidden');
-                return;
-            }
-            document.getElementById('adminStatusMsg').classList.add('hidden');
-            currentAdminCategory = 'todos';
-            renderAdminCategoryFilterTabs();
-            updateAdminProductList();
-            renderAdminCategoryList();
-            modal.classList.remove('hidden');
-        }
-
-        function saveAdminChanges() {
-            saveToStorage();
+        function selectCategory(cat) {
+            currentCategory = cat;
+            currentSubcategory = 'todos';
             renderCategories();
-            filterProducts();
-            const msg = document.getElementById('adminStatusMsg');
-            msg.classList.remove('hidden');
-            setTimeout(() => {
-                msg.classList.add('hidden');
-                toggleAdminPanel();
-            }, 1200);
+            renderSubcategories();
+            renderProducts();
         }
 
-        function renderAdminCategoryList() {
-            const list = document.getElementById('adminCategoryList');
-            list.innerHTML = categories.map(cat => `
-                <div class="bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-xl flex items-center gap-2 text-xs text-slate-300">
-                    <span>${cat}</span>
-                    ${categories.length > 1 ? `<button onclick="deleteCategory('${cat}')" class="text-slate-500 hover:text-red-400"><i class="fa-solid fa-xmark"></i></button>` : ''}
-                </div>
-            `).join('');
+        function selectSubcategory(sub) {
+            currentSubcategory = sub;
+            renderSubcategories();
+            renderProducts();
         }
 
-        function handleCategorySubmit(e) {
-            e.preventDefault();
-            const input = document.getElementById('newCategoryName');
-            const catName = input.value.trim();
-            if(!catName) return;
+        function renderProducts() {
+            const grid = document.getElementById('productGrid');
+            const noResults = document.getElementById('noResults');
+            const searchVal = document.getElementById('searchInput').value.toLowerCase();
+            const counter = document.getElementById('productCounter');
 
-            if(categories.includes(catName)) {
-                alert("Esta categoría ya existe.");
+            let filtered = products.filter(p => {
+                const matchCat = currentCategory === 'todos' || p.category === currentCategory;
+                const matchSub = currentSubcategory === 'todos' || p.subcategory === currentSubcategory;
+                const matchSearch = p.name.toLowerCase().includes(searchVal) || p.desc.toLowerCase().includes(searchVal);
+                return matchCat && matchSub && matchSearch;
+            });
+
+            counter.innerText = `Mostrando ${filtered.length} producto(s)`;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                noResults.classList.remove('hidden');
                 return;
             }
+            noResults.classList.add('hidden');
 
-            categories.push(catName);
-            input.value = '';
-            renderAdminCategoryList();
-            renderAdminCategoryFilterTabs();
-            renderProductCategorySelect();
-            saveToStorage();
-            renderCategories();
-            filterProducts();
-        }
-
-        function deleteCategory(catName) {
-            if(categories.length <= 1) {
-                alert("Debes tener al menos una categoría.");
-                return;
-            }
-            if(confirm(`¿Deseas eliminar la categoría "${catName}"?`)) {
-                categories = categories.filter(c => c !== catName);
-                renderAdminCategoryList();
-                renderAdminCategoryFilterTabs();
-                renderProductCategorySelect();
-                if(currentCategory === catName) {
-                    setCategory('todos');
-                }
-                if(currentAdminCategory === catName) {
-                    setAdminCategory('todos');
-                }
-                saveToStorage();
-                renderCategories();
-                filterProducts();
-            }
-        }
-
-        function updateAdminProductList() {
-            const list = document.getElementById('adminProductList');
-            const filteredProducts = currentAdminCategory === 'todos' 
-                ? products 
-                : products.filter(p => p.category === currentAdminCategory);
-
-            if(filteredProducts.length === 0) {
-                list.innerHTML = `<p class="text-center text-slate-500 py-6 text-xs">No hay productos registrados en esta categoría</p>`;
-                return;
-            }
-
-            list.innerHTML = filteredProducts.map(p => `
-                <div class="flex items-center justify-between bg-slate-950 p-3.5 rounded-2xl border border-slate-800 gap-4">
-                    <div class="flex items-center gap-3">
-                        <img src="${p.image}" alt="${p.name}" onerror="this.src='https://placehold.co/100x100/0f172a/ffffff?text=PC'" class="w-10 h-10 object-cover rounded-xl border border-slate-800">
-                        <div>
-                            <h4 class="text-xs font-bold text-white">${p.name}</h4>
-                            <p class="text-[10px] text-slate-400">${p.category} | S/. ${p.price.toFixed(2)} | Stock: ${p.stock}</p>
+            let html = '';
+            filtered.forEach(p => {
+                html += `
+                    <div class="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-xl hover:border-blue-500/50 transition-all flex flex-col group">
+                        <div class="relative h-48 bg-slate-950 overflow-hidden cursor-pointer" onclick="openDetailModal(${p.id})">
+                            <img src="${p.image || 'https://placehold.co/400x300/0f172a/3b82f6?text=PC+Best'}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/400x300/0f172a/3b82f6?text=PC+Best'">
+                            <span class="absolute top-3 left-3 bg-blue-600/90 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-lg">${p.category}</span>
+                            ${p.subcategory ? `<span class="absolute top-3 right-3 bg-cyan-600/90 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-lg">${p.subcategory}</span>` : ''}
+                        </div>
+                        <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+                            <div>
+                                <h3 onclick="openDetailModal(${p.id})" class="font-bold text-base text-white hover:text-blue-400 cursor-pointer line-clamp-1">${p.name}</h3>
+                                <p class="text-xs text-slate-400 mt-1 line-clamp-2">${p.desc}</p>
+                            </div>
+                            <div class="flex items-center justify-between pt-2 border-t border-slate-800">
+                                <div>
+                                    <span class="text-[10px] text-slate-400 block font-bold uppercase">Precio</span>
+                                    <span class="text-lg font-black text-blue-400">S/. ${p.price.toFixed(2)}</span>
+                                </div>
+                                <button onclick="addToCart(${p.id})" class="bg-blue-600 hover:bg-blue-500 text-white p-3 rounded-2xl shadow-lg shadow-blue-600/30 transition-all">
+                                    <i class="fa-solid fa-cart-plus text-sm"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <button onclick="openProductForm(${p.id})" class="bg-blue-600/20 hover:bg-blue-600 text-blue-400 hover:text-white px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1">
-                            <i class="fa-solid fa-pen"></i> Editar
-                        </button>
-                        <button onclick="deleteProduct(${p.id})" class="bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1">
-                            <i class="fa-solid fa-trash-can"></i> Eliminar
-                        </button>
-                    </div>
-                </div>
-            `).join('');
+                `;
+            });
+            grid.innerHTML = html;
         }
 
-        function openProductForm(id = null) {
-            const formModal = document.getElementById('productFormModal');
-            const title = document.getElementById('formModalTitle');
-            const icon = document.getElementById('formModalIcon');
-            
-            document.getElementById('productForm').reset();
-            document.getElementById('editProductId').value = '';
-            renderProductCategorySelect();
-
-            if(id) {
-                const p = products.find(prod => prod.id === id);
-                if(p) {
-                    title.innerText = "Editar Producto";
-                    icon.className = "fa-solid fa-pen-to-square";
-                    document.getElementById('editProductId').value = p.id;
-                    document.getElementById('prodName').value = p.name;
-                    document.getElementById('prodCategory').value = p.category;
-                    document.getElementById('prodPrice').value = p.price;
-                    document.getElementById('prodStock').value = p.stock;
-                    document.getElementById('prodImage').value = p.image;
-                    document.getElementById('prodDesc').value = p.desc;
-                }
-            } else {
-                title.innerText = "Nuevo Producto (Modo Múltiple)";
-                icon.className = "fa-solid fa-square-plus";
-            }
-
-            formModal.classList.remove('hidden');
+        function filterProducts() {
+            renderProducts();
         }
 
-        function closeProductForm() {
-            document.getElementById('productFormModal').classList.add('hidden');
-            updateAdminProductList();
-        }
-
-        function handleProductFormSubmit(e) {
-            e.preventDefault();
-            const editId = document.getElementById('editProductId').value;
-            const name = document.getElementById('prodName').value;
-            const category = document.getElementById('prodCategory').value;
-            const price = parseFloat(document.getElementById('prodPrice').value);
-            const stock = parseInt(document.getElementById('prodStock').value);
-            let image = document.getElementById('prodImage').value;
-            if(!image) {
-                image = 'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=500&auto=format&fit=crop&q=60';
-            }
-            const desc = document.getElementById('prodDesc').value || 'Componente de alta calidad.';
-
-            if(editId) {
-                const idNum = parseInt(editId);
-                products = products.map(p => p.id === idNum ? { ...p, name, category, price, stock, image, desc } : p);
-                closeProductForm();
-            } else {
-                const newProduct = {
-                    id: products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1,
-                    name,
-                    category,
-                    price,
-                    stock,
-                    image,
-                    desc
-                };
-                products.unshift(newProduct);
-                saveToStorage();
-                updateAdminProductList();
-                
-                document.getElementById('productForm').reset();
-                document.getElementById('prodName').focus();
-                
-                const titleEl = document.getElementById('formModalTitle');
-                const originalText = titleEl.innerText;
-                titleEl.innerText = "¡Producto guardado! Agrega el siguiente:";
-                titleEl.classList.add("text-emerald-400");
-                setTimeout(() => {
-                    titleEl.innerText = originalText;
-                    titleEl.classList.remove("text-emerald-400");
-                }, 2000);
-            }
-        }
-
-        function deleteProduct(id) {
-            if(confirm("¿Estás seguro de eliminar este producto del catálogo?")) {
-                products = products.filter(p => p.id !== id);
-                cart = cart.filter(i => i.id !== id);
-                updateAdminProductList();
-                updateCartUI();
-                saveToStorage();
-            }
-        }
-
-        function showProductDetails(id) {
-            const p = products.find(prod => prod.id === id);
-            if(!p) return;
-
-            document.getElementById('detailImage').src = p.image;
+        // Modal detalle
+        function openDetailModal(id) {
+            const p = products.find(x => x.id === id);
+            if (!p) return;
+            document.getElementById('detailImage').src = p.image || 'https://placehold.co/600x400/0f172a/3b82f6?text=PC+Best';
             document.getElementById('detailCategory').innerText = p.category;
+            const subBadge = document.getElementById('detailSubcategory');
+            if (p.subcategory) {
+                subBadge.innerText = p.subcategory;
+                subBadge.classList.remove('hidden');
+            } else {
+                subBadge.classList.add('hidden');
+            }
             document.getElementById('detailName').innerText = p.name;
             document.getElementById('detailPrice').innerText = `S/. ${p.price.toFixed(2)}`;
             document.getElementById('detailDesc').innerText = p.desc;
             
-            const stockBadge = document.getElementById('detailStock');
-            stockBadge.innerText = `Stock: ${p.stock} unidades`;
-            stockBadge.className = p.stock > 0 ? "text-xs font-bold px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30" : "text-xs font-bold px-2.5 py-1 rounded-lg bg-red-500/20 text-red-400 border border-red-500/30";
+            const stockEl = document.getElementById('detailStock');
+            stockEl.innerText = `Stock: ${p.stock}`;
+            stockEl.className = p.stock > 0 ? 'text-xs font-bold px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-400' : 'text-xs font-bold px-2.5 py-1 rounded-lg bg-red-500/20 text-red-400';
 
-            const addBtn = document.getElementById('detailAddBtn');
-            addBtn.setAttribute('onclick', `addToCart(${p.id}); closeDetailModal();`);
-
+            document.getElementById('detailAddBtn').setAttribute('onclick', `addToCart(${p.id}); closeDetailModal();`);
             document.getElementById('productDetailModal').classList.remove('hidden');
         }
 
@@ -849,257 +690,363 @@
             document.getElementById('productDetailModal').classList.add('hidden');
         }
 
-        function setCategory(cat) {
-            currentCategory = cat;
-            document.querySelectorAll('.category-btn').forEach(btn => {
-                btn.className = "category-btn px-5 py-2.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700";
-            });
-            const activeBtn = document.getElementById('cat-' + cat);
-            if(activeBtn) {
-                activeBtn.className = "category-btn px-5 py-2.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap bg-blue-600 text-white shadow-md shadow-blue-600/30";
-            }
-            filterProducts();
-        }
-
-        function filterProducts() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            const grid = document.getElementById('productGrid');
-            const noResults = document.getElementById('noResults');
-
-            const filtered = products.filter(p => {
-                const matchCat = currentCategory === 'todos' || p.category === currentCategory;
-                const matchQuery = p.name.toLowerCase().includes(query) || p.desc.toLowerCase().includes(query);
-                return matchCat && matchQuery;
-            });
-
-            document.getElementById('productCounter').innerText = `Mostrando ${filtered.length} productos`;
-
-            if(filtered.length === 0) {
-                grid.innerHTML = '';
-                noResults.classList.remove('hidden');
-                return;
-            }
-
-            noResults.classList.add('hidden');
-            grid.innerHTML = filtered.map(p => `
-                <div class="bg-slate-900 border border-slate-800 hover:border-slate-700 rounded-2xl overflow-hidden shadow-xl transition-all flex flex-col group">
-                    <div class="relative h-48 bg-slate-950 overflow-hidden cursor-pointer" onclick="showProductDetails(${p.id})">
-                        <img src="${p.image}" alt="${p.name}" onerror="this.src='https://placehold.co/400x300/0f172a/ffffff?text=PcBest'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90">
-                        <span class="absolute top-3 left-3 bg-slate-900/85 backdrop-blur-md border border-slate-700 text-xs font-bold text-blue-400 px-2.5 py-1 rounded-lg">
-                            ${p.category}
-                        </span>
-                        <span class="absolute top-3 right-3 bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-[10px] font-bold px-2 py-0.5 rounded-md">
-                            Stock: ${p.stock}
-                        </span>
-                    </div>
-                    <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
-                        <div>
-                            <h3 onclick="showProductDetails(${p.id})" class="font-extrabold text-base text-white hover:text-blue-400 cursor-pointer transition-colors">${p.name}</h3>
-                            <p class="text-xs text-slate-400 mt-1 line-clamp-2">${p.desc}</p>
-                        </div>
-                        <div class="flex items-center justify-between pt-2 border-t border-slate-800 gap-2">
-                            <div>
-                                <span class="text-[10px] text-slate-500 block uppercase font-bold">Precio</span>
-                                <span class="text-base font-black text-white">S/. ${p.price.toFixed(2)}</span>
-                            </div>
-                            <div class="flex gap-1.5">
-                                <button onclick="showProductDetails(${p.id})" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-2.5 rounded-xl transition-all text-xs font-bold flex items-center gap-1" title="Ver detalles completos">
-                                    <i class="fa-solid fa-eye"></i> Detalles
-                                </button>
-                                <button onclick="addToCart(${p.id})" class="bg-blue-600 hover:bg-blue-500 text-white p-2.5 rounded-xl transition-all shadow-md shadow-blue-600/30 flex items-center justify-center" title="Agregar al carrito">
-                                    <i class="fa-solid fa-cart-plus text-sm"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
+        // Carrito
         function addToCart(id) {
-            const product = products.find(p => p.id === id);
-            const existing = cart.find(item => item.id === id);
-            if(existing) {
-                existing.qty += 1;
+            const p = products.find(x => x.id === id);
+            if (!p) return;
+            const existing = cart.find(x => x.id === id);
+            if (existing) {
+                existing.qty++;
             } else {
-                cart.push({ ...product, qty: 1 });
+                cart.push({ ...p, qty: 1 });
             }
-            updateCartUI();
+            renderCartCount();
         }
 
-        function updateCartQty(id, change) {
-            const item = cart.find(i => i.id === id);
-            if(item) {
-                item.qty += change;
-                if(item.qty <= 0) {
-                    cart = cart.filter(i => i.id !== id);
-                }
-            }
-            updateCartUI();
-        }
-
-        function removeFromCart(id) {
-            cart = cart.filter(i => i.id !== id);
-            updateCartUI();
-        }
-
-        function clearCart() {
-            cart = [];
-            updateCartUI();
-        }
-
-        function updateCartUI() {
-            const count = cart.reduce((acc, item) => acc + item.qty, 0);
-            document.getElementById('cartCount').innerText = count;
-
-            const total = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
-
-            document.getElementById('floatingCartTotal').innerText = `S/. ${total.toFixed(2)} (${count} ítems)`;
-            document.getElementById('cartTotalVal').innerText = `S/. ${total.toFixed(2)}`;
-
-            const list = document.getElementById('cartItemList');
-            if(cart.length === 0) {
-                list.innerHTML = `
-                    <div class="text-center py-12 text-slate-500">
-                        <i class="fa-solid fa-cart-shopping text-4xl mb-3"></i>
-                        <p class="text-sm font-semibold">Tu carrito está vacío</p>
-                    </div>
-                `;
-                return;
-            }
-
-            list.innerHTML = cart.map(item => `
-                <div class="flex items-center justify-between bg-slate-950 p-3.5 rounded-2xl border border-slate-800 gap-4">
-                    <div class="flex-1">
-                        <h4 class="text-xs font-bold text-white">${item.name}</h4>
-                        <p class="text-xs text-blue-400 font-medium">S/. ${item.price.toFixed(2)} c/u</p>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <button onclick="updateCartQty(${item.id}, -1)" class="w-7 h-7 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg flex items-center justify-center text-xs">-</button>
-                        <span class="text-xs font-bold w-6 text-center">${item.qty}</span>
-                        <button onclick="updateCartQty(${item.id}, 1)" class="w-7 h-7 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg flex items-center justify-center text-xs">+</button>
-                    </div>
-                    <div class="text-right">
-                        <span class="text-xs font-extrabold text-white">S/. ${(item.price * item.qty).toFixed(2)}</span>
-                    </div>
-                    <button onclick="removeFromCart(${item.id})" class="text-slate-500 hover:text-red-400 p-1">
-                        <i class="fa-solid fa-trash-can text-xs"></i>
-                    </button>
-                </div>
-            `).join('');
+        function renderCartCount() {
+            const totalCount = cart.reduce((acc, item) => acc + item.qty, 0);
+            const totalPrice = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
+            document.getElementById('cartCount').innerText = totalCount;
+            document.getElementById('floatingCartTotal').innerText = `S/. ${totalPrice.toFixed(2)} (${totalCount} ítems)`;
         }
 
         function toggleCartModal() {
             const modal = document.getElementById('cartModal');
-            modal.classList.toggle('hidden');
+            if (modal.classList.contains('hidden')) {
+                renderCartModalList();
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+
+        function renderCartModalList() {
+            const list = document.getElementById('cartItemList');
+            const totalVal = document.getElementById('cartTotalVal');
+            
+            if (cart.length === 0) {
+                list.innerHTML = `<div class="text-center py-10 text-slate-500 text-xs">Tu cotización está vacía.</div>`;
+                totalVal.innerText = `S/. 0.00`;
+                return;
+            }
+
+            let html = '';
+            let total = 0;
+            cart.forEach((item, index) => {
+                const sub = item.price * item.qty;
+                total += sub;
+                html += `
+                    <div class="flex items-center justify-between bg-slate-950 p-3 rounded-2xl border border-slate-800 gap-3">
+                        <div class="flex-1">
+                            <h4 class="font-bold text-xs text-white">${item.name}</h4>
+                            <p class="text-[10px] text-blue-400 font-bold">S/. ${item.price.toFixed(2)} c/u</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="updateQty(${index}, -1)" class="w-7 h-7 bg-slate-900 text-slate-300 rounded-lg hover:bg-slate-800 font-bold">-</button>
+                            <span class="text-xs font-bold w-6 text-center">${item.qty}</span>
+                            <button onclick="updateQty(${index}, 1)" class="w-7 h-7 bg-slate-900 text-slate-300 rounded-lg hover:bg-slate-800 font-bold">+</button>
+                            <button onclick="removeFromCart(${index})" class="text-red-400 hover:text-red-300 p-2 text-xs"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>
+                `;
+            });
+            list.innerHTML = html;
+            totalVal.innerText = `S/. ${total.toFixed(2)}`;
+        }
+
+        function updateQty(index, delta) {
+            cart[index].qty += delta;
+            if (cart[index].qty <= 0) {
+                cart.splice(index, 1);
+            }
+            renderCartModalList();
+            renderCartCount();
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            renderCartModalList();
+            renderCartCount();
+        }
+
+        function clearCart() {
+            cart = [];
+            renderCartModalList();
+            renderCartCount();
         }
 
         function sendToWhatsApp() {
-            if(cart.length === 0) {
-                return;
-            }
-            let text = "Hola *PcBest Huancayo*, deseo cotizar los siguientes productos:\n\n";
+            if (cart.length === 0) return;
+            let msg = `Hola *PcBest Huancayo*, solicito cotización de los siguientes componentes:%0A%0A`;
             let total = 0;
             cart.forEach(item => {
-                text += `• ${item.qty}x ${item.name} - S/. ${(item.price * item.qty).toFixed(2)}\n`;
-                total += (item.price * item.qty);
+                const sub = item.price * item.qty;
+                total += sub;
+                msg += `• ${item.qty}x ${item.name} - S/. ${sub.toFixed(2)}%0A`;
             });
-            text += `\n*TOTAL A PAGAR: S/. ${total.toFixed(2)}*`;
-            
-            const encoded = encodeURIComponent(text);
-            window.open(`https://wa.me/51910057512?text=${encoded}`, '_blank');
+            msg += `%0A*Total General: S/. ${total.toFixed(2)}*%0A%0A¡Quedo atento para coordinar el pago y entrega en Huancayo!`;
+            window.open(`https://wa.me/51910057512?text=${msg}`, '_blank');
+        }
+
+        // Admin PIN modal
+        function requestPin() {
+            document.getElementById('pinInput').value = '';
+            document.getElementById('pinError').classList.add('hidden');
+            document.getElementById('pinModal').classList.remove('hidden');
+        }
+
+        function closePinModal() {
+            document.getElementById('pinModal').classList.add('hidden');
+        }
+
+        function verifyPin() {
+            const val = document.getElementById('pinInput').value;
+            if (val === ADMIN_PIN) {
+                closePinModal();
+                openAdminPanel();
+            } else {
+                document.getElementById('pinError').classList.remove('hidden');
+            }
+        }
+
+        function openAdminPanel() {
+            renderAdminCategories();
+            renderAdminSubcategories();
+            renderAdminProductFilterTabs();
+            renderAdminProducts();
+            document.getElementById('adminPanelModal').classList.remove('hidden');
+        }
+
+        function toggleAdminPanel() {
+            document.getElementById('adminPanelModal').classList.add('hidden');
+        }
+
+        function renderAdminCategories() {
+            const list = document.getElementById('adminCategoryList');
+            const parentSelect = document.getElementById('subCatParentSelect');
+            let html = '';
+            let selectHtml = `<option value="">Seleccionar Categoría Principal...</option>`;
+
+            categories.forEach(cat => {
+                html += `<span class="bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-300 flex items-center gap-2">
+                    ${cat}
+                    <button onclick="deleteCategory('${cat}')" class="text-red-400 hover:text-red-300"><i class="fa-solid fa-xmark"></i></button>
+                </span>`;
+                selectHtml += `<option value="${cat}">${cat}</option>`;
+            });
+            list.innerHTML = html;
+            parentSelect.innerHTML = selectHtml;
+        }
+
+        function renderAdminSubcategories() {
+            const list = document.getElementById('adminSubcategoryList');
+            let html = '';
+
+            for (const [cat, subs] of Object.entries(subcategories)) {
+                html += `<div class="bg-slate-900 p-3 rounded-xl border border-slate-800 space-y-2">
+                    <h5 class="text-xs font-extrabold text-blue-400">${cat}</h5>
+                    <div class="flex flex-wrap gap-2">`;
+                if (!subs || subs.length === 0) {
+                    html += `<span class="text-[10px] text-slate-500">Sin subcategorías registradas.</span>`;
+                } else {
+                    subs.forEach(sub => {
+                        html += `<span class="bg-slate-950 border border-slate-800 px-2.5 py-1 rounded-lg text-[11px] font-bold text-slate-300 flex items-center gap-1.5">
+                            ${sub}
+                            <button onclick="deleteSubcategory('${cat}', '${sub}')" class="text-red-400 hover:text-red-300"><i class="fa-solid fa-xmark"></i></button>
+                        </span>`;
+                    });
+                }
+                html += `</div></div>`;
+            }
+            list.innerHTML = html;
+        }
+
+        function handleCategorySubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('newCategoryName').value.trim();
+            if (name && !categories.includes(name)) {
+                categories.push(name);
+                if (!subcategories[name]) subcategories[name] = [];
+                document.getElementById('newCategoryName').value = '';
+                renderAdminCategories();
+                renderAdminSubcategories();
+            }
+        }
+
+        function deleteCategory(cat) {
+            if (confirm(`¿Eliminar la categoría ${cat}?`)) {
+                categories = categories.filter(c => c !== cat);
+                delete subcategories[cat];
+                renderAdminCategories();
+                renderAdminSubcategories();
+            }
+        }
+
+        function handleSubcategorySubmit(e) {
+            e.preventDefault();
+            const parent = document.getElementById('subCatParentSelect').value;
+            const subName = document.getElementById('newSubcategoryName').value.trim();
+            if (parent && subName) {
+                if (!subcategories[parent]) subcategories[parent] = [];
+                if (!subcategories[parent].includes(subName)) {
+                    subcategories[parent].push(subName);
+                    document.getElementById('newSubcategoryName').value = '';
+                    renderAdminSubcategories();
+                }
+            }
+        }
+
+        function deleteSubcategory(cat, sub) {
+            if (subcategories[cat]) {
+                subcategories[cat] = subcategories[cat].filter(s => s !== sub);
+                renderAdminSubcategories();
+            }
+        }
+
+        function renderAdminProductFilterTabs() {
+            const container = document.getElementById('adminCategoryFilterTabs');
+            let html = `<button onclick="setAdminFilter('todos')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${currentAdminCategory === 'todos' ? 'bg-blue-600 text-white' : 'bg-slate-900 text-slate-300'}">Todos</button>`;
+            categories.forEach(cat => {
+                html += `<button onclick="setAdminFilter('${cat}')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${currentAdminCategory === cat ? 'bg-blue-600 text-white' : 'bg-slate-900 text-slate-300'}">${cat}</button>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function setAdminFilter(cat) {
+            currentAdminCategory = cat;
+            renderAdminProductFilterTabs();
+            renderAdminProducts();
+        }
+
+        function renderAdminProducts() {
+            const list = document.getElementById('adminProductList');
+            let filtered = currentAdminCategory === 'todos' ? products : products.filter(p => p.category === currentAdminCategory);
+
+            let html = '';
+            filtered.forEach(p => {
+                html += `
+                    <div class="flex items-center justify-between bg-slate-950 p-4 rounded-2xl border border-slate-800 gap-4">
+                        <div class="flex items-center gap-3">
+                            <img src="${p.image || 'https://placehold.co/100x100/0f172a/3b82f6?text=PC'}" class="w-12 h-12 object-cover rounded-xl" onerror="this.src='https://placehold.co/100x100/0f172a/3b82f6?text=PC'">
+                            <div>
+                                <h4 class="font-bold text-xs text-white">${p.name}</h4>
+                                <p class="text-[10px] text-slate-400">${p.category} ${p.subcategory ? '› ' + p.subcategory : ''} • <span class="text-blue-400 font-bold">S/. ${p.price.toFixed(2)}</span> • Stock: ${p.stock}</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="openProductForm(${p.id})" class="bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white p-2.5 rounded-xl text-xs"><i class="fa-solid fa-pen"></i></button>
+                            <button onclick="deleteProduct(${p.id})" class="bg-slate-900 hover:bg-slate-800 text-red-400 hover:text-red-300 p-2.5 rounded-xl text-xs"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>
+                `;
+            });
+            list.innerHTML = html;
+        }
+
+        function openProductForm(id = null) {
+            const catSelect = document.getElementById('prodCategory');
+            let html = '';
+            categories.forEach(cat => {
+                html += `<option value="${cat}">${cat}</option>`;
+            });
+            catSelect.innerHTML = html;
+
+            if (id) {
+                const p = products.find(x => x.id === id);
+                document.getElementById('formModalTitle').innerText = 'Editar Producto';
+                document.getElementById('editProductId').value = p.id;
+                document.getElementById('prodName').value = p.name;
+                document.getElementById('prodCategory').value = p.category;
+                updateSubcategoryDropdownOptions(p.subcategory);
+                document.getElementById('prodPrice').value = p.price;
+                document.getElementById('prodStock').value = p.stock;
+                document.getElementById('prodImage').value = p.image || '';
+                document.getElementById('prodDesc').value = p.desc;
+            } else {
+                document.getElementById('formModalTitle').innerText = 'Nuevo Producto';
+                document.getElementById('editProductId').value = '';
+                document.getElementById('productForm').reset();
+                updateSubcategoryDropdownOptions();
+            }
+            document.getElementById('productFormModal').classList.remove('hidden');
+        }
+
+        function updateSubcategoryDropdownOptions(selectedSub = '') {
+            const cat = document.getElementById('prodCategory').value;
+            const subSelect = document.getElementById('prodSubcategory');
+            let html = `<option value="">-- Sin subcategoría --</option>`;
+
+            if (subcategories[cat] && subcategories[cat].length > 0) {
+                subcategories[cat].forEach(sub => {
+                    const sel = sub === selectedSub ? 'selected' : '';
+                    html += `<option value="${sub}" ${sel}>${sub}</option>`;
+                });
+            }
+            subSelect.innerHTML = html;
+        }
+
+        function closeProductForm() {
+            document.getElementById('productFormModal').classList.add('hidden');
+        }
+
+        function handleProductFormSubmit(e) {
+            e.preventDefault();
+            const id = document.getElementById('editProductId').value;
+            const name = document.getElementById('prodName').value.trim();
+            const category = document.getElementById('prodCategory').value;
+            const subcategory = document.getElementById('prodSubcategory').value;
+            const price = parseFloat(document.getElementById('prodPrice').value);
+            const stock = parseInt(document.getElementById('prodStock').value);
+            const image = document.getElementById('prodImage').value.trim();
+            const desc = document.getElementById('prodDesc').value.trim();
+
+            if (id) {
+                const p = products.find(x => x.id == id);
+                if (p) {
+                    p.name = name;
+                    p.category = category;
+                    p.subcategory = subcategory;
+                    p.price = price;
+                    p.stock = stock;
+                    p.image = image;
+                    p.desc = desc;
+                }
+            } else {
+                const newId = products.length > 0 ? Math.max(...products.map(x => x.id)) + 1 : 1;
+                products.push({ id: newId, name, category, subcategory, price, stock, image, desc });
+            }
+
+            closeProductForm();
+            renderAdminProducts();
+            renderAll();
+        }
+
+        function deleteProduct(id) {
+            if (confirm('¿Estás seguro de eliminar este producto?')) {
+                products = products.filter(x => x.id !== id);
+                renderAdminProducts();
+                renderAll();
+            }
+        }
+
+        async function saveAdminChanges() {
+            await saveToCloud();
+            const msg = document.getElementById('adminStatusMsg');
+            msg.classList.remove('hidden');
+            setTimeout(() => {
+                msg.classList.add('hidden');
+                toggleAdminPanel();
+            }, 1200);
+            renderAll();
         }
 
         function downloadPDFCatalog() {
-            let printWindow = window.open('', '_blank');
-            let htmlContent = `
-                <!DOCTYPE html>
-                <html lang="es">
-                <head>
-                    <meta charset="UTF-8">
-                    <title>Catálogo Oficial con Imágenes - PcBest Huancayo</title>
-                    <style>
-                        body { font-family: Arial, sans-serif; color: #111; margin: 20px; }
-                        header { border-bottom: 2px solid #2563eb; padding-bottom: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
-                        h1 { color: #1e3a8a; margin: 0; font-size: 22px; }
-                        p { margin: 2px 0; font-size: 11px; color: #555; }
-                        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-                        th, td { border: 1px solid #cbd5e1; padding: 6px 10px; font-size: 10px; text-align: left; vertical-align: middle; }
-                        th { background-color: #1e3a8a; color: #fff; text-transform: uppercase; }
-                        tr:nth-child(even) { background-color: #f8fafc; }
-                        .prod-img { width: 50px; height: 50px; object-fit: cover; border-radius: 6px; border: 1px solid #cbd5e1; }
-                        .footer { margin-top: 30px; text-align: center; font-size: 10px; color: #666; border-top: 1px solid #cbd5e1; padding-top: 10px; }
-                    </style>
-                </head>
-                <body>
-                    <header>
-                        <div>
-                            <h1>PC BEST HUANCAYO</h1>
-                            <p>Catálogo Oficial de Hardware y Componentes con Imágenes</p>
-                        </div>
-                        <div style="text-align: right;">
-                            <p><strong>Fecha:</strong> ${new Date().toLocaleDateString()}</p>
-                            <p><strong>WhatsApp:</strong> 910057512</p>
-                            <p><strong>Redes:</strong> @pcbest_huancayo</p>
-                        </div>
-                    </header>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th style="width: 40px; text-align: center;">Foto</th>
-                                <th>Categoría</th>
-                                <th>Nombre del Producto</th>
-                                <th>Descripción</th>
-                                <th style="text-align: center;">Stock</th>
-                                <th style="text-align: right;">Precio (S/.)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-            `;
-
-            products.forEach((p) => {
-                htmlContent += `
-                    <tr>
-                        <td style="text-align: center;">
-                            <img src="${p.image}" class="prod-img" crossorigin="anonymous" onerror="this.src='https://placehold.co/100x100/e2e8f0/1e293b?text=PC'">
-                        </td>
-                        <td><b>${p.category}</b></td>
-                        <td><b>${p.name}</b></td>
-                        <td>${p.desc}</td>
-                        <td style="text-align: center;">${p.stock}</td>
-                        <td style="text-align: right;"><b>S/. ${p.price.toFixed(2)}</b></td>
-                    </tr>
-                `;
-            });
-
-            htmlContent += `
-                        </tbody>
-                    </table>
-                    <div class="footer">
-                        <p>PcBest Huancayo - Garantía y Calidad en Computadoras y Componentes. Huancayo, Perú.</p>
-                    </div>
-                    <script>
-                        window.onload = function() { setTimeout(() => { window.print(); }, 500); }
-                    <\/script>
-                </body>
-                </html>
-            `;
-
-            printWindow.document.write(htmlContent);
-            printWindow.document.close();
+            window.print();
         }
 
-        window.onload = async function() {
-            await loadFromCloud();
-            renderCategories();
-            filterProducts();
-            
-            setInterval(async () => {
-                await loadFromCloud();
-                renderCategories();
-                filterProducts();
-            }, 10000);
-        }
+        window.onload = function() {
+            loadFromCloud();
+        };
     </script>
 </body>
 </html>
