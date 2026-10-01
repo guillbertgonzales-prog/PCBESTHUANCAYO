@@ -216,20 +216,24 @@
                     </p>
                 </div>
 
-                <!-- Sección de Gestión de Categorías -->
+                <!-- Sección de Gestión de Categorías con botón Guardar Categoría -->
                 <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-4">
-                    <div>
-                        <h4 class="text-sm font-bold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-folder-plus text-blue-500"></i> Gestión de Categorías
-                        </h4>
-                        <p class="text-xs text-slate-400">Crea nuevas categorías para clasificar tu hardware</p>
+                    <div class="flex justify-between items-center flex-wrap gap-2">
+                        <div>
+                            <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-folder-plus text-blue-500"></i> Gestión de Categorías
+                            </h4>
+                            <p class="text-xs text-slate-400">Crea nuevas categorías para clasificar tu hardware</p>
+                        </div>
                     </div>
-                    <form onsubmit="handleCategorySubmit(event)" class="flex gap-3">
-                        <input type="text" id="newCategoryName" required placeholder="Nombre de nueva categoría (Ej. Refrigeración)" class="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-blue-500">
-                        <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-5 py-2.5 rounded-xl text-xs transition-all shadow-lg shadow-blue-600/30 whitespace-nowrap">
-                            <i class="fa-solid fa-plus mr-1"></i> Agregar Categoría
+                    
+                    <form onsubmit="handleCategorySubmit(event)" class="flex gap-3 flex-col sm:flex-row">
+                        <input type="text" id="newCategoryName" required placeholder="Nombre de nueva categoría (Ej. Refrigeración líquida)" class="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-xs text-slate-100 focus:outline-none focus:border-blue-500">
+                        <button type="submit" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-3 rounded-xl text-xs transition-all shadow-lg shadow-emerald-600/30 whitespace-nowrap flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-floppy-disk"></i> Guardar Categoría
                         </button>
                     </form>
+                    
                     <div id="adminCategoryList" class="flex flex-wrap gap-2 pt-2">
                         <!-- Categorías actuales -->
                     </div>
@@ -666,6 +670,9 @@
             renderAdminCategoryList();
             renderAdminCategoryFilterTabs();
             renderProductCategorySelect();
+            saveToStorage();
+            renderCategories();
+            filterProducts();
         }
 
         function deleteCategory(catName) {
@@ -684,6 +691,9 @@
                 if(currentAdminCategory === catName) {
                     setAdminCategory('todos');
                 }
+                saveToStorage();
+                renderCategories();
+                filterProducts();
             }
         }
 
