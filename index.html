@@ -9,6 +9,62 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        
+        ::-webkit-scrollbar {
+            height: 6px;
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(59, 130, 246, 0.5);
+            border-radius: 9999px;
+            transition: background 0.3s ease;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(59, 130, 246, 0.8);
+        }
+        
+        /* Hide scrollbar for clean UI while keeping scroll functionality */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Print styling for large product images in catalog download */
+        @media print {
+            body {
+                background-color: white !important;
+                color: black !important;
+            }
+            header, footer, .fixed, button, #categorias, section.relative:first-of-type .max-w-xl {
+                display: none !important;
+            }
+            #productGrid {
+                display: grid !important;
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 20px !important;
+            }
+            #productGrid > div {
+                break-inside: avoid;
+                border: 1px solid #cbd5e1 !important;
+                background: white !important;
+                box-shadow: none !important;
+            }
+            #productGrid img {
+                height: 220px !important;
+                object-fit: contain !important;
+                background: #f8fafc !important;
+            }
+            #productGrid h3, #productGrid p, #productGrid span {
+                color: #0f172a !important;
+            }
+        }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen selection:bg-blue-500 selection:text-white">
@@ -106,8 +162,27 @@
             <span id="productCounter" class="text-xs text-slate-400 font-bold bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800">Mostrando todos los productos</span>
         </div>
         
-        <div id="categoryContainer" class="flex gap-2 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-slate-800"></div>
-        <div id="subcategoryContainer" class="flex gap-2 overflow-x-auto pb-2 hidden items-center bg-slate-900/60 p-3 rounded-2xl border border-slate-800/80"></div>
+        <!-- Modern Scroll Bar Container for Categories -->
+        <div class="relative group/scroll">
+            <button onclick="scrollCategories(-300)" class="absolute left-0 top-1/2 -translate-y-1/2 -ml-3 z-20 bg-slate-900/90 hover:bg-blue-600 text-white w-9 h-9 rounded-full shadow-lg border border-slate-700 flex items-center justify-center opacity-0 group-hover/scroll:opacity-100 transition-all duration-300">
+                <i class="fa-solid fa-chevron-left text-xs"></i>
+            </button>
+            <div id="categoryContainer" class="flex gap-2.5 overflow-x-auto pb-3 pt-1 px-1 scroll-smooth no-scrollbar"></div>
+            <button onclick="scrollCategories(300)" class="absolute right-0 top-1/2 -translate-y-1/2 -mr-3 z-20 bg-slate-900/90 hover:bg-blue-600 text-white w-9 h-9 rounded-full shadow-lg border border-slate-700 flex items-center justify-center opacity-0 group-hover/scroll:opacity-100 transition-all duration-300">
+                <i class="fa-solid fa-chevron-right text-xs"></i>
+            </button>
+        </div>
+
+        <!-- Modern Scroll Bar Container for Subcategories -->
+        <div class="relative group/subscroll">
+            <button onclick="scrollSubcategories(-300)" class="absolute left-0 top-1/2 -translate-y-1/2 -ml-3 z-20 bg-slate-900/90 hover:bg-cyan-600 text-white w-9 h-9 rounded-full shadow-lg border border-slate-700 flex items-center justify-center opacity-0 group-hover/subscroll:opacity-100 transition-all duration-300">
+                <i class="fa-solid fa-chevron-left text-xs"></i>
+            </button>
+            <div id="subcategoryContainer" class="flex gap-2.5 overflow-x-auto pb-2 pt-1 px-1 hidden items-center bg-slate-900/60 p-3 rounded-2xl border border-slate-800/80 scroll-smooth no-scrollbar"></div>
+            <button onclick="scrollSubcategories(300)" class="absolute right-0 top-1/2 -translate-y-1/2 -mr-3 z-20 bg-slate-900/90 hover:bg-cyan-600 text-white w-9 h-9 rounded-full shadow-lg border border-slate-700 flex items-center justify-center opacity-0 group-hover/subscroll:opacity-100 transition-all duration-300">
+                <i class="fa-solid fa-chevron-right text-xs"></i>
+            </button>
+        </div>
     </section>
 
     <main id="catalogo" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-20">
@@ -132,6 +207,29 @@
             </div>
             <button onclick="toggleCartModal()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-5 py-2.5 rounded-xl text-xs transition-all shadow-lg shadow-blue-600/35 flex items-center gap-2">
                 Ver Cotización <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Cookies Consent Banner -->
+    <div id="cookieConsentBanner" class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-4 sm:max-w-md z-50 bg-slate-900 border border-slate-800 p-5 rounded-3xl shadow-2xl backdrop-blur-md hidden flex flex-col gap-4">
+        <div class="flex items-start gap-3">
+            <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0">
+                <i class="fa-solid fa-cookie-bite text-lg"></i>
+            </div>
+            <div>
+                <h4 class="font-extrabold text-sm text-white">Aviso de Cookies y Almacenamiento</h4>
+                <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+                    Utilizamos cookies y almacenamiento local para mejorar tu experiencia de navegación, guardar tu cotización y ofrecerte contenido personalizado en PcBest Huancayo.
+                </p>
+            </div>
+        </div>
+        <div class="flex gap-2 pt-1">
+            <button onclick="acceptCookies()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition-all flex-1 shadow-lg shadow-blue-600/30">
+                Aceptar Todas
+            </button>
+            <button onclick="rejectCookies()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-2.5 px-4 rounded-xl text-xs transition-all">
+                Solo Esenciales
             </button>
         </div>
     </div>
@@ -242,7 +340,6 @@
             </div>
 
             <div class="p-6 overflow-y-auto flex-1 space-y-8">
-                <!-- Gestión de Imágenes de Oferta / Banners -->
                 <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-4">
                     <div>
                         <h4 class="text-sm font-bold text-white flex items-center gap-2">
@@ -260,7 +357,6 @@
                     <div id="adminPromoList" class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2"></div>
                 </div>
 
-                <!-- Gestión de Categorías principales -->
                 <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-4">
                     <div>
                         <h4 class="text-sm font-bold text-white flex items-center gap-2">
@@ -277,7 +373,6 @@
                     <div id="adminCategoryList" class="flex flex-wrap gap-2 pt-2"></div>
                 </div>
 
-                <!-- Gestión de Subcategorías -->
                 <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-4">
                     <div>
                         <h4 class="text-sm font-bold text-white flex items-center gap-2">
@@ -297,7 +392,6 @@
                     <div id="adminSubcategoryList" class="space-y-3 pt-2"></div>
                 </div>
 
-                <!-- Sección de Productos -->
                 <div class="space-y-4">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-slate-950 p-4 rounded-2xl border border-slate-800 gap-4">
                         <div>
@@ -562,6 +656,16 @@
         let cart = [];
         const ADMIN_PIN = "2230";
 
+        function scrollCategories(offset) {
+            const container = document.getElementById('categoryContainer');
+            container.scrollBy({ left: offset, behavior: 'smooth' });
+        }
+
+        function scrollSubcategories(offset) {
+            const container = document.getElementById('subcategoryContainer');
+            container.scrollBy({ left: offset, behavior: 'smooth' });
+        }
+
         async function loadFromCloud() {
             try {
                 const res = await fetch(`https://api.jsonbin.io/v3/b/${CLOUD_BIN_ID}/latest`, {
@@ -684,11 +788,11 @@
 
         function renderCategories() {
             const container = document.getElementById('categoryContainer');
-            let html = `<button onclick="selectCategory('todos')" class="px-5 py-2.5 rounded-xl font-bold text-xs whitespace-nowrap transition-all ${currentCategory === 'todos' ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30' : 'bg-slate-900 border border-slate-800 text-slate-300 hover:bg-slate-800'}">🌟 Todos</button>`;
+            let html = `<button onclick="selectCategory('todos')" class="px-5 py-2.5 rounded-xl font-bold text-xs whitespace-nowrap transition-all shadow-md ${currentCategory === 'todos' ? 'bg-blue-600 text-white shadow-blue-600/30' : 'bg-slate-900 border border-slate-800 text-slate-300 hover:bg-slate-800'}">🌟 Todos</button>`;
             
             categories.forEach(cat => {
                 const isActive = currentCategory === cat;
-                html += `<button onclick="selectCategory('${cat}')" class="px-5 py-2.5 rounded-xl font-bold text-xs whitespace-nowrap transition-all ${isActive ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30' : 'bg-slate-900 border border-slate-800 text-slate-300 hover:bg-slate-800'}">${cat}</button>`;
+                html += `<button onclick="selectCategory('${cat}')" class="px-5 py-2.5 rounded-xl font-bold text-xs whitespace-nowrap transition-all shadow-md ${isActive ? 'bg-blue-600 text-white shadow-blue-600/30' : 'bg-slate-900 border border-slate-800 text-slate-300 hover:bg-slate-800'}">${cat}</button>`;
             });
             container.innerHTML = html;
         }
@@ -703,12 +807,12 @@
 
             subContainer.classList.remove('hidden');
             const subs = subcategories[currentCategory];
-            let html = `<span class="text-xs font-bold text-slate-400 mr-2"><i class="fa-solid fa-code-branch text-cyan-400"></i> Subcategoría:</span>`;
-            html += `<button onclick="selectSubcategory('todos')" class="px-3 py-1.5 rounded-lg font-bold text-xs transition-all ${currentSubcategory === 'todos' ? 'bg-cyan-600 text-white' : 'bg-slate-900 text-slate-300 hover:bg-slate-800'}">Todas en ${currentCategory}</button>`;
+            let html = `<span class="text-xs font-bold text-slate-400 mr-2 whitespace-nowrap"><i class="fa-solid fa-code-branch text-cyan-400"></i> Subcategoría:</span>`;
+            html += `<button onclick="selectSubcategory('todos')" class="px-3.5 py-1.5 rounded-lg font-bold text-xs whitespace-nowrap transition-all ${currentSubcategory === 'todos' ? 'bg-cyan-600 text-white' : 'bg-slate-900 text-slate-300 hover:bg-slate-800'}">Todas en ${currentCategory}</button>`;
 
             subs.forEach(sub => {
                 const isActive = currentSubcategory === sub;
-                html += `<button onclick="selectSubcategory('${sub}')" class="px-3 py-1.5 rounded-lg font-bold text-xs transition-all ${isActive ? 'bg-cyan-600 text-white' : 'bg-slate-900 text-slate-300 hover:bg-slate-800'}">${sub}</button>`;
+                html += `<button onclick="selectSubcategory('${sub}')" class="px-3.5 py-1.5 rounded-lg font-bold text-xs whitespace-nowrap transition-all ${isActive ? 'bg-cyan-600 text-white' : 'bg-slate-900 text-slate-300 hover:bg-slate-800'}">${sub}</button>`;
             });
 
             subContainer.innerHTML = html;
@@ -1209,8 +1313,26 @@
             window.print();
         }
 
+        function checkCookiesConsent() {
+            const consent = localStorage.getItem('pcbest_cookies_consent');
+            if (!consent) {
+                document.getElementById('cookieConsentBanner').classList.remove('hidden');
+            }
+        }
+
+        function acceptCookies() {
+            localStorage.setItem('pcbest_cookies_consent', 'accepted');
+            document.getElementById('cookieConsentBanner').classList.add('hidden');
+        }
+
+        function rejectCookies() {
+            localStorage.setItem('pcbest_cookies_consent', 'rejected');
+            document.getElementById('cookieConsentBanner').classList.add('hidden');
+        }
+
         window.onload = function() {
             loadFromCloud();
+            checkCookiesConsent();
         };
     </script>
 </body>
