@@ -1,31 +1,48 @@
 <!DOCTYPE html>
-<html lang="es" class="scroll-smooth dark">
+<html lang="es" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo de Halloween - PcBest Huancayo</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='16' fill='%23ea580c'/><text x='32' y='42' font-family='Plus Jakarta Sans, Arial, sans-serif' font-weight='900' font-size='26' fill='%23ffffff' text-anchor='middle'>🎃</text></svg>">
+    <title>Catálogo Moderno Halloween - PcBest Huancayo</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='16' fill='%23f97316'/><text x='32' y='42' font-family='Plus Jakarta Sans, Arial, sans-serif' font-weight='900' font-size='28' fill='%23ffffff' text-anchor='middle'>🎃</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js for modern admin graphs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Creepster&display=swap');
+        body { font-family: 'Outfit', sans-serif; }
+        .halloween-title { font-family: 'Creepster', cursive, sans-serif; letter-spacing: 2px; }
         
+        .glass-panel {
+            background: rgba(18, 10, 31, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(249, 115, 22, 0.15);
+        }
+
+        .glass-card {
+            background: rgba(13, 7, 24, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+        }
+
         ::-webkit-scrollbar {
             height: 6px;
             width: 6px;
         }
         ::-webkit-scrollbar-track {
-            background: rgba(10, 5, 20, 0.8);
+            background: rgba(10, 5, 18, 0.9);
             border-radius: 9999px;
         }
         ::-webkit-scrollbar-thumb {
-            background: rgba(234, 88, 12, 0.6);
+            background: rgba(249, 115, 22, 0.5);
             border-radius: 9999px;
             transition: background 0.3s ease;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(234, 88, 12, 0.9);
+            background: rgba(249, 115, 22, 0.8);
         }
         
         .no-scrollbar::-webkit-scrollbar {
@@ -36,145 +53,176 @@
             scrollbar-width: none;
         }
 
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
+        }
+        .floating-element {
+            animation: floatSlow 5s ease-in-out infinite;
+        }
+
+        @keyframes neonGlow {
+            0%, 100% { filter: drop-shadow(0 0 15px rgba(249, 115, 22, 0.4)); }
+            50% { filter: drop-shadow(0 0 25px rgba(168, 85, 247, 0.6)); }
+        }
+        .neon-glow {
+            animation: neonGlow 4s ease-in-out infinite;
+        }
+
         @media print {
-            body {
-                background-color: white !important;
-                color: black !important;
-            }
-            header, footer, .fixed, button, #categorias, section.relative:first-of-type .max-w-xl {
-                display: none !important;
-            }
-            #productGrid {
-                display: grid !important;
-                grid-template-columns: repeat(2, 1fr) !important;
-                gap: 20px !important;
-            }
-            #productGrid > div {
-                break-inside: avoid;
-                border: 1px solid #cbd5e1 !important;
-                background: white !important;
-                box-shadow: none !important;
-            }
-            #productGrid img {
-                height: 220px !important;
-                object-fit: contain !important;
-                background: #f8fafc !important;
-            }
-            #productGrid h3, #productGrid p, #productGrid span {
-                color: #0f172a !important;
-            }
+            body { background-color: white !important; color: black !important; }
+            header, footer, .fixed, button, #categorias, #quienes-somos, section.relative:first-of-type .max-w-xl { display: none !important; }
+            #productGrid { display: grid !important; grid-template-columns: repeat(2, 1fr) !important; gap: 20px !important; }
+            #productGrid > div { break-inside: avoid; border: 1px solid #cbd5e1 !important; background: white !important; box-shadow: none !important; }
+            #productGrid img { height: 220px !important; object-fit: contain !important; background: #f8fafc !important; }
+            #productGrid h3, #productGrid p, #productGrid span { color: #0f172a !important; }
         }
     </style>
 </head>
-<body class="bg-[#090514] text-orange-50 min-h-screen selection:bg-orange-600 selection:text-white">
+<body class="bg-[#07030d] text-slate-100 min-h-screen selection:bg-orange-500 selection:text-white">
 
-    <header class="bg-[#120a24]/90 backdrop-blur-md sticky top-0 z-40 border-b border-orange-950/50 shadow-lg shadow-orange-950/20">
+    <!-- Top Neon Ticker -->
+    <div class="bg-gradient-to-r from-purple-950 via-orange-950 to-purple-950 border-b border-orange-500/30 py-2 px-4 text-center text-xs font-bold text-orange-300 flex items-center justify-center gap-3">
+        <span class="animate-pulse">🎃 CYBER HALLOWEEN EDITION</span>
+        <span class="hidden sm:inline text-purple-300">| ¡Hardware de alta gama con tecnología del más allá en Huancayo!</span>
+        <span class="text-orange-400 font-extrabold">🦇 Stock Limitado</span>
+    </div>
+
+    <header class="glass-panel sticky top-0 z-40 border-b border-purple-900/40">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-orange-600 via-purple-600 to-amber-500 flex items-center justify-center shadow-lg shadow-orange-600/40 animate-pulse">
-                    <i class="fa-solid fa-ghost text-white text-xl"></i>
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-orange-600 via-amber-500 to-purple-600 flex items-center justify-center shadow-lg shadow-orange-600/30 text-2xl neon-glow">
+                    🎃
                 </div>
                 <div>
-                    <span class="font-extrabold text-xl tracking-tight bg-gradient-to-r from-orange-400 via-amber-300 to-purple-400 bg-clip-text text-transparent">PC BEST HUANCAYO</span>
-                    <span class="block text-[10px] text-orange-400/80 font-bold uppercase tracking-widest">🎃 Edición Especial Halloween</span>
+                    <span class="font-black text-xl tracking-tight bg-gradient-to-r from-orange-400 via-amber-200 to-purple-400 bg-clip-text text-transparent halloween-title text-2xl sm:text-3xl">PC BEST HALLOWEEN</span>
+                    <span class="block text-[10px] text-orange-400 font-extrabold uppercase tracking-widest">Cyber Hardware & Gamers</span>
                 </div>
             </div>
 
-            <div class="hidden md:flex items-center gap-6">
-                <a href="#catalogo" class="text-sm font-semibold text-orange-200/80 hover:text-orange-400 transition-colors">Catálogo</a>
-                <a href="#categorias" class="text-sm font-semibold text-orange-200/80 hover:text-orange-400 transition-colors">Categorías</a>
-                <div class="flex items-center gap-3 border-l border-orange-950 pl-6">
-                    <a href="https://www.tiktok.com/@pcbest_huancayo" target="_blank" class="text-orange-400/70 hover:text-orange-400 transition-colors" title="TikTok: @pcbest_huancayo">
-                        <i class="fa-brands fa-tiktok text-base"></i>
-                    </a>
-                    <a href="https://www.facebook.com/profile.php?id=61594306926466" target="_blank" class="text-orange-400/70 hover:text-orange-400 transition-colors" title="Facebook">
-                        <i class="fa-brands fa-facebook text-base"></i>
-                    </a>
-                    <a href="https://www.instagram.com/pcbest_huancayo" target="_blank" class="text-orange-400/70 hover:text-orange-400 transition-colors" title="Instagram">
-                        <i class="fa-brands fa-instagram text-base"></i>
-                    </a>
+            <div class="hidden lg:flex items-center gap-6">
+                <a href="#catalogo" class="text-sm font-semibold text-slate-300 hover:text-orange-400 transition-colors">Catálogo</a>
+                <a href="#categorias" class="text-sm font-semibold text-slate-300 hover:text-orange-400 transition-colors">Categorías</a>
+                <a href="#promoBannerContainer" class="text-sm font-extrabold text-orange-400 hover:text-orange-300 transition-colors flex items-center gap-1.5 animate-pulse">
+                    <i class="fa-solid fa-ghost text-base"></i> Ofertas Terroríficas
+                </a>
+                <a href="#quienes-somos" class="text-sm font-semibold text-slate-300 hover:text-orange-400 transition-colors">Quiénes Somos</a>
+                <div class="flex items-center gap-3 border-l border-purple-900/60 pl-6">
+                    <a href="https://www.tiktok.com/@pcbest_huancayo" target="_blank" class="text-slate-400 hover:text-orange-400 transition-colors" title="TikTok"><i class="fa-brands fa-tiktok text-base"></i></a>
+                    <a href="https://www.facebook.com/profile.php?id=61594306926466" target="_blank" class="text-slate-400 hover:text-orange-400 transition-colors" title="Facebook"><i class="fa-brands fa-facebook text-base"></i></a>
+                    <a href="https://www.instagram.com/pcbest_huancayo" target="_blank" class="text-slate-400 hover:text-orange-400 transition-colors" title="Instagram"><i class="fa-brands fa-instagram text-base"></i></a>
                 </div>
-                <a href="https://wa.me/51910057512" target="_blank" class="text-sm font-semibold text-emerald-400 hover:text-emerald-300 transition-colors flex items-center gap-1.5">
+                <a href="https://wa.me/51910057512" target="_blank" class="text-sm font-bold text-emerald-400 hover:text-emerald-300 transition-colors flex items-center gap-1.5 bg-emerald-950/40 px-3.5 py-2 rounded-xl border border-emerald-500/30">
                     <i class="fa-brands fa-whatsapp text-lg"></i> 910057512
                 </a>
             </div>
 
             <div class="flex items-center gap-2.5">
-                <button onclick="downloadPDFCatalog()" class="bg-[#1a0f2e] hover:bg-[#261542] text-orange-400 border border-orange-900/60 hover:border-orange-500 p-2.5 rounded-xl transition-all flex items-center gap-1.5 text-xs font-bold shadow-md" title="Descargar Catálogo PDF">
+                <button onclick="downloadPDFCatalog()" class="bg-purple-950/60 hover:bg-purple-900 text-orange-300 border border-purple-800/60 hover:border-orange-500 p-2.5 rounded-xl transition-all flex items-center gap-1.5 text-xs font-bold" title="Descargar PDF">
                     <i class="fa-solid fa-file-pdf text-sm"></i>
-                    <span class="hidden sm:inline">Catálogo PDF</span>
+                    <span class="hidden sm:inline">PDF</span>
                 </button>
-                <button onclick="requestPin()" class="bg-[#1a0f2e] hover:bg-[#261542] text-purple-400 border border-purple-900/60 hover:border-purple-500 p-2.5 rounded-xl transition-all flex items-center gap-1.5 text-xs font-bold shadow-md" title="Panel de Administración con PIN">
-                    <i class="fa-solid fa-shield-halved text-sm"></i>
-                    <span class="hidden sm:inline">Admin (PIN)</span>
+                <button onclick="requestPin()" class="bg-purple-950/60 hover:bg-purple-900 text-amber-300 border border-purple-800/60 hover:border-amber-500 p-2.5 rounded-xl transition-all flex items-center gap-1.5 text-xs font-bold" title="Panel de Administración con Gráficos">
+                    <i class="fa-solid fa-chart-pie text-sm"></i>
+                    <span class="hidden sm:inline">Admin</span>
                 </button>
-                <button onclick="toggleCartModal()" class="relative bg-[#120a24] border border-orange-900/60 hover:border-orange-500 p-2.5 rounded-xl transition-all flex items-center gap-2 group shadow-md">
-                    <i class="fa-solid fa-cart-shopping text-orange-400 text-lg"></i>
-                    <span class="hidden sm:inline text-xs font-bold text-orange-200 group-hover:text-white">Cotizar</span>
-                    <span id="cartCount" class="absolute -top-2 -right-2 bg-orange-600 text-white font-black text-xs w-6 h-6 rounded-full flex items-center justify-center shadow-md shadow-orange-600/50">0</span>
+                <button onclick="toggleCartModal()" class="relative glass-card border border-orange-500/40 hover:border-orange-500 p-2.5 rounded-xl transition-all flex items-center gap-2 group shadow-lg shadow-orange-950/50">
+                    <i class="fa-solid fa-cauldron text-orange-400 text-lg"></i>
+                    <span class="hidden sm:inline text-xs font-bold text-slate-200 group-hover:text-white">Caldero</span>
+                    <span id="cartCount" class="absolute -top-2 -right-2 bg-gradient-to-r from-orange-600 to-amber-600 text-white font-black text-xs w-6 h-6 rounded-full flex items-center justify-center shadow-md shadow-orange-600/50">0</span>
                 </button>
             </div>
         </div>
     </header>
 
-    <section class="relative bg-gradient-to-b from-[#120a24] via-[#090514] to-[#090514] py-12 px-4 sm:px-6 lg:px-8 border-b border-orange-950 overflow-hidden">
-        <div class="absolute inset-0 opacity-15 bg-[radial-gradient(#ea580c_1px,transparent_1px)] [background-size:20px_20px]"></div>
+    <section class="relative bg-gradient-to-b from-[#12081f] via-[#07030d] to-[#07030d] py-16 px-4 sm:px-6 lg:px-8 border-b border-purple-950 overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#ea580c_1px,transparent_1px)] [background-size:24px_24px]"></div>
+        
+        <div class="absolute top-8 left-12 text-3xl opacity-25 floating-element hidden sm:block">🦇</div>
+        <div class="absolute top-24 right-20 text-3xl opacity-25 floating-element hidden sm:block" style="animation-delay: 2s;">👻</div>
+        <div class="absolute bottom-12 left-1/3 text-2xl opacity-20 floating-element hidden lg:block" style="animation-delay: 3.5s;">🕷️</div>
+
         <div class="max-w-5xl mx-auto text-center relative z-10 space-y-6">
             <div>
-                <span class="bg-orange-600/20 border border-orange-500/30 text-orange-400 text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest inline-block mb-3 shadow-lg shadow-orange-600/20">
-                    🎃 ¡Ofertas de Terror y Alto Rendimiento! 🦇
+                <span class="bg-gradient-to-r from-orange-500/10 to-purple-500/10 border border-orange-500/30 text-orange-400 text-xs font-bold px-4 py-2 rounded-full uppercase tracking-widest inline-block mb-4 shadow-xl">
+                    🦇 Cyber Halloween 2026 • PcBest Huancayo
                 </span>
-                <h1 class="text-3xl sm:text-5xl font-black tracking-tight text-white leading-tight">
-                    Equipa tu PC con la <span class="bg-gradient-to-r from-orange-400 via-amber-300 to-purple-400 bg-clip-text text-transparent">Magia de Halloween</span>
+                <h1 class="text-3xl sm:text-6xl font-black tracking-tight text-white leading-tight">
+                    Componentes tan potentes que <span class="bg-gradient-to-r from-orange-400 via-amber-300 to-purple-400 bg-clip-text text-transparent halloween-title text-4xl sm:text-7xl">dardan miedo</span>
                 </h1>
-                <p class="text-orange-200/70 text-sm sm:text-base max-w-2xl mx-auto mt-3 font-medium">
-                    Procesadores, tarjetas gráficas y componentes con garantía en Huancayo a precios escalofriantemente bajos.
+                <p class="text-slate-400 text-sm sm:text-base max-w-2xl mx-auto mt-3 font-medium">
+                    Actualiza tu estación gamer con tecnología de última generación y los mejores precios del mercado central en Huancayo.
                 </p>
             </div>
 
-            <div id="promoBannerContainer" class="w-full max-w-5xl mx-auto rounded-3xl overflow-hidden border border-orange-900/60 bg-[#120a24] shadow-2xl relative min-h-[320px] sm:min-h-[460px] flex items-center justify-center">
-                <!-- Renderizado de banners -->
+            <!-- Promo Banners Container -->
+            <div id="promoBannerContainer" class="w-full max-w-5xl mx-auto rounded-3xl overflow-hidden glass-card border border-orange-500/30 shadow-2xl relative min-h-[320px] sm:min-h-[480px] flex items-center justify-center">
+                <!-- Renderizado dinámico -->
             </div>
 
             <div class="flex justify-center pt-2">
-                <button onclick="interestInOffer()" class="bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white font-extrabold px-8 py-3.5 rounded-2xl text-sm transition-all shadow-xl shadow-orange-600/40 flex items-center gap-3 transform hover:scale-105">
-                    <i class="fa-brands fa-whatsapp text-xl"></i> ¡Reclamar Oferta de Halloween!
+                <button onclick="interestInOffer()" class="bg-gradient-to-r from-orange-600 via-amber-600 to-purple-600 hover:from-orange-500 hover:to-amber-500 text-white font-extrabold px-8 py-4 rounded-2xl text-sm transition-all shadow-xl shadow-orange-600/30 flex items-center gap-3 transform hover:scale-105">
+                    <i class="fa-brands fa-whatsapp text-xl"></i> ¡Reclamar Oferta Escalofriante!
                 </button>
             </div>
 
             <div class="max-w-xl mx-auto pt-2">
                 <div class="relative flex-1">
-                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-orange-400/60"></i>
-                    <input type="text" id="searchInput" oninput="filterProducts()" placeholder="Buscar componente embrujado..." class="w-full bg-[#120a24] border border-orange-950 rounded-2xl pl-11 pr-4 py-3.5 text-sm text-orange-100 placeholder-orange-500/50 focus:outline-none focus:border-orange-500 shadow-xl">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-orange-400"></i>
+                    <input type="text" id="searchInput" oninput="filterProducts()" placeholder="Busca procesadores, gráficas, cases RGB..." class="w-full glass-card border border-purple-900/80 rounded-2xl pl-11 pr-4 py-3.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-orange-500 shadow-xl">
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- Filtros y Categorías -->
     <section id="categorias" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-6 space-y-4">
         <div class="flex items-center justify-between mb-2 flex-wrap gap-4">
             <h2 class="text-xl font-extrabold text-white flex items-center gap-2">
-                <i class="fa-solid fa-spider text-orange-500"></i> Categorías Encantadas
+                <i class="fa-solid fa-skull-crossbones text-orange-500"></i> Catálogo y Filtros Cibernéticos
             </h2>
-            <span id="productCounter" class="text-xs text-orange-300 font-bold bg-[#120a24] px-3 py-1.5 rounded-lg border border-orange-950">Mostrando todos los productos</span>
+            <span id="productCounter" class="text-xs text-orange-300 font-bold glass-card px-3.5 py-1.5 rounded-xl border border-purple-900/60">Mostrando todos los productos</span>
+        </div>
+
+        <div class="glass-card p-4 rounded-2xl border border-purple-900/60 flex flex-wrap items-center justify-between gap-4 shadow-lg">
+            <div class="flex items-center gap-3 flex-wrap">
+                <span class="text-xs font-bold text-orange-400 uppercase flex items-center gap-1.5">
+                    <i class="fa-solid fa-tags"></i> Rango de Precios (S/.):
+                </span>
+                <div class="flex items-center gap-2">
+                    <input type="number" id="minPriceInput" oninput="filterProducts()" placeholder="Mín" class="w-24 bg-[#07030d] border border-purple-900 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-orange-500">
+                    <span class="text-slate-500">-</span>
+                    <input type="number" id="maxPriceInput" oninput="filterProducts()" placeholder="Máx" class="w-24 bg-[#07030d] border border-purple-900 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-orange-500">
+                </div>
+                <button onclick="resetPriceFilter()" class="bg-purple-950 hover:bg-purple-900 text-orange-300 text-xs font-bold px-3.5 py-2 rounded-xl border border-purple-800 transition-all">Limpiar</button>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="text-xs font-bold text-slate-400">Ordenar:</span>
+                <select id="sortSelect" onchange="filterProducts()" class="bg-[#07030d] border border-purple-900 rounded-xl px-3 py-2 text-xs text-orange-300 focus:outline-none focus:border-orange-500">
+                    <option value="default">Por defecto</option>
+                    <option value="low-high">Precio: Menor a Mayor</option>
+                    <option value="high-low">Precio: Mayor a Menor</option>
+                    <option value="name">Alfabético (A-Z)</option>
+                </select>
+            </div>
         </div>
         
         <div class="relative group/scroll">
-            <button onclick="scrollCategories(-300)" class="absolute left-0 top-1/2 -translate-y-1/2 -ml-3 z-20 bg-[#1a0f2e]/90 hover:bg-orange-600 text-white w-9 h-9 rounded-full shadow-lg border border-orange-900 flex items-center justify-center opacity-0 group-hover/scroll:opacity-100 transition-all duration-300">
+            <button onclick="scrollCategories(-300)" class="absolute left-0 top-1/2 -translate-y-1/2 -ml-3 z-20 bg-purple-950/90 hover:bg-orange-600 text-white w-9 h-9 rounded-full shadow-lg border border-purple-800 flex items-center justify-center opacity-0 group-hover/scroll:opacity-100 transition-all duration-300">
                 <i class="fa-solid fa-chevron-left text-xs"></i>
             </button>
             <div id="categoryContainer" class="flex gap-2.5 overflow-x-auto pb-3 pt-1 px-1 scroll-smooth no-scrollbar"></div>
-            <button onclick="scrollCategories(300)" class="absolute right-0 top-1/2 -translate-y-1/2 -mr-3 z-20 bg-[#1a0f2e]/90 hover:bg-orange-600 text-white w-9 h-9 rounded-full shadow-lg border border-orange-900 flex items-center justify-center opacity-0 group-hover/scroll:opacity-100 transition-all duration-300">
+            <button onclick="scrollCategories(300)" class="absolute right-0 top-1/2 -translate-y-1/2 -mr-3 z-20 bg-purple-950/90 hover:bg-orange-600 text-white w-9 h-9 rounded-full shadow-lg border border-purple-800 flex items-center justify-center opacity-0 group-hover/scroll:opacity-100 transition-all duration-300">
                 <i class="fa-solid fa-chevron-right text-xs"></i>
             </button>
         </div>
 
         <div class="relative group/subscroll">
-            <button onclick="scrollSubcategories(-300)" class="absolute left-0 top-1/2 -translate-y-1/2 -ml-3 z-20 bg-[#1a0f2e]/90 hover:bg-purple-600 text-white w-9 h-9 rounded-full shadow-lg border border-purple-900 flex items-center justify-center opacity-0 group-hover/subscroll:opacity-100 transition-all duration-300">
+            <button onclick="scrollSubcategories(-300)" class="absolute left-0 top-1/2 -translate-y-1/2 -ml-3 z-20 bg-purple-950/90 hover:bg-amber-600 text-white w-9 h-9 rounded-full shadow-lg border border-purple-800 flex items-center justify-center opacity-0 group-hover/subscroll:opacity-100 transition-all duration-300">
                 <i class="fa-solid fa-chevron-left text-xs"></i>
             </button>
-            <div id="subcategoryContainer" class="flex gap-2.5 overflow-x-auto pb-2 pt-1 px-1 hidden items-center bg-[#120a24]/60 p-3 rounded-2xl border border-orange-950 scroll-smooth no-scrollbar"></div>
-            <button onclick="scrollSubcategories(300)" class="absolute right-0 top-1/2 -translate-y-1/2 -mr-3 z-20 bg-[#1a0f2e]/90 hover:bg-purple-600 text-white w-9 h-9 rounded-full shadow-lg border border-purple-900 flex items-center justify-center opacity-0 group-hover/subscroll:opacity-100 transition-all duration-300">
+            <div id="subcategoryContainer" class="flex gap-2.5 overflow-x-auto pb-2 pt-1 px-1 hidden items-center glass-card p-3 rounded-2xl border border-purple-900/50 scroll-smooth no-scrollbar"></div>
+            <button onclick="scrollSubcategories(300)" class="absolute right-0 top-1/2 -translate-y-1/2 -mr-3 z-20 bg-purple-950/90 hover:bg-amber-600 text-white w-9 h-9 rounded-full shadow-lg border border-purple-800 flex items-center justify-center opacity-0 group-hover/subscroll:opacity-100 transition-all duration-300">
                 <i class="fa-solid fa-chevron-right text-xs"></i>
             </button>
         </div>
@@ -183,39 +231,98 @@
     <main id="catalogo" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-20">
         <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
         <div id="noResults" class="hidden text-center py-20">
-            <i class="fa-solid fa-ghost text-5xl text-orange-900 mb-4 animate-bounce"></i>
-            <h3 class="text-lg font-bold text-orange-200">No se encontraron artefactos</h3>
-            <p class="text-sm text-orange-400/60 mt-1">Intenta con otra búsqueda o categoría.</p>
+            <div class="text-6xl mb-4">🧙‍♂️</div>
+            <h3 class="text-lg font-bold text-slate-300">Ningún espíritu encontrado con esos filtros</h3>
+            <p class="text-sm text-slate-500 mt-1">Prueba cambiando el rango de precios o buscando otro componente.</p>
         </div>
     </main>
 
+    <!-- Quienes Somos -->
+    <section id="quienes-somos" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-purple-950">
+        <div class="glass-card border border-orange-500/30 rounded-3xl p-8 sm:p-12 shadow-2xl relative overflow-hidden">
+            <div class="absolute -right-20 -bottom-20 w-96 h-96 bg-orange-600/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -left-20 -top-20 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-10">
+                <div class="lg:col-span-6 space-y-6">
+                    <div class="inline-flex items-center gap-2 bg-orange-500/10 border border-orange-500/20 text-orange-400 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider">
+                        <span>🦇</span> Excelencia y Potencia en Huancayo
+                    </div>
+                    <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight leading-tight">
+                        ¿Quiénes Somos en <span class="bg-gradient-to-r from-orange-400 to-amber-300 bg-clip-text text-transparent halloween-title text-3xl sm:text-4xl">PcBest Cyber</span>?
+                    </h2>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                        Somos la tienda referente en hardware gamer y profesional en Huancayo. Te ofrecemos componentes de primer nivel, garantía real y asesoría técnica especializada para armar el equipo de tus sueños.
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                        <div class="bg-[#07030d]/80 p-4 rounded-2xl border border-purple-900/60">
+                            <div class="w-10 h-10 rounded-xl bg-orange-600/20 text-orange-400 flex items-center justify-center font-bold mb-3 text-lg">
+                                🛡️
+                            </div>
+                            <h4 class="font-extrabold text-white text-sm">Garantía Real</h4>
+                            <p class="text-xs text-slate-400 mt-1">Componentes originales respaldados por marcas líderes.</p>
+                        </div>
+                        <div class="bg-[#07030d]/80 p-4 rounded-2xl border border-purple-900/60">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-600/20 text-emerald-400 flex items-center justify-center font-bold mb-3 text-lg">
+                                🚀
+                            </div>
+                            <h4 class="font-extrabold text-white text-sm">Envíos Rápidos</h4>
+                            <p class="text-xs text-slate-400 mt-1">Despachos seguros en Huancayo y envíos a todo el Perú.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-4 pt-2">
+                        <a href="https://wa.me/51910057512" target="_blank" class="bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white font-extrabold px-6 py-3.5 rounded-2xl text-xs transition-all shadow-lg shadow-orange-600/30 flex items-center gap-2">
+                            <i class="fa-brands fa-whatsapp text-lg"></i> Asesoría Experta por WhatsApp
+                        </a>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-6">
+                    <div class="relative rounded-3xl overflow-hidden border border-orange-500/30 shadow-2xl group">
+                        <img src="https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=800&auto=format&fit=crop&q=80" alt="Tienda PcBest" class="w-full h-[380px] sm:h-[440px] object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#07030d] via-[#07030d]/30 to-transparent flex items-end p-6 sm:p-8">
+                            <div class="space-y-2">
+                                <span class="bg-orange-600 text-white font-black text-xs px-3 py-1 rounded-lg uppercase tracking-wider">Laboratorio Gamer</span>
+                                <h3 class="text-xl sm:text-2xl font-black text-white">Ensamblajes extremos con iluminación ARGB</h3>
+                                <p class="text-xs text-slate-300">Diseña tu equipo personalizado hoy mismo.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Floating Cart Bar -->
     <div class="fixed bottom-6 left-1/2 -translate-x-1/2 z-30 w-full max-w-md px-4">
-        <div class="bg-[#120a24]/90 backdrop-blur-md border border-orange-900/60 p-4 rounded-2xl shadow-2xl flex items-center justify-between gap-4">
+        <div class="glass-panel border border-orange-500/40 p-4 rounded-2xl shadow-2xl flex items-center justify-between gap-4">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-orange-600/20 text-orange-400 rounded-xl flex items-center justify-center font-bold">
-                    <i class="fa-solid fa-skull"></i>
+                <div class="w-10 h-10 bg-orange-600/20 text-orange-400 rounded-xl flex items-center justify-center font-bold text-lg">
+                    🔮
                 </div>
                 <div>
-                    <p class="text-xs text-orange-300/70 font-semibold">Cotización de Halloween</p>
+                    <p class="text-xs text-slate-400 font-semibold">Caldero de cotización</p>
                     <p id="floatingCartTotal" class="text-sm font-extrabold text-white">S/. 0.00 (0 ítems)</p>
                 </div>
             </div>
-            <button onclick="toggleCartModal()" class="bg-orange-600 hover:bg-orange-500 text-white font-bold px-5 py-2.5 rounded-xl text-xs transition-all shadow-lg shadow-orange-600/35 flex items-center gap-2">
-                Ver Cotización <i class="fa-solid fa-arrow-right"></i>
+            <button onclick="toggleCartModal()" class="bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white font-bold px-5 py-2.5 rounded-xl text-xs transition-all shadow-lg shadow-orange-600/35 flex items-center gap-2">
+                Ver Caldero <i class="fa-solid fa-arrow-right"></i>
             </button>
         </div>
     </div>
 
-    <!-- Modales y demás scripts idénticos pero con clase Halloween -->
-    <div id="cookieConsentBanner" class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-4 sm:max-w-md z-50 bg-[#120a24] border border-orange-900 p-5 rounded-3xl shadow-2xl backdrop-blur-md hidden flex flex-col gap-4">
+    <!-- Cookies Consent -->
+    <div id="cookieConsentBanner" class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-4 sm:max-w-md z-50 glass-card border border-orange-500/30 p-5 rounded-3xl shadow-2xl hidden flex flex-col gap-4">
         <div class="flex items-start gap-3">
-            <div class="w-10 h-10 rounded-xl bg-orange-500/20 text-orange-400 flex items-center justify-center shrink-0">
-                <i class="fa-solid fa-cookie-bite text-lg"></i>
+            <div class="w-10 h-10 rounded-xl bg-orange-500/20 text-orange-400 flex items-center justify-center shrink-0 text-xl">
+                🍪
             </div>
             <div>
-                <h4 class="font-extrabold text-sm text-white">Aviso de Galletas Embrujadas</h4>
-                <p class="text-xs text-orange-200/70 mt-1 leading-relaxed">
-                    Utilizamos almacenamiento local para recordar tu cotización de Halloween en PcBest Huancayo.
+                <h4 class="font-extrabold text-sm text-white">Magia de Cookies</h4>
+                <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+                    Utilizamos cookies para recordar tus preferencias y guardar los ítems de tu cotización en PcBest Huancayo.
                 </p>
             </div>
         </div>
@@ -223,240 +330,359 @@
             <button onclick="acceptCookies()" class="bg-orange-600 hover:bg-orange-500 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition-all flex-1 shadow-lg shadow-orange-600/30">
                 Aceptar
             </button>
-            <button onclick="rejectCookies()" class="bg-[#1a0f2e] hover:bg-[#261542] text-orange-300 font-bold py-2.5 px-4 rounded-xl text-xs transition-all">
+            <button onclick="rejectCookies()" class="bg-purple-950 hover:bg-purple-900 text-slate-300 font-bold py-2.5 px-4 rounded-xl text-xs transition-all">
                 Rechazar
             </button>
         </div>
     </div>
 
-    <div id="offerDetailModal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden flex items-center justify-center p-4">
-        <div class="bg-[#120a24] border border-orange-900 w-full max-w-4xl rounded-3xl overflow-hidden shadow-2xl flex flex-col relative max-h-[90vh]">
-            <button onclick="closeOfferModal()" class="absolute top-4 right-4 z-20 bg-[#1a0f2e] text-orange-300 hover:text-white w-10 h-10 rounded-full flex items-center justify-center transition-colors shadow-lg">
+    <!-- Offer Modal -->
+    <div id="offerDetailModal" class="fixed inset-0 z-50 bg-[#07030d]/90 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="glass-card border border-orange-500/40 w-full max-w-4xl rounded-3xl overflow-hidden shadow-2xl flex flex-col relative max-h-[90vh]">
+            <button onclick="closeOfferModal()" class="absolute top-4 right-4 z-20 bg-purple-950 text-slate-300 hover:text-white w-10 h-10 rounded-full flex items-center justify-center transition-colors shadow-lg">
                 <i class="fa-solid fa-xmark text-xl"></i>
             </button>
-            <div class="p-6 bg-[#090514] border-b border-orange-950 flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-orange-600/20 text-orange-400 flex items-center justify-center">
-                    <i class="fa-solid fa-bullhorn text-lg"></i>
+            <div class="p-6 bg-[#07030d] border-b border-purple-900 flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-orange-600/20 text-orange-400 flex items-center justify-center text-lg">
+                    🦇
                 </div>
                 <div>
-                    <h3 id="offerModalTitleText" class="font-extrabold text-lg text-white">Oferta de Halloween</h3>
-                    <p class="text-xs text-orange-400/70">PcBest Huancayo</p>
+                    <h3 id="offerModalTitleText" class="font-extrabold text-lg text-white">Detalle de Oferta Escalofriante</h3>
+                    <p class="text-xs text-orange-400">PcBest Huancayo - Edición Cyber Halloween</p>
                 </div>
             </div>
-            <div class="p-6 overflow-y-auto flex-1 flex flex-col items-center justify-center bg-[#090514]">
-                <img id="offerModalImage" src="" alt="Oferta" class="max-w-full max-h-[60vh] object-contain rounded-2xl shadow-2xl border border-orange-900/50">
+            <div class="p-6 overflow-y-auto flex-1 flex flex-col items-center justify-center bg-[#07030d]">
+                <img id="offerModalImage" src="" alt="Oferta" class="max-w-full max-h-[60vh] object-contain rounded-2xl shadow-2xl border border-purple-900/60">
             </div>
-            <div class="p-6 bg-[#120a24] border-t border-orange-950 flex flex-col sm:flex-row justify-between items-center gap-4">
-                <p class="text-xs text-orange-300/80 font-medium">¿Te interesa esta promoción? Contáctanos por WhatsApp.</p>
+            <div class="p-6 glass-panel border-t border-purple-900 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <p class="text-xs text-slate-300 font-medium">¿Te interesa esta promoción? Comunícate con nuestros asesores.</p>
                 <div class="flex gap-3 w-full sm:w-auto">
-                    <button onclick="closeOfferModal()" class="bg-[#1a0f2e] hover:bg-[#261542] text-orange-300 font-bold py-3 px-6 rounded-xl text-xs transition-all flex-1 sm:flex-none">Cerrar</button>
+                    <button onclick="closeOfferModal()" class="bg-purple-950 hover:bg-purple-900 text-slate-300 font-bold py-3 px-6 rounded-xl text-xs transition-all flex-1 sm:flex-none">Cerrar</button>
                     <button onclick="interestInOfferFromModal()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold py-3 px-6 rounded-xl text-xs transition-all shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2 flex-1 sm:flex-none">
-                        <i class="fa-brands fa-whatsapp text-lg"></i> Consultar
+                        <i class="fa-brands fa-whatsapp text-lg"></i> Consultar por WhatsApp
                     </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="productDetailModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-[#120a24] border border-orange-900 w-full max-w-3xl rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row relative">
-            <button onclick="closeDetailModal()" class="absolute top-4 right-4 z-20 bg-[#1a0f2e] text-orange-300 hover:text-white w-9 h-9 rounded-full flex items-center justify-center transition-colors">
+    <!-- Product Detail Modal -->
+    <div id="productDetailModal" class="fixed inset-0 z-50 bg-[#07030d]/85 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="glass-card border border-orange-500/40 w-full max-w-3xl rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row relative">
+            <button onclick="closeDetailModal()" class="absolute top-4 right-4 z-20 bg-purple-950 text-slate-300 hover:text-white w-9 h-9 rounded-full flex items-center justify-center transition-colors">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
-            <div class="w-full md:w-1/2 bg-[#090514] p-6 flex items-center justify-center relative min-h-[280px]">
+            
+            <div class="w-full md:w-1/2 bg-[#07030d] p-6 flex items-center justify-center relative min-h-[280px] md:min-h-[400px]">
                 <img id="detailImage" src="" alt="Detalle" class="max-w-full max-h-[320px] object-contain rounded-xl drop-shadow-2xl">
                 <div class="absolute bottom-4 left-4 flex gap-2">
                     <span id="detailCategory" class="bg-orange-600 text-white text-[11px] font-bold px-3 py-1 rounded-xl shadow-lg"></span>
-                    <span id="detailSubcategory" class="bg-purple-600 text-white text-[11px] font-bold px-3 py-1 rounded-xl shadow-lg hidden"></span>
+                    <span id="detailSubcategory" class="bg-purple-700 text-white text-[11px] font-bold px-3 py-1 rounded-xl shadow-lg hidden"></span>
                 </div>
             </div>
+
             <div class="w-full md:w-1/2 p-6 md:p-8 flex flex-col justify-between space-y-6">
                 <div class="space-y-4">
-                    <h3 id="detailName" class="text-xl md:text-2xl font-extrabold text-white leading-snug"></h3>
+                    <div class="flex justify-between items-start gap-4">
+                        <h3 id="detailName" class="text-xl md:text-2xl font-extrabold text-white leading-snug"></h3>
+                    </div>
                     <div class="flex items-baseline gap-3">
                         <span id="detailPrice" class="text-2xl md:text-3xl font-black text-orange-400"></span>
                         <span id="detailStock" class="text-xs font-bold px-2.5 py-1 rounded-lg"></span>
                     </div>
-                    <div class="bg-[#090514] p-4 rounded-2xl border border-orange-950">
-                        <h4 class="text-xs font-bold uppercase tracking-wider text-orange-400 mb-1.5"><i class="fa-solid fa-circle-info mr-1"></i> Detalles</h4>
-                        <p id="detailDesc" class="text-xs md:text-sm text-orange-100/80 leading-relaxed"></p>
+                    <div class="bg-[#07030d] p-4 rounded-2xl border border-purple-900/60">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-orange-400 mb-1.5"><i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Especificaciones</h4>
+                        <p id="detailDesc" class="text-xs md:text-sm text-slate-300 leading-relaxed"></p>
                     </div>
                 </div>
+
                 <div class="flex gap-3 pt-2">
-                    <button onclick="closeDetailModal()" class="bg-[#1a0f2e] hover:bg-[#261542] text-orange-300 font-bold py-3 px-4 rounded-xl text-xs transition-all flex-1">Cerrar</button>
-                    <button id="detailAddBtn" onclick="" class="bg-orange-600 hover:bg-orange-500 text-white font-bold py-3 px-4 rounded-xl text-xs transition-all flex-1 shadow-lg shadow-orange-600/30 flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-cart-plus"></i> Agregar
+                    <button onclick="closeDetailModal()" class="bg-purple-950 hover:bg-purple-900 text-slate-300 font-bold py-3 px-4 rounded-xl text-xs transition-all flex-1">
+                        Cerrar
+                    </button>
+                    <button id="detailAddBtn" onclick="" class="bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white font-bold py-3 px-4 rounded-xl text-xs transition-all flex-1 shadow-lg shadow-orange-600/30 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-cauldron"></i> Agregar al Caldero
                     </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="pinModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-[#120a24] border border-orange-900 w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl p-6 text-center space-y-4">
-            <div class="w-12 h-12 bg-purple-500/20 text-purple-400 rounded-2xl flex items-center justify-center mx-auto text-xl">
-                <i class="fa-solid fa-lock"></i>
+    <!-- PIN Modal -->
+    <div id="pinModal" class="fixed inset-0 z-50 bg-[#07030d]/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="glass-card border border-orange-500/40 w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl p-6 text-center space-y-4">
+            <div class="w-12 h-12 bg-orange-500/20 text-orange-400 rounded-2xl flex items-center justify-center mx-auto text-xl">
+                🔮
             </div>
             <div>
                 <h3 class="font-extrabold text-lg text-white">Acceso Administrador</h3>
-                <p class="text-xs text-orange-300/70 mt-1">Ingresa el PIN (SAPO)</p>
+                <p class="text-xs text-slate-400 mt-1">Ingresa el PIN maestro (<span class="text-orange-400 font-bold">2230</span>)</p>
             </div>
-            <input type="password" id="pinInput" placeholder="••••" maxlength="4" class="w-full bg-[#090514] border border-orange-950 rounded-xl text-center text-2xl tracking-widest py-3 text-white focus:outline-none focus:border-purple-500">
-            <p id="pinError" class="text-xs text-red-400 hidden font-semibold">PIN Incorrecto</p>
+            <input type="password" id="pinInput" placeholder="••••" maxlength="4" class="w-full bg-[#07030d] border border-purple-900 rounded-xl text-center text-2xl tracking-widest py-3 text-white focus:outline-none focus:border-orange-500">
+            <p id="pinError" class="text-xs text-red-400 hidden font-semibold">¡PIN incorrecto!</p>
             <div class="flex gap-2 pt-2">
-                <button onclick="closePinModal()" class="bg-[#1a0f2e] text-orange-300 font-bold py-2.5 px-4 rounded-xl text-xs flex-1">Cancelar</button>
-                <button onclick="verifyPin()" class="bg-purple-600 hover:bg-purple-500 text-white font-bold py-2.5 px-4 rounded-xl text-xs flex-1 shadow-lg shadow-purple-600/30">Acceder</button>
+                <button onclick="closePinModal()" class="bg-purple-950 hover:bg-purple-900 text-slate-300 font-bold py-2.5 px-4 rounded-xl text-xs transition-all flex-1">Cancelar</button>
+                <button onclick="verifyPin()" class="bg-orange-600 hover:bg-orange-500 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition-all flex-1 shadow-lg shadow-orange-600/30">Acceder</button>
             </div>
         </div>
     </div>
 
-    <div id="adminPanelModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-[#120a24] border border-orange-900 w-full max-w-4xl rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
-            <div class="p-6 border-b border-orange-950 flex items-center justify-between bg-[#090514]">
+    <!-- Admin Panel Modal WITH CHARTS -->
+    <div id="adminPanelModal" class="fixed inset-0 z-50 bg-[#07030d]/85 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="glass-card border border-orange-500/40 w-full max-w-5xl rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[92vh]">
+            <div class="p-6 border-b border-purple-900 flex items-center justify-between bg-[#07030d]">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center">
-                        <i class="fa-solid fa-sliders"></i>
+                    <div class="w-10 h-10 rounded-xl bg-orange-500/20 text-orange-400 flex items-center justify-center text-lg">
+                        📊
                     </div>
                     <div>
-                        <h3 class="font-extrabold text-lg text-white">Panel de Control Halloween</h3>
-                        <p class="text-xs text-orange-400/70">Banners, Categorías y Productos</p>
+                        <h3 class="font-extrabold text-lg text-white">Panel de Administración con Gráficos</h3>
+                        <p class="text-xs text-orange-400">Analítica de inventario, banners y stock en tiempo real</p>
                     </div>
                 </div>
-                <button onclick="toggleAdminPanel()" class="text-orange-300 hover:text-white p-2 rounded-xl"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <button onclick="toggleAdminPanel()" class="text-slate-400 hover:text-white p-2 rounded-xl hover:bg-purple-950 transition-colors">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
             </div>
+
             <div class="p-6 overflow-y-auto flex-1 space-y-8">
-                <div class="bg-[#090514] p-5 rounded-2xl border border-orange-950 space-y-4">
-                    <h4 class="text-sm font-bold text-white flex items-center gap-2"><i class="fa-solid fa-image text-orange-500"></i> Banners de Promoción</h4>
+                <!-- GRÁFICOS / CHARTS SECTION -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Gráfico 1: Productos por Categoría -->
+                    <div class="bg-[#07030d] p-5 rounded-2xl border border-purple-900/60 shadow-lg flex flex-col items-center">
+                        <div class="w-full flex justify-between items-center mb-3">
+                            <h4 class="text-xs font-extrabold text-orange-400 uppercase tracking-wider"><i class="fa-solid fa-chart-pie mr-1"></i> Productos por Categoría</h4>
+                            <span class="text-[10px] text-slate-400">Distribución</span>
+                        </div>
+                        <div class="w-full h-64 relative flex items-center justify-center">
+                            <canvas id="categoryChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Gráfico 2: Top Precios / Stock -->
+                    <div class="bg-[#07030d] p-5 rounded-2xl border border-purple-900/60 shadow-lg flex flex-col items-center">
+                        <div class="w-full flex justify-between items-center mb-3">
+                            <h4 class="text-xs font-extrabold text-amber-400 uppercase tracking-wider"><i class="fa-solid fa-chart-bar mr-1"></i> Valor de Stock por Categoría (S/.)</h4>
+                            <span class="text-[10px] text-slate-400">Inversión</span>
+                        </div>
+                        <div class="w-full h-64 relative flex items-center justify-center">
+                            <canvas id="stockValueChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Banners Management -->
+                <div class="bg-[#07030d] p-5 rounded-2xl border border-purple-900/60 space-y-4">
+                    <div>
+                        <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-ghost text-orange-500"></i> Gestión de Banners Promocionales
+                        </h4>
+                        <p class="text-xs text-slate-400">Agrega o elimina imágenes para el carrusel superior</p>
+                    </div>
                     <form onsubmit="handlePromoBannerSubmit(event)" class="flex gap-3 flex-col sm:flex-row">
-                        <input type="url" id="newPromoImage" required placeholder="URL de imagen..." class="flex-1 bg-[#120a24] border border-orange-950 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-orange-500">
-                        <input type="text" id="newPromoTitle" placeholder="Título..." class="sm:w-64 bg-[#120a24] border border-orange-950 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-orange-500">
-                        <button type="submit" class="bg-orange-600 text-white font-bold px-6 py-3 rounded-xl text-xs shadow-lg">Guardar</button>
+                        <input type="url" id="newPromoImage" required placeholder="URL de imagen (https://...)" class="flex-1 bg-[#12081f] border border-purple-900 rounded-xl px-4 py-3 text-xs text-slate-100 focus:outline-none focus:border-orange-500">
+                        <input type="text" id="newPromoTitle" placeholder="Título corto..." class="sm:w-64 bg-[#12081f] border border-purple-900 rounded-xl px-4 py-3 text-xs text-slate-100 focus:outline-none focus:border-orange-500">
+                        <button type="submit" class="bg-orange-600 hover:bg-orange-500 text-white font-bold px-6 py-3 rounded-xl text-xs transition-all shadow-lg shadow-orange-600/30 whitespace-nowrap flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-floppy-disk"></i> Guardar Banner
+                        </button>
                     </form>
                     <div id="adminPromoList" class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2"></div>
                 </div>
-                <div class="bg-[#090514] p-5 rounded-2xl border border-orange-950 space-y-4">
-                    <h4 class="text-sm font-bold text-white flex items-center gap-2"><i class="fa-solid fa-folder-plus text-purple-500"></i> Categorías</h4>
+
+                <!-- Categorías -->
+                <div class="bg-[#07030d] p-5 rounded-2xl border border-purple-900/60 space-y-4">
+                    <div>
+                        <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-folder-plus text-orange-400"></i> Gestión de Categorías
+                        </h4>
+                        <p class="text-xs text-slate-400">Crea o elimina categorías principales</p>
+                    </div>
                     <form onsubmit="handleCategorySubmit(event)" class="flex gap-3 flex-col sm:flex-row">
-                        <input type="text" id="newCategoryName" required placeholder="Nombre..." class="flex-1 bg-[#120a24] border border-orange-950 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-purple-500">
-                        <button type="submit" class="bg-purple-600 text-white font-bold px-6 py-3 rounded-xl text-xs shadow-lg">Guardar</button>
+                        <input type="text" id="newCategoryName" required placeholder="Nombre de categoría..." class="flex-1 bg-[#12081f] border border-purple-900 rounded-xl px-4 py-3 text-xs text-slate-100 focus:outline-none focus:border-orange-500">
+                        <button type="submit" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-3 rounded-xl text-xs transition-all shadow-lg shadow-emerald-600/30 whitespace-nowrap flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-floppy-disk"></i> Guardar Categoría
+                        </button>
                     </form>
                     <div id="adminCategoryList" class="flex flex-wrap gap-2 pt-2"></div>
                 </div>
-                <div class="bg-[#090514] p-5 rounded-2xl border border-orange-950 space-y-4">
-                    <h4 class="text-sm font-bold text-white flex items-center gap-2"><i class="fa-solid fa-folder-tree text-cyan-400"></i> Subcategorías</h4>
+
+                <!-- Subcategorías -->
+                <div class="bg-[#07030d] p-5 rounded-2xl border border-purple-900/60 space-y-4">
+                    <div>
+                        <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-folder-tree text-purple-400"></i> Gestión de Subcategorías
+                        </h4>
+                        <p class="text-xs text-slate-400">Asocia subcategorías a una categoría principal</p>
+                    </div>
                     <form onsubmit="handleSubcategorySubmit(event)" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                        <select id="subCatParentSelect" required class="bg-[#120a24] border border-orange-950 rounded-xl px-4 py-3 text-xs text-white"><option value="">Categoría...</option></select>
-                        <input type="text" id="newSubcategoryName" required placeholder="Subcategoría..." class="bg-[#120a24] border border-orange-950 rounded-xl px-4 py-3 text-xs text-white">
-                        <button type="submit" class="bg-cyan-600 text-white font-bold px-6 py-3 rounded-xl text-xs">Agregar</button>
+                        <select id="subCatParentSelect" required class="bg-[#12081f] border border-purple-900 rounded-xl px-4 py-3 text-xs text-slate-100 focus:outline-none focus:border-orange-500">
+                            <option value="">Seleccionar Categoría...</option>
+                        </select>
+                        <input type="text" id="newSubcategoryName" required placeholder="Nombre de subcategoría..." class="bg-[#12081f] border border-purple-900 rounded-xl px-4 py-3 text-xs text-slate-100 focus:outline-none focus:border-orange-500">
+                        <button type="submit" class="bg-purple-700 hover:bg-purple-600 text-white font-bold px-6 py-3 rounded-xl text-xs transition-all shadow-lg shadow-purple-700/30 whitespace-nowrap flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-plus"></i> Agregar
+                        </button>
                     </form>
                     <div id="adminSubcategoryList" class="space-y-3 pt-2"></div>
                 </div>
+
+                <!-- Productos -->
                 <div class="space-y-4">
-                    <div class="flex justify-between items-center bg-[#090514] p-4 rounded-2xl border border-orange-950">
-                        <h4 class="text-sm font-bold text-white">Productos</h4>
-                        <button onclick="openProductForm()" class="bg-orange-600 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-lg">Nuevo Producto</button>
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-[#07030d] p-4 rounded-2xl border border-purple-900/60 gap-4">
+                        <div>
+                            <h4 class="text-sm font-bold text-white">Inventario de Productos</h4>
+                            <p class="text-xs text-slate-400">Gestiona componentes, precios y stock</p>
+                        </div>
+                        <button onclick="openProductForm()" class="bg-orange-600 hover:bg-orange-500 text-white font-bold px-4 py-2.5 rounded-xl text-xs transition-all flex items-center gap-2 shadow-lg shadow-orange-600/30 whitespace-nowrap">
+                            <i class="fa-solid fa-plus"></i> Nuevo Producto
+                        </button>
                     </div>
-                    <div id="adminCategoryFilterTabs" class="flex gap-2 overflow-x-auto pb-1"></div>
+
+                    <div class="flex items-center gap-2 overflow-x-auto pb-1">
+                        <span class="text-xs font-bold text-orange-400 uppercase tracking-wider whitespace-nowrap"><i class="fa-solid fa-filter mr-1"></i> Filtrar Admin:</span>
+                        <div id="adminCategoryFilterTabs" class="flex gap-2"></div>
+                    </div>
+
                     <div class="space-y-3" id="adminProductList"></div>
                 </div>
             </div>
-            <div class="p-6 bg-[#090514] border-t border-orange-950 flex justify-between items-center">
-                <p id="adminStatusMsg" class="text-xs text-emerald-400 font-semibold hidden">Cambios guardados</p>
+
+            <div class="p-6 bg-[#07030d] border-t border-purple-900 flex justify-between items-center">
+                <p id="adminStatusMsg" class="text-xs text-emerald-400 font-semibold hidden"><i class="fa-solid fa-check-circle mr-1"></i> Cambios guardados y sincronizados</p>
                 <div class="flex gap-3 ml-auto">
-                    <button onclick="toggleAdminPanel()" class="bg-[#1a0f2e] text-orange-300 font-bold py-2.5 px-6 rounded-xl text-xs">Cerrar</button>
-                    <button onclick="saveAdminChanges()" class="bg-emerald-600 text-white font-bold py-2.5 px-6 rounded-xl text-xs shadow-lg">Guardar Cambios</button>
+                    <button onclick="toggleAdminPanel()" class="bg-purple-950 hover:bg-purple-900 text-slate-300 font-bold py-2.5 px-6 rounded-xl text-xs transition-all">
+                        Cerrar
+                    </button>
+                    <button onclick="saveAdminChanges()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 px-6 rounded-xl text-xs transition-all shadow-lg shadow-emerald-600/30 flex items-center gap-2">
+                        <i class="fa-solid fa-floppy-disk"></i> Guardar Cambios
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="productFormModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-[#120a24] border border-orange-900 w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl flex flex-col">
-            <div class="p-6 border-b border-orange-950 flex items-center justify-between bg-[#090514]">
-                <h3 class="font-extrabold text-lg text-white" id="formModalTitle">Producto</h3>
-                <button onclick="closeProductForm()" class="text-orange-300"><i class="fa-solid fa-xmark"></i></button>
+    <!-- Product Form Modal -->
+    <div id="productFormModal" class="fixed inset-0 z-50 bg-[#07030d]/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="glass-card border border-orange-500/40 w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl flex flex-col">
+            <div class="p-6 border-b border-purple-900 flex items-center justify-between bg-[#07030d]">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-orange-600/20 text-orange-400 flex items-center justify-center text-lg">
+                        🎃
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-lg text-white" id="formModalTitle">Nuevo Producto</h3>
+                        <p class="text-xs text-orange-400">Completa los campos del componente</p>
+                    </div>
+                </div>
+                <button onclick="closeProductForm()" class="text-slate-400 hover:text-white p-2 rounded-xl hover:bg-purple-950 transition-colors">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
             </div>
+
             <form id="productForm" onsubmit="handleProductFormSubmit(event)" class="p-6 space-y-4">
                 <input type="hidden" id="editProductId">
                 <div>
-                    <label class="block text-xs font-bold text-orange-300 uppercase mb-1.5">Nombre</label>
-                    <input type="text" id="prodName" required class="w-full bg-[#090514] border border-orange-950 rounded-xl px-4 py-3 text-sm text-white">
+                    <label class="block text-xs font-bold text-orange-400 uppercase mb-1.5">Nombre del Producto</label>
+                    <input type="text" id="prodName" required placeholder="Ej. AMD Ryzen 7 5700X" class="w-full bg-[#07030d] border border-purple-900 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-orange-500">
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs font-bold text-orange-300 uppercase mb-1.5">Categoría</label>
-                        <select id="prodCategory" onchange="updateSubcategoryDropdownOptions()" class="w-full bg-[#090514] border border-orange-950 rounded-xl px-4 py-3 text-sm text-white"></select>
+                        <label class="block text-xs font-bold text-orange-400 uppercase mb-1.5">Categoría Principal</label>
+                        <select id="prodCategory" onchange="updateSubcategoryDropdownOptions()" class="w-full bg-[#07030d] border border-purple-900 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-orange-500"></select>
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-orange-300 uppercase mb-1.5">Subcategoría</label>
-                        <select id="prodSubcategory" class="w-full bg-[#090514] border border-orange-950 rounded-xl px-4 py-3 text-sm text-white"><option value="">-- Sin subcategoría --</option></select>
+                        <label class="block text-xs font-bold text-orange-400 uppercase mb-1.5">Subcategoría</label>
+                        <select id="prodSubcategory" class="w-full bg-[#07030d] border border-purple-900 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-orange-500">
+                            <option value="">-- Sin subcategoría --</option>
+                        </select>
                     </div>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs font-bold text-orange-300 uppercase mb-1.5">Precio (S/.)</label>
-                        <input type="number" step="0.01" id="prodPrice" required class="w-full bg-[#090514] border border-orange-950 rounded-xl px-4 py-3 text-sm text-white">
+                        <label class="block text-xs font-bold text-orange-400 uppercase mb-1.5">Precio (S/.)</label>
+                        <input type="number" step="0.01" id="prodPrice" required placeholder="0.00" class="w-full bg-[#07030d] border border-purple-900 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-orange-500">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-orange-300 uppercase mb-1.5">Stock</label>
-                        <input type="number" id="prodStock" required value="10" class="w-full bg-[#090514] border border-orange-950 rounded-xl px-4 py-3 text-sm text-white">
+                        <label class="block text-xs font-bold text-orange-400 uppercase mb-1.5">Stock</label>
+                        <input type="number" id="prodStock" required value="10" class="w-full bg-[#07030d] border border-purple-900 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-orange-500">
                     </div>
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-orange-300 uppercase mb-1.5">URL Imagen</label>
-                    <input type="url" id="prodImage" class="w-full bg-[#090514] border border-orange-950 rounded-xl px-4 py-3 text-sm text-white">
+                    <label class="block text-xs font-bold text-orange-400 uppercase mb-1.5">URL de Imagen</label>
+                    <input type="url" id="prodImage" placeholder="https://..." class="w-full bg-[#07030d] border border-purple-900 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-orange-500">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-orange-300 uppercase mb-1.5">Descripción</label>
-                    <textarea id="prodDesc" rows="3" class="w-full bg-[#090514] border border-orange-950 rounded-xl px-4 py-3 text-sm text-white"></textarea>
+                    <label class="block text-xs font-bold text-orange-400 uppercase mb-1.5">Descripción y Detalles</label>
+                    <textarea id="prodDesc" rows="3" placeholder="Especificaciones técnicas..." class="w-full bg-[#07030d] border border-purple-900 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-orange-500"></textarea>
                 </div>
+
                 <div class="pt-4 flex gap-3">
-                    <button type="button" onclick="closeProductForm()" class="bg-[#1a0f2e] text-orange-300 font-bold py-3 px-4 rounded-xl text-xs flex-1">Cerrar</button>
-                    <button type="submit" class="bg-orange-600 text-white font-bold py-3 px-4 rounded-xl text-xs flex-1 shadow-lg">Guardar</button>
+                    <button type="button" onclick="closeProductForm()" class="bg-purple-950 hover:bg-purple-900 text-slate-300 font-bold py-3 px-4 rounded-xl text-xs transition-all flex-1">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="bg-orange-600 hover:bg-orange-500 text-white font-bold py-3 px-4 rounded-xl text-xs transition-all flex-1 shadow-lg shadow-orange-600/30">
+                        Guardar Producto
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 
-    <div id="cartModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-[#120a24] border border-orange-900 w-full max-w-2xl rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
-            <div class="p-6 border-b border-orange-950 flex items-center justify-between bg-[#090514]">
-                <h3 class="font-extrabold text-lg text-white">Cotización</h3>
-                <button onclick="toggleCartModal()" class="text-orange-300"><i class="fa-solid fa-xmark"></i></button>
+    <!-- Cart Modal -->
+    <div id="cartModal" class="fixed inset-0 z-50 bg-[#07030d]/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="glass-card border border-orange-500/40 w-full max-w-2xl rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="p-6 border-b border-purple-900 flex items-center justify-between bg-[#07030d]">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-orange-600/20 text-orange-400 flex items-center justify-center text-lg">
+                        🔮
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-lg text-white">Caldero de Cotización</h3>
+                        <p class="text-xs text-orange-400">Componentes reunidos para tu ensamble</p>
+                    </div>
+                </div>
+                <button onclick="toggleCartModal()" class="text-slate-400 hover:text-white p-2 rounded-xl hover:bg-purple-950 transition-colors">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
             </div>
+
             <div class="p-6 overflow-y-auto flex-1 space-y-4">
                 <div id="cartItemList" class="space-y-3"></div>
             </div>
-            <div class="p-6 bg-[#090514] border-t border-orange-950 space-y-4">
+
+            <div class="p-6 bg-[#07030d] border-t border-purple-900 space-y-4">
                 <div class="flex items-center justify-between">
-                    <span class="text-sm font-bold text-orange-300">Total:</span>
+                    <span class="text-sm font-bold text-slate-400">Total del Caldero:</span>
                     <span id="cartTotalVal" class="text-xl font-black text-orange-400">S/. 0.00</span>
                 </div>
                 <div class="flex gap-3">
-                    <button onclick="clearCart()" class="bg-[#1a0f2e] text-orange-300 font-bold py-3 px-4 rounded-xl text-xs">Vaciar</button>
-                    <button onclick="sendToWhatsApp()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-xl text-xs flex-1 shadow-lg flex items-center justify-center gap-2">
-                        <i class="fa-brands fa-whatsapp"></i> Enviar por WhatsApp
+                    <button onclick="clearCart()" class="bg-purple-950 hover:bg-purple-900 text-slate-300 font-bold py-3 px-4 rounded-xl text-xs transition-all">
+                        Vaciar Caldero
+                    </button>
+                    <button onclick="sendToWhatsApp()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-xl text-xs transition-all flex-1 shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2">
+                        <i class="fa-brands fa-whatsapp text-base"></i> Enviar Cotización por WhatsApp
                     </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <footer class="bg-[#120a24] border-t border-orange-950 py-12 px-4 sm:px-6 lg:px-8">
+    <footer class="glass-panel border-t border-purple-950 py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
             <div class="text-center md:text-left">
-                <span class="font-extrabold text-lg text-white">PC BEST HUANCAYO</span>
-                <p class="text-xs text-orange-400/70 mt-1">Tu tienda de confianza en hardware.</p>
+                <span class="font-extrabold text-lg text-white halloween-title text-2xl tracking-wider">PC BEST HAWAIIN / HALLOWEEN</span>
+                <p class="text-xs text-slate-400 mt-1">Tu tienda de hardware con la mejor tecnología en Huancayo.</p>
             </div>
+            
             <div class="flex items-center gap-4">
-                <a href="https://www.tiktok.com/@pcbest_huancayo" target="_blank" class="w-10 h-10 bg-[#1a0f2e] text-orange-300 hover:text-white rounded-xl flex items-center justify-center"><i class="fa-brands fa-tiktok"></i></a>
-                <a href="https://www.facebook.com/profile.php?id=61594306926466" target="_blank" class="w-10 h-10 bg-[#1a0f2e] text-orange-300 hover:text-white rounded-xl flex items-center justify-center"><i class="fa-brands fa-facebook"></i></a>
-                <a href="https://www.instagram.com/pcbest_huancayo" target="_blank" class="w-10 h-10 bg-[#1a0f2e] text-orange-300 hover:text-white rounded-xl flex items-center justify-center"><i class="fa-brands fa-instagram"></i></a>
-                <a href="https://wa.me/51910057512" target="_blank" class="w-10 h-10 bg-[#1a0f2e] text-orange-300 hover:text-white rounded-xl flex items-center justify-center"><i class="fa-brands fa-whatsapp"></i></a>
+                <a href="https://www.tiktok.com/@pcbest_huancayo" target="_blank" class="w-10 h-10 bg-purple-950 hover:bg-purple-900 text-slate-300 hover:text-orange-400 rounded-xl flex items-center justify-center transition-all" title="TikTok"><i class="fa-brands fa-tiktok text-lg"></i></a>
+                <a href="https://www.facebook.com/profile.php?id=61594306926466" target="_blank" class="w-10 h-10 bg-purple-950 hover:bg-purple-900 text-slate-300 hover:text-orange-400 rounded-xl flex items-center justify-center transition-all" title="Facebook"><i class="fa-brands fa-facebook text-lg"></i></a>
+                <a href="https://www.instagram.com/pcbest_huancayo" target="_blank" class="w-10 h-10 bg-purple-950 hover:bg-purple-900 text-slate-300 hover:text-orange-400 rounded-xl flex items-center justify-center transition-all" title="Instagram"><i class="fa-brands fa-instagram text-lg"></i></a>
+                <a href="https://wa.me/51910057512" target="_blank" class="w-10 h-10 bg-purple-950 hover:bg-purple-900 text-slate-300 hover:text-emerald-400 rounded-xl flex items-center justify-center transition-all" title="WhatsApp"><i class="fa-brands fa-whatsapp text-lg"></i></a>
             </div>
         </div>
-        <div class="max-w-7xl mx-auto mt-8 pt-6 border-t border-orange-950 text-center text-xs text-orange-400/50">
-            &copy; 2026 PcBest Huancayo. Edición Halloween.
+        <div class="max-w-7xl mx-auto mt-8 pt-6 border-t border-purple-900/40 text-center text-xs text-slate-500">
+            &copy; 2026 PcBest Huancayo. Cyber Halloween Edition. Todos los derechos reservados.
         </div>
     </footer>
 
@@ -465,14 +691,22 @@
         const CLOUD_BIN_ID = "6abd35cbac6210605a06028a";
 
         let promoBanners = [
-            { id: 1, image: "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=1000&auto=format&fit=crop&q=80", title: "🎃 Ofertas Embrujadas en Tarjetas Gráficas!" },
-            { id: 2, image: "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=1000&auto=format&fit=crop&q=80", title: "🦇 Ensamblajes Gamer de Terror y Alto Poder" }
+            { id: 1, image: "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=1000&auto=format&fit=crop&q=80", title: "🦇 ¡Ofertas Macabras en Tarjetas Gráficas!" },
+            { id: 2, image: "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=1000&auto=format&fit=crop&q=80", title: "🎃 Ensamblajes Gamer de Alta Gama" }
         ];
 
         let currentBannerIndex = 0;
         let bannerInterval = null;
 
-        let categories = ["Procesadores", "Tarjetas de Video", "Placas Madre", "Memorias RAM", "Almacenamiento", "Cases y Fuentes"];
+        let categories = [
+            "Procesadores",
+            "Tarjetas de Video",
+            "Placas Madre",
+            "Memorias RAM",
+            "Almacenamiento",
+            "Cases y Fuentes"
+        ];
+
         let subcategories = {
             "Procesadores": ["AMD Ryzen", "Intel Core"],
             "Tarjetas de Video": ["NVIDIA GeForce", "AMD Radeon"],
@@ -483,10 +717,66 @@
         };
 
         let products = [
-            { id: 1, name: "AMD Ryzen 5 5600G", category: "Procesadores", subcategory: "AMD Ryzen", price: 540.00, stock: 12, image: "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=500&auto=format&fit=crop&q=60", desc: "Procesador de escritorio con 6 núcleos y gráficos integrados Radeon Vega 7." },
-            { id: 2, name: "Intel Core i5-13400F", category: "Procesadores", subcategory: "Intel Core", price: 680.00, stock: 8, image: "https://images.unsplash.com/photo-1555680202-c86f0e12f086?w=500&auto=format&fit=crop&q=60", desc: "Procesador Intel de 13ª generación, 10 núcleos." },
-            { id: 3, name: "NVIDIA GeForce RTX 4060 8GB", category: "Tarjetas de Video", subcategory: "NVIDIA GeForce", price: 1350.00, stock: 5, image: "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=500&auto=format&fit=crop&q=60", desc: "Tarjeta gráfica con arquitectura Ada Lovelace y 8GB GDDR6." },
-            { id: 4, name: "Gigabyte B550M AORUS ELITE", category: "Placas Madre", subcategory: "Chipset AMD", price: 420.00, stock: 10, image: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=500&auto=format&fit=crop&q=60", desc: "Placa base Micro-ATX con chipset AMD B550." }
+            {
+                id: 1,
+                name: "AMD Ryzen 5 5600G (Halloween Edition)",
+                category: "Procesadores",
+                subcategory: "AMD Ryzen",
+                price: 540.00,
+                stock: 12,
+                image: "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=500&auto=format&fit=crop&q=60",
+                desc: "Procesador de escritorio con 6 núcleos y gráficos integrados Radeon Vega 7."
+            },
+            {
+                id: 2,
+                name: "Intel Core i5-13400F",
+                category: "Procesadores",
+                subcategory: "Intel Core",
+                price: 680.00,
+                stock: 8,
+                image: "https://images.unsplash.com/photo-1555680202-c86f0e12f086?w=500&auto=format&fit=crop&q=60",
+                desc: "Procesador Intel de 13ª generación, 10 núcleos y 16 hilos. Rendimiento extremo."
+            },
+            {
+                id: 3,
+                name: "NVIDIA GeForce RTX 4060 8GB",
+                category: "Tarjetas de Video",
+                subcategory: "NVIDIA GeForce",
+                price: 1350.00,
+                stock: 5,
+                image: "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=500&auto=format&fit=crop&q=60",
+                desc: "Tarjeta gráfica con arquitectura Ada Lovelace y 8GB GDDR6 para gaming."
+            },
+            {
+                id: 4,
+                name: "Gigabyte B550M AORUS ELITE",
+                category: "Placas Madre",
+                subcategory: "Chipset AMD",
+                price: 420.00,
+                stock: 10,
+                image: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=500&auto=format&fit=crop&q=60",
+                desc: "Placa base Micro-ATX con chipset AMD B550, socket AM4 y disipación avanzada."
+            },
+            {
+                id: 5,
+                name: "Lexar Thor 16GB (2x8GB) 3200MHz",
+                category: "Memorias RAM",
+                subcategory: "DDR4",
+                price: 210.00,
+                stock: 20,
+                image: "https://images.unsplash.com/photo-1562976540-1e02c51414c5?w=500&auto=format&fit=crop&q=60",
+                desc: "Kit de memoria RAM DDR4 de alto rendimiento 3200MHz con disipador térmico."
+            },
+            {
+                id: 6,
+                name: "Kingston NV2 1TB NVMe PCIe 4.0",
+                category: "Almacenamiento",
+                subcategory: "SSD NVMe M.2",
+                price: 270.00,
+                stock: 25,
+                image: "https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=500&auto=format&fit=crop&q=60",
+                desc: "Unidad SSD M.2 NVMe con velocidades de hasta 3500 MB/s para cargas instantáneas."
+            }
         ];
 
         let currentCategory = 'todos';
@@ -495,12 +785,23 @@
         let cart = [];
         const ADMIN_PIN = "2230";
 
-        function scrollCategories(offset) { document.getElementById('categoryContainer').scrollBy({ left: offset, behavior: 'smooth' }); }
-        function scrollSubcategories(offset) { document.getElementById('subcategoryContainer').scrollBy({ left: offset, behavior: 'smooth' }); }
+        // Chart instances
+        let categoryChartInstance = null;
+        let stockValueChartInstance = null;
+
+        function scrollCategories(offset) {
+            document.getElementById('categoryContainer').scrollBy({ left: offset, behavior: 'smooth' });
+        }
+
+        function scrollSubcategories(offset) {
+            document.getElementById('subcategoryContainer').scrollBy({ left: offset, behavior: 'smooth' });
+        }
 
         async function loadFromCloud() {
             try {
-                const res = await fetch(`https://api.jsonbin.io/v3/b/${CLOUD_BIN_ID}/latest`, { headers: { "X-Master-Key": CLOUD_MASTER_KEY } });
+                const res = await fetch(`https://api.jsonbin.io/v3/b/${CLOUD_BIN_ID}/latest`, {
+                    headers: { "X-Master-Key": CLOUD_MASTER_KEY }
+                });
                 if (res.ok) {
                     const data = await res.json();
                     if (data && data.record) {
@@ -510,7 +811,9 @@
                         if (data.record.products) products = data.record.products;
                     }
                 }
-            } catch (e) { console.log("Modo local"); }
+            } catch (e) {
+                console.log("Modo local activo");
+            }
             renderAll();
         }
 
@@ -518,10 +821,15 @@
             try {
                 await fetch(`https://api.jsonbin.io/v3/b/${CLOUD_BIN_ID}`, {
                     method: "PUT",
-                    headers: { "Content-Type": "application/json", "X-Master-Key": CLOUD_MASTER_KEY },
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-Master-Key": CLOUD_MASTER_KEY
+                    },
                     body: JSON.stringify({ promoBanners, categories, subcategories, products })
                 });
-            } catch (e) { console.error(e); }
+            } catch (e) {
+                console.error("Error al sincronizar", e);
+            }
         }
 
         function renderAll() {
@@ -535,45 +843,80 @@
         function renderPromoBanners() {
             const container = document.getElementById('promoBannerContainer');
             if (!promoBanners || promoBanners.length === 0) {
-                container.innerHTML = `<div class="p-12 text-center text-orange-400/50"><i class="fa-solid fa-ghost text-5xl mb-2"></i><p class="text-sm">No hay banners activos.</p></div>`;
+                container.innerHTML = `<div class="p-12 text-center text-slate-400"><div class="text-5xl mb-2">🎃</div><p class="text-sm">No hay banners activos.</p></div>`;
                 return;
             }
             if (currentBannerIndex >= promoBanners.length) currentBannerIndex = 0;
             const b = promoBanners[currentBannerIndex];
+
             container.innerHTML = `
-                <div class="relative w-full h-[320px] sm:h-[460px] overflow-hidden group cursor-pointer" onclick="openOfferModal(${b.id})">
-                    <img src="${b.image}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                    <div class="absolute inset-0 bg-gradient-to-t from-[#090514] via-[#090514]/20 to-transparent flex items-end p-8">
+                <div class="relative w-full h-[320px] sm:h-[480px] overflow-hidden group cursor-pointer" onclick="openOfferModal(${b.id})" title="Haz clic para ampliar">
+                    <img src="${b.image}" alt="${b.title || 'Oferta'}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#07030d] via-[#07030d]/30 to-transparent flex items-end p-8">
                         <div>
                             ${b.title ? `<span class="bg-orange-600 text-white font-extrabold text-sm px-4 py-1.5 rounded-xl shadow-lg mb-3 inline-block">${b.title}</span>` : ''}
-                            <p class="text-xs sm:text-sm text-orange-200 font-semibold flex items-center gap-2"><i class="fa-solid fa-magnifying-glass-plus text-orange-400"></i> Click para ver en grande</p>
+                            <p class="text-xs sm:text-sm text-orange-200 font-semibold flex items-center gap-2">
+                                <i class="fa-solid fa-ghost text-orange-400"></i> ¡Haz clic para ver la imagen en grande!
+                            </p>
                         </div>
                     </div>
+                    ${promoBanners.length > 1 ? `
+                        <button onclick="event.stopPropagation(); prevBanner();" class="absolute left-4 top-1/2 -translate-y-1/2 bg-[#07030d]/80 hover:bg-[#07030d] text-white p-3 rounded-full backdrop-blur-md transition-all shadow-xl"><i class="fa-solid fa-chevron-left text-sm"></i></button>
+                        <button onclick="event.stopPropagation(); nextBanner();" class="absolute right-4 top-1/2 -translate-y-1/2 bg-[#07030d]/80 hover:bg-[#07030d] text-white p-3 rounded-full backdrop-blur-md transition-all shadow-xl"><i class="fa-solid fa-chevron-right text-sm"></i></button>
+                    ` : ''}
                 </div>
             `;
+
+            if (!bannerInterval && promoBanners.length > 1) {
+                bannerInterval = setInterval(() => {
+                    currentBannerIndex = (currentBannerIndex + 1) % promoBanners.length;
+                    renderPromoBanners();
+                }, 5000);
+            }
+        }
+
+        function nextBanner() {
+            currentBannerIndex = (currentBannerIndex + 1) % promoBanners.length;
+            renderPromoBanners();
+        }
+
+        function prevBanner() {
+            currentBannerIndex = (currentBannerIndex - 1 + promoBanners.length) % promoBanners.length;
+            renderPromoBanners();
         }
 
         function openOfferModal(id) {
             const b = promoBanners.find(x => x.id === id) || promoBanners[currentBannerIndex];
             if (!b) return;
             document.getElementById('offerModalImage').src = b.image;
-            document.getElementById('offerModalTitleText').innerText = b.title || "Oferta Halloween";
+            document.getElementById('offerModalTitleText').innerText = b.title || "Detalle de Oferta";
             document.getElementById('offerDetailModal').classList.remove('hidden');
         }
-        function closeOfferModal() { document.getElementById('offerDetailModal').classList.add('hidden'); }
-        function interestInOffer() {
-            let activeTitle = "esta oferta de Halloween";
-            if (promoBanners && promoBanners[currentBannerIndex]) activeTitle = promoBanners[currentBannerIndex].title || activeTitle;
-            window.open(`https://wa.me/51910057512?text=${encodeURIComponent('¡Hola PcBest Huancayo! Me interesa ' + activeTitle)}`, '_blank');
+
+        function closeOfferModal() {
+            document.getElementById('offerDetailModal').classList.add('hidden');
         }
-        function interestInOfferFromModal() { interestInOffer(); }
+
+        function interestInOffer() {
+            let activeTitle = "esta oferta";
+            if (promoBanners && promoBanners.length > 0 && promoBanners[currentBannerIndex]) {
+                activeTitle = promoBanners[currentBannerIndex].title || "esta oferta de Halloween";
+            }
+            const msg = `¡Hola *PcBest Huancayo*! Estoy interesado en la oferta de Cyber Halloween: *${activeTitle}*. ¿Podrían darme más información y stock?`;
+            window.open(`https://wa.me/51910057512?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        function interestInOfferFromModal() {
+            interestInOffer();
+        }
 
         function renderCategories() {
             const container = document.getElementById('categoryContainer');
-            let html = `<button onclick="selectCategory('todos')" class="px-5 py-2.5 rounded-xl font-bold text-xs whitespace-nowrap transition-all shadow-md ${currentCategory === 'todos' ? 'bg-orange-600 text-white shadow-orange-600/30' : 'bg-[#120a24] border border-orange-950 text-orange-200 hover:bg-[#1a0f2e]'}">🌟 Todos</button>`;
+            let html = `<button onclick="selectCategory('todos')" class="px-5 py-2.5 rounded-xl font-bold text-xs whitespace-nowrap transition-all shadow-md ${currentCategory === 'todos' ? 'bg-gradient-to-r from-orange-600 to-amber-600 text-white shadow-orange-600/30' : 'glass-card border border-purple-900 text-slate-300 hover:bg-purple-950'}">🎃 Todos</button>`;
+            
             categories.forEach(cat => {
                 const isActive = currentCategory === cat;
-                html += `<button onclick="selectCategory('${cat}')" class="px-5 py-2.5 rounded-xl font-bold text-xs whitespace-nowrap transition-all shadow-md ${isActive ? 'bg-orange-600 text-white shadow-orange-600/30' : 'bg-[#120a24] border border-orange-950 text-orange-200 hover:bg-[#1a0f2e]'}">${cat}</button>`;
+                html += `<button onclick="selectCategory('${cat}')" class="px-5 py-2.5 rounded-xl font-bold text-xs whitespace-nowrap transition-all shadow-md ${isActive ? 'bg-gradient-to-r from-orange-600 to-amber-600 text-white shadow-orange-600/30' : 'glass-card border border-purple-900 text-slate-300 hover:bg-purple-950'}">${cat}</button>`;
             });
             container.innerHTML = html;
         }
@@ -585,57 +928,96 @@
                 currentSubcategory = 'todos';
                 return;
             }
+
             subContainer.classList.remove('hidden');
-            let html = `<span class="text-xs font-bold text-orange-300 mr-2 whitespace-nowrap"><i class="fa-solid fa-code-branch text-purple-400"></i> Subcategoría:</span>`;
-            html += `<button onclick="selectSubcategory('todos')" class="px-3.5 py-1.5 rounded-lg font-bold text-xs whitespace-nowrap transition-all ${currentSubcategory === 'todos' ? 'bg-purple-600 text-white' : 'bg-[#120a24] text-orange-200'}">Todas</button>`;
-            subcategories[currentCategory].forEach(sub => {
+            const subs = subcategories[currentCategory];
+            let html = `<span class="text-xs font-bold text-orange-400 mr-2 whitespace-nowrap"><i class="fa-solid fa-wand-magic-sparkles"></i> Subcategoría:</span>`;
+            html += `<button onclick="selectSubcategory('todos')" class="px-3.5 py-1.5 rounded-lg font-bold text-xs whitespace-nowrap transition-all ${currentSubcategory === 'todos' ? 'bg-purple-700 text-white' : 'glass-card text-slate-300 hover:bg-purple-950'}">Todas en ${currentCategory}</button>`;
+
+            subs.forEach(sub => {
                 const isActive = currentSubcategory === sub;
-                html += `<button onclick="selectSubcategory('${sub}')" class="px-3.5 py-1.5 rounded-lg font-bold text-xs whitespace-nowrap transition-all ${isActive ? 'bg-purple-600 text-white' : 'bg-[#120a24] text-orange-200'}">${sub}</button>`;
+                html += `<button onclick="selectSubcategory('${sub}')" class="px-3.5 py-1.5 rounded-lg font-bold text-xs whitespace-nowrap transition-all ${isActive ? 'bg-purple-700 text-white' : 'glass-card text-slate-300 hover:bg-purple-950'}">${sub}</button>`;
             });
+
             subContainer.innerHTML = html;
         }
 
-        function selectCategory(cat) { currentCategory = cat; currentSubcategory = 'todos'; renderCategories(); renderSubcategories(); renderProducts(); }
-        function selectSubcategory(sub) { currentSubcategory = sub; renderSubcategories(); renderProducts(); }
+        function selectCategory(cat) {
+            currentCategory = cat;
+            currentSubcategory = 'todos';
+            renderCategories();
+            renderSubcategories();
+            renderProducts();
+        }
+
+        function selectSubcategory(sub) {
+            currentSubcategory = sub;
+            renderSubcategories();
+            renderProducts();
+        }
+
+        function resetPriceFilter() {
+            document.getElementById('minPriceInput').value = '';
+            document.getElementById('maxPriceInput').value = '';
+            document.getElementById('sortSelect').value = 'default';
+            renderProducts();
+        }
 
         function renderProducts() {
             const grid = document.getElementById('productGrid');
             const noResults = document.getElementById('noResults');
             const searchVal = document.getElementById('searchInput').value.toLowerCase();
+            const minPrice = parseFloat(document.getElementById('minPriceInput').value) || 0;
+            const maxPrice = parseFloat(document.getElementById('maxPriceInput').value) || Infinity;
+            const sortVal = document.getElementById('sortSelect').value;
             const counter = document.getElementById('productCounter');
 
             let filtered = products.filter(p => {
                 const matchCat = currentCategory === 'todos' || p.category === currentCategory;
                 const matchSub = currentSubcategory === 'todos' || p.subcategory === currentSubcategory;
                 const matchSearch = p.name.toLowerCase().includes(searchVal) || p.desc.toLowerCase().includes(searchVal);
-                return matchCat && matchSub && matchSearch;
+                const matchPrice = p.price >= minPrice && p.price <= maxPrice;
+                return matchCat && matchSub && matchSearch && matchPrice;
             });
 
+            if (sortVal === 'low-high') {
+                filtered.sort((a, b) => a.price - b.price);
+            } else if (sortVal === 'high-low') {
+                filtered.sort((a, b) => b.price - a.price);
+            } else if (sortVal === 'name') {
+                filtered.sort((a, b) => a.name.localeCompare(b.name));
+            }
+
             counter.innerText = `Mostrando ${filtered.length} producto(s)`;
-            if (filtered.length === 0) { grid.innerHTML = ''; noResults.classList.remove('hidden'); return; }
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                noResults.classList.remove('hidden');
+                return;
+            }
             noResults.classList.add('hidden');
 
             let html = '';
             filtered.forEach(p => {
                 html += `
-                    <div class="bg-[#120a24] border border-orange-950 rounded-3xl overflow-hidden shadow-xl hover:border-orange-500/50 transition-all flex flex-col group">
-                        <div class="relative h-48 bg-[#090514] overflow-hidden cursor-pointer" onclick="openDetailModal(${p.id})">
-                            <img src="${p.image || 'https://placehold.co/400x300/120a24/ea580c?text=PcBest'}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/400x300/120a24/ea580c?text=PcBest'">
-                            <span class="absolute top-3 left-3 bg-orange-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-lg">${p.category}</span>
-                            ${p.subcategory ? `<span class="absolute top-3 right-3 bg-purple-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-lg">${p.subcategory}</span>` : ''}
+                    <div class="glass-card border border-purple-900/60 rounded-3xl overflow-hidden shadow-xl hover:border-orange-500/60 transition-all flex flex-col group">
+                        <div class="relative h-48 bg-[#07030d] overflow-hidden cursor-pointer" onclick="openDetailModal(${p.id})">
+                            <img src="${p.image || 'https://placehold.co/400x300/07030d/ea580c?text=Hardware+PC'}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/400x300/07030d/ea580c?text=PC'">
+                            <span class="absolute top-3 left-3 bg-orange-600/90 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-lg shadow">${p.category}</span>
+                            ${p.subcategory ? `<span class="absolute top-3 right-3 bg-purple-700/90 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-lg shadow">${p.subcategory}</span>` : ''}
                         </div>
                         <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
                             <div>
                                 <h3 onclick="openDetailModal(${p.id})" class="font-bold text-base text-white hover:text-orange-400 cursor-pointer line-clamp-1">${p.name}</h3>
-                                <p class="text-xs text-orange-200/60 mt-1 line-clamp-2">${p.desc}</p>
+                                <p class="text-xs text-slate-400 mt-1 line-clamp-2">${p.desc}</p>
                             </div>
-                            <div class="flex items-center justify-between pt-2 border-t border-orange-950">
+                            <div class="flex items-center justify-between pt-2 border-t border-purple-900/60">
                                 <div>
-                                    <span class="text-[10px] text-orange-300 block font-bold uppercase">Precio</span>
+                                    <span class="text-[10px] text-orange-400 block font-bold uppercase">Precio</span>
                                     <span class="text-lg font-black text-orange-400">S/. ${p.price.toFixed(2)}</span>
                                 </div>
-                                <button onclick="addToCart(${p.id})" class="bg-orange-600 hover:bg-orange-500 text-white p-3 rounded-2xl shadow-lg shadow-orange-600/30 transition-all">
-                                    <i class="fa-solid fa-cart-plus text-sm"></i>
+                                <button onclick="addToCart(${p.id})" class="bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white p-3 rounded-2xl shadow-lg shadow-orange-600/30 transition-all transform hover:scale-105">
+                                    <i class="fa-solid fa-cauldron text-sm"></i>
                                 </button>
                             </div>
                         </div>
@@ -645,31 +1027,47 @@
             grid.innerHTML = html;
         }
 
-        function filterProducts() { renderProducts(); }
+        function filterProducts() {
+            renderProducts();
+        }
 
         function openDetailModal(id) {
             const p = products.find(x => x.id === id);
             if (!p) return;
-            document.getElementById('detailImage').src = p.image || 'https://placehold.co/600x400/120a24/ea580c?text=PcBest';
+            document.getElementById('detailImage').src = p.image || 'https://placehold.co/600x400/07030d/ea580c?text=PC';
             document.getElementById('detailCategory').innerText = p.category;
             const subBadge = document.getElementById('detailSubcategory');
-            if (p.subcategory) { subBadge.innerText = p.subcategory; subBadge.classList.remove('hidden'); } else { subBadge.classList.add('hidden'); }
+            if (p.subcategory) {
+                subBadge.innerText = p.subcategory;
+                subBadge.classList.remove('hidden');
+            } else {
+                subBadge.classList.add('hidden');
+            }
             document.getElementById('detailName').innerText = p.name;
             document.getElementById('detailPrice').innerText = `S/. ${p.price.toFixed(2)}`;
             document.getElementById('detailDesc').innerText = p.desc;
+            
             const stockEl = document.getElementById('detailStock');
             stockEl.innerText = `Stock: ${p.stock}`;
             stockEl.className = p.stock > 0 ? 'text-xs font-bold px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-400' : 'text-xs font-bold px-2.5 py-1 rounded-lg bg-red-500/20 text-red-400';
+
             document.getElementById('detailAddBtn').setAttribute('onclick', `addToCart(${p.id}); closeDetailModal();`);
             document.getElementById('productDetailModal').classList.remove('hidden');
         }
-        function closeDetailModal() { document.getElementById('productDetailModal').classList.add('hidden'); }
+
+        function closeDetailModal() {
+            document.getElementById('productDetailModal').classList.add('hidden');
+        }
 
         function addToCart(id) {
             const p = products.find(x => x.id === id);
             if (!p) return;
             const existing = cart.find(x => x.id === id);
-            if (existing) existing.qty++; else cart.push({ ...p, qty: 1 });
+            if (existing) {
+                existing.qty++;
+            } else {
+                cart.push({ ...p, qty: 1 });
+            }
             renderCartCount();
         }
 
@@ -682,29 +1080,40 @@
 
         function toggleCartModal() {
             const modal = document.getElementById('cartModal');
-            if (modal.classList.contains('hidden')) { renderCartModalList(); modal.classList.remove('hidden'); } else { modal.classList.add('hidden'); }
+            if (modal.classList.contains('hidden')) {
+                renderCartModalList();
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
         }
 
         function renderCartModalList() {
             const list = document.getElementById('cartItemList');
             const totalVal = document.getElementById('cartTotalVal');
-            if (cart.length === 0) { list.innerHTML = `<div class="text-center py-10 text-orange-400/50 text-xs">Cotización vacía.</div>`; totalVal.innerText = `S/. 0.00`; return; }
+            
+            if (cart.length === 0) {
+                list.innerHTML = `<div class="text-center py-10 text-slate-500 text-xs">Tu caldero de cotización está vacío.</div>`;
+                totalVal.innerText = `S/. 0.00`;
+                return;
+            }
+
             let html = '';
             let total = 0;
             cart.forEach((item, index) => {
                 const sub = item.price * item.qty;
                 total += sub;
                 html += `
-                    <div class="flex items-center justify-between bg-[#090514] p-3 rounded-2xl border border-orange-950 gap-3">
+                    <div class="flex items-center justify-between bg-[#07030d] p-3 rounded-2xl border border-purple-900 gap-3">
                         <div class="flex-1">
                             <h4 class="font-bold text-xs text-white">${item.name}</h4>
                             <p class="text-[10px] text-orange-400 font-bold">S/. ${item.price.toFixed(2)} c/u</p>
                         </div>
                         <div class="flex items-center gap-2">
-                            <button onclick="updateQty(${index}, -1)" class="w-7 h-7 bg-[#1a0f2e] text-orange-200 rounded-lg">-</button>
-                            <span class="text-xs font-bold w-6 text-center text-white">${item.qty}</span>
-                            <button onclick="updateQty(${index}, 1)" class="w-7 h-7 bg-[#1a0f2e] text-orange-200 rounded-lg">+</button>
-                            <button onclick="removeFromCart(${index})" class="text-red-400 p-2 text-xs"><i class="fa-solid fa-trash"></i></button>
+                            <button onclick="updateQty(${index}, -1)" class="w-7 h-7 bg-[#12081f] text-slate-300 rounded-lg hover:bg-purple-950 font-bold">-</button>
+                            <span class="text-xs font-bold w-6 text-center">${item.qty}</span>
+                            <button onclick="updateQty(${index}, 1)" class="w-7 h-7 bg-[#12081f] text-slate-300 rounded-lg hover:bg-purple-950 font-bold">+</button>
+                            <button onclick="removeFromCart(${index})" class="text-red-400 hover:text-red-300 p-2 text-xs"><i class="fa-solid fa-trash"></i></button>
                         </div>
                     </div>
                 `;
@@ -715,126 +1124,334 @@
 
         function updateQty(index, delta) {
             cart[index].qty += delta;
-            if (cart[index].qty <= 0) cart.splice(index, 1);
+            if (cart[index].qty <= 0) {
+                cart.splice(index, 1);
+            }
             renderCartModalList();
             renderCartCount();
         }
-        function removeFromCart(index) { cart.splice(index, 1); renderCartModalList(); renderCartCount(); }
-        function clearCart() { cart = []; renderCartModalList(); renderCartCount(); }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            renderCartModalList();
+            renderCartCount();
+        }
+
+        function clearCart() {
+            cart = [];
+            renderCartModalList();
+            renderCartCount();
+        }
 
         function sendToWhatsApp() {
             if (cart.length === 0) return;
-            let msg = `Hola *PcBest Huancayo*, solicito cotización de Halloween:%0A%0A`;
+            let msg = `¡Hola *PcBest Huancayo*! Solicito cotización con los siguientes componentes:%0A%0A`;
             let total = 0;
-            cart.forEach(item => { const sub = item.price * item.qty; total += sub; msg += `• ${item.qty}x ${item.name} - S/. ${sub.toFixed(2)}%0A`; });
-            msg += `%0A*Total: S/. ${total.toFixed(2)}*`;
+            cart.forEach(item => {
+                const sub = item.price * item.qty;
+                total += sub;
+                msg += `• ${item.qty}x ${item.name} - S/. ${sub.toFixed(2)}%0A`;
+            });
+            msg += `%0A*Total del Caldero: S/. ${total.toFixed(2)}*%0A%0A¡Quedo atento para coordinar la entrega en Huancayo!`;
             window.open(`https://wa.me/51910057512?text=${msg}`, '_blank');
         }
 
-        function requestPin() { document.getElementById('pinInput').value = ''; document.getElementById('pinError').classList.add('hidden'); document.getElementById('pinModal').classList.remove('hidden'); }
-        function closePinModal() { document.getElementById('pinModal').classList.add('hidden'); }
+        function requestPin() {
+            document.getElementById('pinInput').value = '';
+            document.getElementById('pinError').classList.add('hidden');
+            document.getElementById('pinModal').classList.remove('hidden');
+        }
+
+        function closePinModal() {
+            document.getElementById('pinModal').classList.add('hidden');
+        }
+
         function verifyPin() {
-            if (document.getElementById('pinInput').value === ADMIN_PIN) { closePinModal(); openAdminPanel(); } else { document.getElementById('pinError').classList.remove('hidden'); }
+            const val = document.getElementById('pinInput').value;
+            if (val === ADMIN_PIN) {
+                closePinModal();
+                openAdminPanel();
+            } else {
+                document.getElementById('pinError').classList.remove('hidden');
+            }
         }
 
         function openAdminPanel() {
-            renderAdminPromoList(); renderAdminCategories(); renderAdminSubcategories(); renderAdminProductFilterTabs(); renderAdminProducts();
+            renderAdminPromoList();
+            renderAdminCategories();
+            renderAdminSubcategories();
+            renderAdminProductFilterTabs();
+            renderAdminProducts();
             document.getElementById('adminPanelModal').classList.remove('hidden');
+            // Render charts after modal is visible
+            setTimeout(renderAdminCharts, 200);
         }
-        function toggleAdminPanel() { document.getElementById('adminPanelModal').classList.add('hidden'); }
+
+        function toggleAdminPanel() {
+            document.getElementById('adminPanelModal').classList.add('hidden');
+        }
+
+        function renderAdminCharts() {
+            // 1. Prepare data for Category Count Chart
+            const catCounts = {};
+            categories.forEach(c => catCounts[c] = 0);
+            products.forEach(p => {
+                if (catCounts[p.category] !== undefined) {
+                    catCounts[p.category]++;
+                } else {
+                    catCounts[p.category] = 1;
+                }
+            });
+
+            const catLabels = Object.keys(catCounts);
+            const catData = Object.values(catCounts);
+
+            const ctx1 = document.getElementById('categoryChart').getContext('2d');
+            if (categoryChartInstance) categoryChartInstance.destroy();
+
+            categoryChartInstance = new Chart(ctx1, {
+                type: 'doughnut',
+                data: {
+                    labels: catLabels,
+                    datasets: [{
+                        data: catData,
+                        backgroundColor: [
+                            '#f97316', '#a855f7', '#3b82f6', '#10b981', '#eab308', '#ec4899', '#6366f1'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#cbd5e1', font: { size: 10, family: 'Outfit' } }
+                        }
+                    }
+                }
+            });
+
+            // 2. Prepare data for Stock Value by Category Chart
+            const catValues = {};
+            categories.forEach(c => catValues[c] = 0);
+            products.forEach(p => {
+                const val = p.price * p.stock;
+                if (catValues[p.category] !== undefined) {
+                    catValues[p.category] += val;
+                } else {
+                    catValues[p.category] = val;
+                }
+            });
+
+            const valLabels = Object.keys(catValues);
+            const valData = Object.values(catValues);
+
+            const ctx2 = document.getElementById('stockValueChart').getContext('2d');
+            if (stockValueChartInstance) stockValueChartInstance.destroy();
+
+            stockValueChartInstance = new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: valLabels,
+                    datasets: [{
+                        label: 'Valor de Stock (S/.)',
+                        data: valData,
+                        backgroundColor: '#f97316',
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { display: false } },
+                        y: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.05)' } }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
 
         function renderAdminPromoList() {
             const list = document.getElementById('adminPromoList');
             let html = '';
+            if (!promoBanners || promoBanners.length === 0) {
+                list.innerHTML = `<p class="text-xs text-slate-500 sm:col-span-2">No hay banners.</p>`;
+                return;
+            }
             promoBanners.forEach(b => {
-                html += `<div class="flex items-center justify-between bg-[#120a24] p-3 rounded-xl border border-orange-950 gap-3">
-                    <div class="flex items-center gap-3"><img src="${b.image}" class="w-16 h-10 object-cover rounded-lg"><div><h5 class="text-xs font-bold text-white line-clamp-1">${b.title || ''}</h5></div></div>
-                    <button onclick="deletePromoBanner(${b.id})" class="text-red-400 text-xs"><i class="fa-solid fa-trash"></i></button>
-                </div>`;
+                html += `
+                    <div class="flex items-center justify-between bg-[#12081f] p-3 rounded-xl border border-purple-900 gap-3">
+                        <div class="flex items-center gap-3">
+                            <img src="${b.image}" class="w-16 h-10 object-cover rounded-lg" onerror="this.src='https://placehold.co/100x60/07030d/ea580c?text=Banner'">
+                            <div>
+                                <h5 class="text-xs font-bold text-white line-clamp-1">${b.title || 'Sin título'}</h5>
+                                <span class="text-[10px] text-slate-400">ID: ${b.id}</span>
+                            </div>
+                        </div>
+                        <button onclick="deletePromoBanner(${b.id})" class="text-red-400 hover:text-red-300 p-2 text-xs"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                `;
             });
             list.innerHTML = html;
         }
 
         function handlePromoBannerSubmit(e) {
             e.preventDefault();
-            const image = document.getElementById('newPromoImage').value.trim();
+            const imgUrl = document.getElementById('newPromoImage').value.trim();
             const title = document.getElementById('newPromoTitle').value.trim();
-            if (image) {
-                promoBanners.push({ id: Date.now(), image, title });
-                document.getElementById('newPromoImage').value = ''; document.getElementById('newPromoTitle').value = '';
-                renderAdminPromoList(); renderPromoBanners();
+            if (imgUrl) {
+                const newId = promoBanners.length > 0 ? Math.max(...promoBanners.map(x => x.id)) + 1 : 1;
+                promoBanners.push({ id: newId, image: imgUrl, title });
+                document.getElementById('newPromoImage').value = '';
+                document.getElementById('newPromoTitle').value = '';
+                renderAdminPromoList();
+                renderPromoBanners();
             }
         }
-        function deletePromoBanner(id) { promoBanners = promoBanners.filter(x => x.id !== id); renderAdminPromoList(); renderPromoBanners(); }
+
+        function deletePromoBanner(id) {
+            promoBanners = promoBanners.filter(x => x.id !== id);
+            renderAdminPromoList();
+            renderPromoBanners();
+        }
 
         function renderAdminCategories() {
             const list = document.getElementById('adminCategoryList');
             const parentSelect = document.getElementById('subCatParentSelect');
-            let html = ''; let selectOpt = '<option value="">Categoría...</option>';
-            categories.forEach(cat => {
-                html += `<span class="bg-[#120a24] border border-orange-950 px-3 py-1.5 rounded-xl text-xs font-bold text-orange-200 flex items-center gap-2">${cat} <button onclick="deleteCategory('${cat}')" class="text-red-400"><i class="fa-solid fa-xmark"></i></button></span>`;
-                selectOpt += `<option value="${cat}">${cat}</option>`;
-            });
-            list.innerHTML = html; parentSelect.innerHTML = selectOpt;
-        }
+            let html = '';
+            let selectHtml = `<option value="">Seleccionar Categoría...</option>`;
 
-        function handleCategorySubmit(e) {
-            e.preventDefault();
-            const name = document.getElementById('newCategoryName').value.trim();
-            if (name && !categories.includes(name)) { categories.push(name); if (!subcategories[name]) subcategories[name] = []; document.getElementById('newCategoryName').value = ''; renderAdminCategories(); renderAdminSubcategories(); }
+            categories.forEach(cat => {
+                html += `<span class="bg-[#12081f] border border-purple-900 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-300 flex items-center gap-2">
+                    ${cat}
+                    <button onclick="deleteCategory('${cat}')" class="text-red-400 hover:text-red-300"><i class="fa-solid fa-xmark"></i></button>
+                </span>`;
+                selectHtml += `<option value="${cat}">${cat}</option>`;
+            });
+            list.innerHTML = html;
+            parentSelect.innerHTML = selectHtml;
         }
-        function deleteCategory(cat) { categories = categories.filter(c => c !== cat); delete subcategories[cat]; renderAdminCategories(); renderAdminSubcategories(); }
 
         function renderAdminSubcategories() {
             const list = document.getElementById('adminSubcategoryList');
             let html = '';
+
             for (const [cat, subs] of Object.entries(subcategories)) {
-                html += `<div class="bg-[#120a24] p-3 rounded-xl border border-orange-950 space-y-2"><h5 class="text-xs font-bold text-orange-400">${cat}</h5><div class="flex flex-wrap gap-2">`;
-                subs.forEach(sub => {
-                    html += `<span class="bg-[#090514] px-2.5 py-1 rounded-lg text-[11px] font-bold text-orange-200 flex items-center gap-1.5">${sub} <button onclick="deleteSubcategory('${cat}', '${sub}')" class="text-red-400"><i class="fa-solid fa-xmark"></i></button></span>`;
-                });
+                html += `<div class="bg-[#12081f] p-3 rounded-xl border border-purple-900 space-y-2">
+                    <h5 class="text-xs font-extrabold text-orange-400">${cat}</h5>
+                    <div class="flex flex-wrap gap-2">`;
+                if (!subs || subs.length === 0) {
+                    html += `<span class="text-[10px] text-slate-500">Sin subcategorías.</span>`;
+                } else {
+                    subs.forEach(sub => {
+                        html += `<span class="bg-[#07030d] border border-purple-900 px-2.5 py-1 rounded-lg text-[11px] font-bold text-slate-300 flex items-center gap-1.5">
+                            ${sub}
+                            <button onclick="deleteSubcategory('${cat}', '${sub}')" class="text-red-400 hover:text-red-300"><i class="fa-solid fa-xmark"></i></button>
+                        </span>`;
+                    });
+                }
                 html += `</div></div>`;
             }
             list.innerHTML = html;
         }
 
+        function handleCategorySubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('newCategoryName').value.trim();
+            if (name && !categories.includes(name)) {
+                categories.push(name);
+                if (!subcategories[name]) subcategories[name] = [];
+                document.getElementById('newCategoryName').value = '';
+                renderAdminCategories();
+                renderAdminSubcategories();
+                renderAdminCharts();
+            }
+        }
+
+        function deleteCategory(cat) {
+            if (confirm(`¿Eliminar la categoría ${cat}?`)) {
+                categories = categories.filter(c => c !== cat);
+                delete subcategories[cat];
+                renderAdminCategories();
+                renderAdminSubcategories();
+                renderAdminCharts();
+            }
+        }
+
         function handleSubcategorySubmit(e) {
             e.preventDefault();
             const parent = document.getElementById('subCatParentSelect').value;
-            const sub = document.getElementById('newSubcategoryName').value.trim();
-            if (parent && sub) { if (!subcategories[parent]) subcategories[parent] = []; if (!subcategories[parent].includes(sub)) subcategories[parent].push(sub); document.getElementById('newSubcategoryName').value = ''; renderAdminSubcategories(); }
+            const subName = document.getElementById('newSubcategoryName').value.trim();
+            if (parent && subName) {
+                if (!subcategories[parent]) subcategories[parent] = [];
+                if (!subcategories[parent].includes(subName)) {
+                    subcategories[parent].push(subName);
+                    document.getElementById('newSubcategoryName').value = '';
+                    renderAdminSubcategories();
+                }
+            }
         }
-        function deleteSubcategory(cat, sub) { subcategories[cat] = subcategories[cat].filter(s => s !== sub); renderAdminSubcategories(); }
+
+        function deleteSubcategory(cat, sub) {
+            if (subcategories[cat]) {
+                subcategories[cat] = subcategories[cat].filter(s => s !== sub);
+                renderAdminSubcategories();
+            }
+        }
 
         function renderAdminProductFilterTabs() {
             const container = document.getElementById('adminCategoryFilterTabs');
-            let html = `<button onclick="setAdminFilter('todos')" class="px-3 py-1.5 rounded-lg text-xs font-bold ${currentAdminCategory === 'todos' ? 'bg-orange-600 text-white' : 'bg-[#120a24] text-orange-200'}">Todos</button>`;
+            let html = `<button onclick="setAdminFilter('todos')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${currentAdminCategory === 'todos' ? 'bg-orange-600 text-white' : 'bg-[#12081f] text-slate-300'}">Todos</button>`;
             categories.forEach(cat => {
-                html += `<button onclick="setAdminFilter('${cat}')" class="px-3 py-1.5 rounded-lg text-xs font-bold ${currentAdminCategory === cat ? 'bg-orange-600 text-white' : 'bg-[#120a24] text-orange-200'}">${cat}</button>`;
+                html += `<button onclick="setAdminFilter('${cat}')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${currentAdminCategory === cat ? 'bg-orange-600 text-white' : 'bg-[#12081f] text-slate-300'}">${cat}</button>`;
             });
             container.innerHTML = html;
         }
-        function setAdminFilter(cat) { currentAdminCategory = cat; renderAdminProductFilterTabs(); renderAdminProducts(); }
+
+        function setAdminFilter(cat) {
+            currentAdminCategory = cat;
+            renderAdminProductFilterTabs();
+            renderAdminProducts();
+        }
 
         function renderAdminProducts() {
             const list = document.getElementById('adminProductList');
             let filtered = currentAdminCategory === 'todos' ? products : products.filter(p => p.category === currentAdminCategory);
+
             let html = '';
             filtered.forEach(p => {
-                html += `<div class="flex items-center justify-between bg-[#090514] p-4 rounded-2xl border border-orange-950 gap-4">
-                    <div class="flex items-center gap-3"><img src="${p.image}" class="w-12 h-12 object-cover rounded-xl"><div><h4 class="font-bold text-xs text-white">${p.name}</h4><p class="text-[10px] text-orange-300">S/. ${p.price.toFixed(2)} • Stock: ${p.stock}</p></div></div>
-                    <div class="flex gap-2">
-                        <button onclick="openProductForm(${p.id})" class="bg-[#120a24] text-orange-200 p-2.5 rounded-xl text-xs"><i class="fa-solid fa-pen"></i></button>
-                        <button onclick="deleteProduct(${p.id})" class="bg-[#120a24] text-red-400 p-2.5 rounded-xl text-xs"><i class="fa-solid fa-trash"></i></button>
+                html += `
+                    <div class="flex items-center justify-between bg-[#12081f] p-4 rounded-2xl border border-purple-900 gap-4">
+                        <div class="flex items-center gap-3">
+                            <img src="${p.image || 'https://placehold.co/100x100/07030d/ea580c?text=PC'}" class="w-12 h-12 object-cover rounded-xl" onerror="this.src='https://placehold.co/100x100/07030d/ea580c?text=PC'">
+                            <div>
+                                <h4 class="font-bold text-xs text-white">${p.name}</h4>
+                                <p class="text-[10px] text-slate-400">${p.category} ${p.subcategory ? '› ' + p.subcategory : ''} • <span class="text-orange-400 font-bold">S/. ${p.price.toFixed(2)}</span> • Stock: ${p.stock}</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="openProductForm(${p.id})" class="bg-[#07030d] hover:bg-purple-950 text-slate-300 hover:text-white p-2.5 rounded-xl text-xs"><i class="fa-solid fa-pen"></i></button>
+                            <button onclick="deleteProduct(${p.id})" class="bg-[#07030d] hover:bg-purple-950 text-red-400 hover:text-red-300 p-2.5 rounded-xl text-xs"><i class="fa-solid fa-trash"></i></button>
+                        </div>
                     </div>
-                </div>`;
+                `;
             });
             list.innerHTML = html;
         }
 
         function openProductForm(id = null) {
             const catSelect = document.getElementById('prodCategory');
-            let html = ''; categories.forEach(cat => { html += `<option value="${cat}">${cat}</option>`; }); catSelect.innerHTML = html;
+            let html = '';
+            categories.forEach(cat => {
+                html += `<option value="${cat}">${cat}</option>`;
+            });
+            catSelect.innerHTML = html;
+
             if (id) {
                 const p = products.find(x => x.id === id);
                 document.getElementById('formModalTitle').innerText = 'Editar Producto';
@@ -859,13 +1476,19 @@
             const cat = document.getElementById('prodCategory').value;
             const subSelect = document.getElementById('prodSubcategory');
             let html = `<option value="">-- Sin subcategoría --</option>`;
-            if (subcategories[cat]) {
-                subcategories[cat].forEach(sub => { html += `<option value="${sub}" ${sub === selectedSub ? 'selected' : ''}>${sub}</option>`; });
+
+            if (subcategories[cat] && subcategories[cat].length > 0) {
+                subcategories[cat].forEach(sub => {
+                    const sel = sub === selectedSub ? 'selected' : '';
+                    html += `<option value="${sub}" ${sel}>${sub}</option>`;
+                });
             }
             subSelect.innerHTML = html;
         }
 
-        function closeProductForm() { document.getElementById('productFormModal').classList.add('hidden'); }
+        function closeProductForm() {
+            document.getElementById('productFormModal').classList.add('hidden');
+        }
 
         function handleProductFormSubmit(e) {
             e.preventDefault();
@@ -880,20 +1503,71 @@
 
             if (id) {
                 const p = products.find(x => x.id == id);
-                if (p) Object.assign(p, { name, category, subcategory, price, stock, image, desc });
+                if (p) {
+                    p.name = name;
+                    p.category = category;
+                    p.subcategory = subcategory;
+                    p.price = price;
+                    p.stock = stock;
+                    p.image = image;
+                    p.desc = desc;
+                }
             } else {
-                products.push({ id: Date.now(), name, category, subcategory, price, stock, image, desc });
+                const newId = products.length > 0 ? Math.max(...products.map(x => x.id)) + 1 : 1;
+                products.push({ id: newId, name, category, subcategory, price, stock, image, desc });
             }
-            closeProductForm(); renderAdminProducts(); renderAll();
+
+            closeProductForm();
+            renderAdminProducts();
+            renderAdminCharts();
+            renderAll();
         }
 
-        function deleteProduct(id) { products = products.filter(x => x.id !== id); renderAdminProducts(); renderAll(); }
-        async function saveAdminChanges() { await saveToCloud(); const m = document.getElementById('adminStatusMsg'); m.classList.remove('hidden'); setTimeout(() => { m.classList.add('hidden'); toggleAdminPanel(); }, 1200); renderAll(); }
-        function downloadPDFCatalog() { window.print(); }
-        function acceptCookies() { document.getElementById('cookieConsentBanner').classList.add('hidden'); }
-        function rejectCookies() { document.getElementById('cookieConsentBanner').classList.add('hidden'); }
+        function deleteProduct(id) {
+            if (confirm('¿Eliminar este componente?')) {
+                products = products.filter(x => x.id !== id);
+                renderAdminProducts();
+                renderAdminCharts();
+                renderAll();
+            }
+        }
 
-        window.onload = function() { loadFromCloud(); };
+        async function saveAdminChanges() {
+            await saveToCloud();
+            const msg = document.getElementById('adminStatusMsg');
+            msg.classList.remove('hidden');
+            setTimeout(() => {
+                msg.classList.add('hidden');
+                toggleAdminPanel();
+            }, 1200);
+            renderAll();
+        }
+
+        function downloadPDFCatalog() {
+            window.print();
+        }
+
+        function checkCookiesConsent() {
+            const consent = localStorage.getItem('pcbest_cookies_consent');
+            if (!consent) {
+                document.getElementById('cookieConsentBanner').classList.remove('hidden');
+            }
+        }
+
+        function acceptCookies() {
+            localStorage.setItem('pcbest_cookies_consent', 'accepted');
+            document.getElementById('cookieConsentBanner').classList.add('hidden');
+        }
+
+        function rejectCookies() {
+            localStorage.setItem('pcbest_cookies_consent', 'rejected');
+            document.getElementById('cookieConsentBanner').classList.add('hidden');
+        }
+
+        window.onload = function() {
+            loadFromCloud();
+            checkCookiesConsent();
+        };
     </script>
 </body>
 </html>
